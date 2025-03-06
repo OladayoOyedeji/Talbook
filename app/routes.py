@@ -8,6 +8,16 @@ no_capital_letters = 1
 no_integers = 2
 no_special_char = 2
 
+class User:
+    def __init__(self, username):
+        self.username = username
+        self.id = get_id(username)
+        self.shopping_cart = get_shopping_cart(self.id)
+        self.listing = get_listing(self.id)
+        self.preferences = get_preferences(self.id)
+        self.transaction_history = get_transaction_history(self.id)
+        self.friends_list = get_friends_list(self.id)
+
 @app.route('/')
 def homepage():
     return '''<html>
@@ -55,8 +65,8 @@ def valid():
     global password_entered
     Password = request.args.get('password', '[no password]')
     if valid_check(Password):
-        print("password valid")
-        return 'add_db'
+        print("password valid go home")
+        return 'home'
     else:
         print('true')
         password_entered = True
@@ -74,13 +84,13 @@ def ver_message():
         return '<span style = "color: red; font-size: 10px">\
         password has to be a minimum of %(i)s characters \
         containing %(j)s capital letters, %(k)s integers, %(l)s \
-        special characters<\span><br>\n <span style = "color: black">'\
+        special characters<br>\n <span style = "color: black">'\
         %{'i':valid_length, 'j':no_capital_letters,
                               'k':no_integers, 'l':no_special_char}
     
 @app.route('/register')
 def register():
-    return """"<html>
+    return """<html>
 <body>
 <h1>Registration</h1>
 <form action='%(action)s' method='get'><br>
@@ -94,7 +104,11 @@ Password: <input type='text' name='password'/> <br>
 </body>
 </html>""" % {'action':valid(), 'verified_message':ver_message()}
 
-
+@app.route('/home')
+def home():
+    return """<html>
+    <h2>you have made it to the homepage<\h2>
+</html>"""
 
 # def process_email(Email):
     
