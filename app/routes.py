@@ -8,6 +8,11 @@ no_capital_letters = 1
 no_integers = 2
 no_special_char = 2
 
+
+## ======================================================== ##
+## = Created a User class to make it easier to navigate and ##
+## = use the database ===================================== ##
+## ======================================================== ##
 class User:
     def __init__(self, username):
         self.username = username
@@ -17,15 +22,11 @@ class User:
         self.preferences = get_preferences(self.id)
         self.transaction_history = get_transaction_history(self.id)
         self.friends_list = get_friends_list(self.id)
+        self.photo_directory = get_photo_directory(self.id)
 
-@app.route('/')
-def homepage():
-    return '''<html>
-<h1>Talbok</h1>
-    <a href="/register">
-    <button>Register</button>
-    </a>
-</html>'''
+    def add_user_db():
+        k
+    def 
 
 def valid_check(Password):
     global password_valid
@@ -87,6 +88,36 @@ def ver_message():
         special characters<br>\n <span style = "color: black">'\
         %{'i':valid_length, 'j':no_capital_letters,
                               'k':no_integers, 'l':no_special_char}
+
+
+
+## ======================================================== ##
+## = these are all the links that will be used in the app = ##
+## = the list of all the links would be =================== ##
+## ========= homepage ===================================== ##
+## ========= sign in ====================================== ##
+## ========= login ======================================== ##
+## ========= profile ====================================== ##
+## ========= explore ====================================== ##
+## ========= inbox ======================================== ##
+## ========= cart ========================================= ##
+## ========= setting ====================================== ##
+## ========= purchases ==================================== ##
+## ========= saved ======================================== ##
+## ========= sell an item ================================= ##
+## ========= more links later ============================= ##
+## ======================================================== ##
+                                                   '''
+                                                   the comments might be awful
+                                                   '''
+@app.route('/')
+def homepage():
+    return '''<html>
+<h1>Talbok</h1>
+    <a href="/register">
+    <button>Register</button>
+    </a>
+</html>'''
     
 @app.route('/register')
 def register():
