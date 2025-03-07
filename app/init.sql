@@ -7,7 +7,7 @@ create database Talbook;
 use Talbook;
 
 --==============================================================
--- Photo: photos for items or user profiles
+-- NO 1. Photo: photos for items or user profiles
 --==============================================================
 CREATE TABLE Photo
 (
@@ -18,7 +18,7 @@ CREATE TABLE Photo
 ) ENGINE=InnoDB;
 
 --==============================================================
--- User: information about users (buyers and sellers)
+-- NO 2. User: information about users (buyers and sellers)
 --==============================================================
 CREATE TABLE User
 (
@@ -33,7 +33,7 @@ CREATE TABLE User
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Category: categories for items (e.g., Instruments, Audio
+-- NO 3. Category: categories for items (e.g., Instruments, Audio
 -- Equipment, etc.)
 --==============================================================
 CREATE TABLE Category
@@ -44,7 +44,7 @@ CREATE TABLE Category
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Subcategory: subcategories for categories (e.g., within the
+-- NO 4. Subcategory: subcategories for categories (e.g., within the
 -- category of "Instruments" you'd have "Brass Instruments",
 -- "Stringed Instruments", etc.)
 --==============================================================
@@ -57,7 +57,7 @@ CREATE TABLE Subcategory
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Item: profiles of sale listings
+-- NO 5. Item: profiles of sale listings
 --==============================================================
 CREATE TABLE Item
 (
@@ -77,7 +77,7 @@ CREATE TABLE Item
 ) ENGINE=InnoDB;
 
 --==============================================================
--- User_Preference: join table linking users to their preferenc-
+-- NO 6. User_Preference: join table linking users to their preferenc-
 --                  es. weights are used to show them diff items 
 --==============================================================
 CREATE TABLE User_Preference
@@ -91,7 +91,7 @@ CREATE TABLE User_Preference
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Purchase_History: records of completed purchases
+-- NO 7. Purchase_History: records of completed purchases
 --==============================================================
 CREATE TABLE Purchase_History
 (
@@ -105,7 +105,7 @@ CREATE TABLE Purchase_History
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Chat: links buyers and sellers for a specific item
+-- NO 8. Chat: links buyers and sellers for a specific item
 --==============================================================
 CREATE TABLE Chat
 (
@@ -120,7 +120,7 @@ CREATE TABLE Chat
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Message: messages sent within a chat (one mess to many chat)
+-- NO 9. Message: messages sent within a chat (one mess to many chat)
 --==============================================================
 CREATE TABLE Message
 (
@@ -134,7 +134,7 @@ CREATE TABLE Message
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Rating: ratings and reviews given by users
+-- NO 10. Rating: ratings and reviews given by users
 --==============================================================
 CREATE TABLE Rating
 (
@@ -148,7 +148,7 @@ CREATE TABLE Rating
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Follow: relationships between users (if you follow a user,
+-- NO 11. Follow: relationships between users (if you follow a user,
 -- you are able to find them easily, and their items are more
 -- likely to be shown to you)
 --==============================================================
@@ -162,7 +162,7 @@ CREATE TABLE Follow
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Item_Photo: join table to allow for multiple photos to be
+-- NO 12. Item_Photo: join table to allow for multiple photos to be
 -- attached to an item (how do you make it so you know which is
 -- to be displayed first?)
 --==============================================================
