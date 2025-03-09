@@ -8,16 +8,21 @@ no_capital_letters = 1
 no_integers = 2
 no_special_char = 2
 
+## ======================================================== ##
+## = functions used for the class ========================= ##
+## ======================================================== ##
+def get_shopping_cart():
+    '''
+    
+    '''
 
 ## ======================================================== ##
 ## = Created a User class to make it easier to navigate and ##
 ## = use the database ===================================== ##
 ## ======================================================== ##
 class User:
-    def __init__(self, username):
-        self.username = username
-        self.id = get_id(username)
-        self.shopping_cart = get_shopping_cart(self.id)
+    def __init__(self, id):
+        self.id = id
         self.listing = get_listing(self.id)
         self.preferences = get_preferences(self.id)
         self.transaction_history = get_transaction_history(self.id)
@@ -71,7 +76,7 @@ def valid():
     else:
         print('true')
         password_entered = True
-        return 'register'
+        return 'signin'
 
 def ver_message():
     global password_valid
@@ -114,12 +119,15 @@ def ver_message():
 def homepage():
     return '''<html>
 <h1>Talbok</h1>
-    <a href="/register">
-    <button>Register</button>
+    <a href="/signin">
+    <button>Signin</button>
+    </a>
+    <a href="/login">
+    <button>Loginr</button>
     </a>
 </html>'''
     
-@app.route('/register')
+@app.route('/signin')
 def register():
     return """<html>
 <body>
