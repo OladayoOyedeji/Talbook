@@ -11,10 +11,58 @@ no_special_char = 2
 ## ======================================================== ##
 ## = functions used for the class ========================= ##
 ## ======================================================== ##
-def get_shopping_cart():
-    '''
+def get_preference(user_id):
+    exe = '''
+    select subcategory_id, weight from User_Preference
+    where user_id = %s
+    ''' % user_id
+
+    conn = pymysql.connect(user='root', passwd='root', db='talbook')
+    cursor = conn.cursor()
+
+    cursor.execute(exe)
+
+    return list(cursor.fetchall())
     
-    '''
+
+def get_transaction_history(user_id):
+    exe = '''
+    select id from Purchase_History
+    where user_id = %s
+    ''' % user_id
+
+    conn = pymysql.connect(user='root', passwd='root', db='talbook')
+    cursor = conn.cursor()
+
+    cursor.execute(exe)
+
+    return list(cursor.fetchall())
+
+def get_follower_list(user_id):
+    exe = '''
+    select follower_id from Follow
+    where followed_id = %s
+    ''' % user_id
+
+    conn = pymysql.connect(user='root', passwd='root', db='talbook')
+    cursor = conn.cursor()
+
+    cursor.execute(exe)
+
+    return list(cursor.fetchall())
+
+def get_followed_list(user_id):
+    exe = '''
+    select followed_id from Follow
+    where followed_id = %s
+    ''' % user_id
+
+    conn = pymysql.connect(user='root', passwd='root', db='talbook')
+    cursor = conn.cursor()
+
+    cursor.execute(exe)
+
+    return list(cursor.fetchall())
 
 ## ======================================================== ##
 ## = Created a User class to make it easier to navigate and ##
@@ -23,15 +71,13 @@ def get_shopping_cart():
 class User:
     def __init__(self, id):
         self.id = id
-        self.listing = get_listing(self.id)
+        # self.listing = get_listing(self.id)
         self.preferences = get_preferences(self.id)
         self.transaction_history = get_transaction_history(self.id)
-        self.friends_list = get_friends_list(self.id)
+        self.follower_list = get_follower_list(self.id)
+        self.followed_list = get_followed_list(self.id)
         self.photo_directory = get_photo_directory(self.id)
 
-    def add_user_db():
-        k
-    def 
 
 def valid_check(Password):
     global password_valid
