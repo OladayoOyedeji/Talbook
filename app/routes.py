@@ -7,6 +7,7 @@ valid_length = 8
 no_capital_letters = 1
 no_integers = 2
 no_special_char = 2
+user = None
 
 ## ======================================================== ##
 ## = functions used for the class ========================= ##
@@ -183,7 +184,7 @@ def homepage():
     <button>Signin</button>
     </a>
     <a href="/login">
-    <button>Loginr</button>
+    <button>Login</button>
     </a>
 </html>'''
     
@@ -193,15 +194,22 @@ def register():
 <body>
 <h1>Registration</h1>
 <form action='%(action)s' method='get'><br>
-Lastname: <input type='text' name='lastname'/> <br>
-Firstname: <input type='text' name='firstname'/> <br>
+Username: <input type='text' name='username'/> <br>
+%(valid_username)s
 Password: <input type='text' name='password'/> <br>
-%(verified_message)s
+%(valid_password)s
 <h3>Email: <input type='text' name='email'/></h3> <br>
 <input type='submit' value='Go'/>
 </form>
 </body>
-</html>""" % {'action':valid(), 'verified_message':ver_message()}
+</html>""" % {'action':is_valid_signin(), 'valid_password': is_Valid_password, 'valid_username':is_Valid_username}
+
+@app.route('/email_verification')
+def email_verification():
+    return '''
+<form action='%s' method='get'><br>
+<input type='text' name='code'/>
+    ''' % is_valid_code()
 
 @app.route('/login')
 def login():
@@ -222,9 +230,10 @@ Password: <input type='text' name='password'/> <br>
 
 @app.route('/home')
 def home():
+    global user
     return """<html>
-    <h2>you have made it to the homepage<\h2>
-</html>"""
+    <h2>%s's homepage<\h2>
+</html>""" % user.username
 
 # def process_email(Email):
     

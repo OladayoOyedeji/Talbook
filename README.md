@@ -32,18 +32,20 @@ transaction -|
 
 Functions that would be used
 
-add_User_db(tuple(username, password, email))
+add_user_db(tuple(username, password, email))
 
-get_User_id(username, password)
+get_user_id(username, password)
 
-is_Valid_username(username)
+is_valid_username(username)
 
-is_Valid_password(Password)
+is_valid_password(Password)
 
 get_id_from_email_username(input)
 
-get_User_hash(id)
+get_user_hash(id)
 
-is_Valid_login()
+is_valid_login()
 
-is_Valid_signin()
+is_valid_signin()
+
+is_valid_code()
