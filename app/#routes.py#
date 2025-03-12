@@ -183,7 +183,7 @@ def homepage():
     <button>Signin</button>
     </a>
     <a href="/login">
-    <button>Loginr</button>
+    <button>Login</button>
     </a>
 </html>'''
     
