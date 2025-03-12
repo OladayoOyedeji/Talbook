@@ -31,11 +31,19 @@ transaction -|
               user_id
 
 Functions that would be used
+
 add_User_db(tuple(username, password, email))
+
 get_User_id(username, password)
+
 is_Valid_username(username)
+
 is_Valid_password(Password)
+
 get_id_from_email_username(input)
+
 get_User_hash(id)
+
 is_Valid_login()
+
 is_Valid_signin()
