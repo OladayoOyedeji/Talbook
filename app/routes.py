@@ -202,7 +202,10 @@ Password: <input type='text' name='password'/> <br>
 <input type='submit' value='Go'/>
 </form>
 </body>
-</html>""" % {'action':is_valid_signin(), 'valid_password': is_Valid_password, 'valid_username':is_Valid_username}
+</html>""" % {'action':is_valid_signin(), 'valid_password': is_valid_password(), 'valid_username':is_valid_username()}
+# is_valid_signin function checks if the password is valid and the username is valid and returns the destination
+# is_Valid_password function checks the password if its valid return nothing but if not valid returns a message
+# like wise for is_valid_username
 
 @app.route('/email_verification')
 def email_verification():
@@ -210,6 +213,7 @@ def email_verification():
 <form action='%s' method='get'><br>
 <input type='text' name='code'/>
     ''' % is_valid_code()
+# is_valid_code function checks the code if its valid and returns the destination
 
 @app.route('/login')
 def login():
