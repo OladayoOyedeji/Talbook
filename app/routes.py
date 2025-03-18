@@ -1,6 +1,6 @@
 from app import app
 from flask import request
-from constants import *
+# from constants import *
 
 # Validation.py
 password_entered = False

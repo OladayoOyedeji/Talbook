@@ -17,7 +17,7 @@ def execute_sql(sql, params=(), commit=False):
         cursor.execute(sql, params)
         if commit:
             conn.commit() # commit changes
-        return cursor.fetchall()
+        return list(cursor.fetchall())
     except Exception as e:
         print("error in execute_sql():", e)
         conn.rollback() # rollback on failure
