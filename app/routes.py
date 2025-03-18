@@ -1,6 +1,8 @@
 from app import app
 from flask import request
+# from constants import *
 
+# Validation.py
 password_entered = False
 password_valid = True
 valid_length = 8
@@ -8,91 +10,6 @@ no_capital_letters = 1
 no_integers = 2
 no_special_char = 2
 user = None
-
-## ======================================================== ##
-## = functions used for the class ========================= ##
-## ======================================================== ##
-def get_preference(user_id):
-    exe = '''
-    select subcategory_id, weight from User_Preference
-    where user_id = %s
-    ''' % user_id
-
-    conn = pymysql.connect(user='root', passwd='root', db='talbook')
-    cursor = conn.cursor()
-
-    cursor.execute(exe)
-
-    return list(cursor.fetchall())
-    
-
-def get_transaction_history(user_id):
-    exe = '''
-    select id from Purchase_History
-    where user_id = %s
-    ''' % user_id
-
-    conn = pymysql.connect(user='root', passwd='root', db='talbook')
-    cursor = conn.cursor()
-
-    cursor.execute(exe)
-
-    return list(cursor.fetchall())
-
-def get_follower_list(user_id):
-    exe = '''
-    select follower_id from Follow
-    where followed_id = %s
-    ''' % user_id
-
-    conn = pymysql.connect(user='root', passwd='root', db='talbook')
-    cursor = conn.cursor()
-
-    cursor.execute(exe)
-
-    return list(cursor.fetchall())
-
-def get_followed_list(user_id):
-    exe = '''
-    select followed_id from Follow
-    where followed_id = %s
-    ''' % user_id
-
-    conn = pymysql.connect(user='root', passwd='root', db='talbook')
-    cursor = conn.cursor()
-
-    cursor.execute(exe)
-
-    return list(cursor.fetchall())
-
-def get_listed_items(user_id):
-    exe = '''
-    select id from item
-    where seller_id = %s
-    ''' % user_id
-
-    conn = pymysql.connect(user='root', passwd='root', db='talbook')
-    cursor = conn.cursor()
-
-    cursor.execute(exe)
-
-    return list(cursor.fetchall())
-
-## ======================================================== ##
-## = Created a User class to make it easier to navigate and ##
-## = use the database ===================================== ##
-## ======================================================== ##
-class User:
-    def __init__(self, id):
-        self.id = id
-        # self.listing = get_listing(self.id)
-        self.preferences = get_preferences(self.id)
-        self.transaction_history = get_transaction_history(self.id)
-        self.follower_list = get_follower_list(self.id)
-        self.followed_list = get_followed_list(self.id)
-        self.photo_directory = get_photo_directory(self.id)
-
-
 
 def valid_check(Password):
     global password_valid
@@ -155,6 +72,7 @@ def ver_message():
         %{'i':valid_length, 'j':no_capital_letters,
                               'k':no_integers, 'l':no_special_char}
 
+# end of validation
 
 
 ## ======================================================== ##
@@ -173,22 +91,20 @@ def ver_message():
 ## ========= sell an item ================================= ##
 ## ========= more links later ============================= ##
 ## ======================================================== ##
-                                                   '''
-                                                   the comments might be awful
-                                                   '''
+
 @app.route('/')
 def homepage():
     return '''<html>
-<h1>Talbok</h1>
-    <a href="/signin">
-    <button>Signin</button>
+<h1>Talbook</h1>
+    <a href="/signup">
+    <button>Signup</button>
     </a>
     <a href="/login">
     <button>Login</button>
     </a>
 </html>'''
     
-@app.route('/signin')
+@app.route('/signup')
 def register():
     return """<html>
 <body>
@@ -202,8 +118,8 @@ Password: <input type='text' name='password'/> <br>
 <input type='submit' value='Go'/>
 </form>
 </body>
-</html>""" % {'action':is_valid_signin(), 'valid_password': is_valid_password(), 'valid_username':is_valid_username()}
-# is_valid_signin function checks if the password is valid and the username is valid and returns the destination
+</html>""" % {'action':is_valid_signup(), 'valid_password': is_valid_password(), 'valid_username':is_valid_username()}
+# is_valid_signup function checks if the password is valid and the username is valid and returns the destination
 # is_Valid_password function checks the password if its valid return nothing but if not valid returns a message
 # like wise for is_valid_username
 
@@ -236,7 +152,7 @@ Password: <input type='text' name='password'/> <br>
 def home():
     global user
     return """<html>
-    <h2>%s's homepage<\h2>
+    <h2>%s's homepage</h2>
 </html>""" % user.username
 
 # def process_email(Email):
