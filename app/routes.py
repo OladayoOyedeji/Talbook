@@ -93,7 +93,7 @@ def ver_message():
 ## ======================================================== ##
 
 @app.route('/')
-def homepage():
+def base():
     return '''<html>
 <h1>Talbook</h1>
     <a href="/signup">
@@ -105,20 +105,14 @@ def homepage():
 </html>'''
     
 @app.route('/signup')
-def register():
-    return """<html>
-<body>
-<h1>Registration</h1>
-<form action='%(action)s' method='get'><br>
-Username: <input type='text' name='username'/> <br>
-%(valid_username)s
-Password: <input type='text' name='password'/> <br>
-%(valid_password)s
-<h3>Email: <input type='text' name='email'/></h3> <br>
-<input type='submit' value='Go'/>
-</form>
-</body>
-</html>""" % {'action':is_valid_signup(), 'valid_password': is_valid_password(), 'valid_username':is_valid_username()}
+def signup():
+    is_valid = {'username': valid_username(),
+                'password': valid_password()}
+
+    invalid_message = {'username': 'username already used',
+                       'password': inv_message_password()}
+    
+    return render_template('signup.html', is_valid=is_valid, invalid_message=invalid_message)
 # is_valid_signup function checks if the password is valid and the username is valid and returns the destination
 # is_Valid_password function checks the password if its valid return nothing but if not valid returns a message
 # like wise for is_valid_username
@@ -133,27 +127,79 @@ def email_verification():
 
 @app.route('/login')
 def login():
-    return """<html>
-<body>
-<h1>Registration</h1>
-<form action='%(action)s' method='get'><br>
-Lastname: <input type='text' name='lastname'/> <br>
-Firstname: <input type='text' name='firstname'/> <br>
-Password: <input type='text' name='password'/> <br>
-%(verified_message)s
-<h3>Email: <input type='text' name='email'/></h3> <br>
-<input type='submit' value='Go'/>
-</form>
-</body>
-</html>""" % {'action':valid(), 'verified_message':ver_message()}
-
+    is_valid_login = is_valid_login()
+    return render_template('login.html', is_valid_login=is_valid_login)
 
 @app.route('/home')
 def home():
     global user
-    return """<html>
-    <h2>%s's homepage</h2>
-</html>""" % user.username
+    if user==None:
+        # get id from username and put it into the User object
+        user = User(id)
+    return render_template('homepage.html', user=user)
+
+# @app.route('/')
+# def homepage():
+#     return '''<html>
+# <h1>Talbook</h1>
+#     <a href="/signup">
+#     <button>Signup</button>
+#     </a>
+#     <a href="/login">
+#     <button>Login</button>
+#     </a>
+# </html>'''
+    
+# @app.route('/signup')
+# def register():
+#     return """<html>
+# <body>
+# <h1>Registration</h1>
+# <form action='%(action)s' method='get'><br>
+# Username: <input type='text' name='username'/> <br>
+# %(valid_username)s
+# Password: <input type='text' name='password'/> <br>
+# %(valid_password)s
+# <h3>Email: <input type='text' name='email'/></h3> <br>
+# <input type='submit' value='Go'/>
+# </form>
+# </body>
+# </html>""" % {'action':is_valid_signup(), 'valid_password': is_valid_password(), 'valid_username':is_valid_username()}
+# # is_valid_signup function checks if the password is valid and the username is valid and returns the destination
+# # is_Valid_password function checks the password if its valid return nothing but if not valid returns a message
+# # like wise for is_valid_username
+
+# @app.route('/email_verification')
+# def email_verification():
+#     return '''
+# <form action='%s' method='get'><br>
+# <input type='text' name='code'/>
+#     ''' % is_valid_code()
+# # is_valid_code function checks the code if its valid and returns the destination
+
+# @app.route('/login')
+# def login():
+#     return """<html>
+# <body>
+# <h1>Registration</h1>
+# <form action='%(action)s' method='get'><br>
+# Lastname: <input type='text' name='lastname'/> <br>
+# Firstname: <input type='text' name='firstname'/> <br>
+# Password: <input type='text' name='password'/> <br>
+# %(verified_message)s
+# <h3>Email: <input type='text' name='email'/></h3> <br>
+# <input type='submit' value='Go'/>
+# </form>
+# </body>
+# </html>""" % {'action':valid(), 'verified_message':ver_message()}
+
+
+# @app.route('/home')
+# def home():
+#     global user
+#     return """<html>
+#     <h2>%s's homepage</h2>
+# </html>""" % user.username
 
 # def process_email(Email):
     
