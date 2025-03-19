@@ -1,7 +1,20 @@
+# File: routes.py
 from app import app
 from flask import request
-# from constants import *
+import string
+from app import User
+from .mysql_util import execute_sql
 
+user = None
+
+password_rules = {
+    "min_length": 8,
+    "min_capital_letters": 1,
+    "min_numbers": 2,
+    "min_special_chars": 2
+}
+
+'''
 # Validation.py
 password_entered = False
 password_valid = True
@@ -10,76 +23,59 @@ no_capital_letters = 1
 no_integers = 2
 no_special_char = 2
 user = None
+'''
 
-def valid_check(Password):
-    global password_valid
-    global valid_length
-    global no_capital_letters
-    global no_integers
-    global no_special_char
-    global password_entered
+def is_valid_username(username: str):
+    usernames = list(User.get_usernames())
+    print(usernames)
+    return (usernames == [] or username not in usernames) 
+
+def password_errors(password: str):
+    '''
+    Returns a list of error messages if password does
+    NOT meet complexity requirements.
+    Returns an empty list if the password is valid.
+    '''
     
-    # print("password_entered", )
-    if not password_entered:
-        return False
+    errors = []
     
-    password_valid = False
-    
-    if len(Password) < valid_length:
-        return False;
-    count_cl = 0
-    count_int = 0
-    count_sp_c = 0
-    for c in Password:
-        if ord(c) >= ord('A') and ord(c) <= ord('Z'):
-            count_cl += 1
-        elif ord(c) >= ord('0') and ord(c) <= ord('9'):
-            count_int += 1
-        elif ord(c) < ord('a') or ord(c) > ord('z'):
-            count_sp_c += 1
-    valid = count_cl >= no_capital_letters and \
-    count_int >= no_integers and count_sp_c >= no_special_char
+    if len(password) < password_rules["min_length"]:
+        errors.append("Password must be at least %s characters long." % password_rules['min_length'])
 
-    print("password_valid?:", valid)
-    password_valid = valid
-        
-    return valid
+    capital_count = 0
+    num_count = 0
+    special_count = 0
+    for c in password:
+        if (c.isupper()):
+            capital_count += 1
+        elif (c.isdigit()):
+            num_count += 1
+        elif (c.isalnum()):
+            special_count += 1
 
-def valid():
-    global password_entered
-    Password = request.args.get('password', '[no password]')
-    if valid_check(Password):
-        print("password valid go home")
-        return 'home'
-    else:
-        print('true')
-        password_entered = True
-        return 'signin'
+    if capital_count < password_rules["min_capital_letters"]:
+        errors.append("Password must contain at least %s capital letter(s)." % password_rules['min_capital_letters'])
+    if num_count < password_rules["min_numbers"]:
+        errors.append("Password must contain at least %s number(s)." % password_rules['min_numbers'])
+    if special_count < password_rules["min_special_chars"]:
+        errors.append("Password must contain at least %s special character(s)." % password_rules['min_special_chars'])
 
-def ver_message():
-    global password_valid
-    global valid_length
-    global no_capital_letters
-    global no_integers
-    global no_special_char
-    if password_valid:
-        return ''
-    else:
-        return '<span style = "color: red; font-size: 10px">\
-        password has to be a minimum of %(i)s characters \
-        containing %(j)s capital letters, %(k)s integers, %(l)s \
-        special characters<br>\n <span style = "color: black">'\
-        %{'i':valid_length, 'j':no_capital_letters,
-                              'k':no_integers, 'l':no_special_char}
+    return errors
 
-# end of validation
+def is_valid_password(password):
+    return True
+    return (password_errors(password) == [])
 
+# sends code to specified email. To validate the email,
+# they must input the code
+def is_valid_email(email):
+    return True
 
 ## ======================================================== ##
 ## = these are all the links that will be used in the app = ##
 ## = the list of all the links would be =================== ##
 ## ========= homepage ===================================== ##
-## ========= sign in ====================================== ##
+## ========= signup ======================================= ##
 ## ========= login ======================================== ##
 ## ========= profile ====================================== ##
 ## ========= explore ====================================== ##
@@ -104,25 +100,46 @@ def homepage():
     </a>
 </html>'''
     
-@app.route('/signup')
-def register():
-    return """<html>
-<body>
-<h1>Registration</h1>
-<form action='%(action)s' method='get'><br>
-Username: <input type='text' name='username'/> <br>
-%(valid_username)s
-Password: <input type='text' name='password'/> <br>
-%(valid_password)s
-<h3>Email: <input type='text' name='email'/></h3> <br>
-<input type='submit' value='Go'/>
-</form>
-</body>
-</html>""" % {'action':is_valid_signup(), 'valid_password': is_valid_password(), 'valid_username':is_valid_username()}
-# is_valid_signup function checks if the password is valid and the username is valid and returns the destination
-# is_Valid_password function checks the password if its valid return nothing but if not valid returns a message
-# like wise for is_valid_username
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    """Handles user signup."""
+    if (request.method == 'POST'):
+        username = request.form.get('username')
+        print("username", username, type(username))
+        password = request.form.get('password')
+        email = request.form.get('email')
 
+        # check for invalid submissions
+        if (not username or not password or not email):
+            return "ERROR: missing fields"
+        elif (not is_valid_username(username)):
+            return "ERROR: invalid username"
+        elif (not is_valid_email(email)):
+            return "ERROR: invalid email format"
+        elif (not is_valid_password(password)):
+            return "ERROR: password does not meet complexity requirements"
+
+        # add user to database
+        try:
+            password_hash = User.hash_password(password)
+            sql = "INSERT INTO USERS (username, email, password_hash) VALUES (%s, %s, %s)"
+            execute_sql(sql, (username, email, password_hash), commit=True)
+
+            return "Registration successful! <a href='/login'>Login here</a>"
+
+        except Exception as e:
+            return "ERROR: %s" % str(e)
+    else:
+        # if it's a GET request, render the signup form
+         return """
+    <form method="POST">
+        Username: <input type="text" name="username" required><br>
+        Password: <input type="password" name="password" required><br>
+        Email: <input type="email" name="email" required><br>
+        <input type="submit" value="Register">
+    </form>
+    """
+    
 @app.route('/email_verification')
 def email_verification():
     return '''
