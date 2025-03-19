@@ -7,7 +7,7 @@ from .mysql_util import execute_sql
 
 user = None
 
-password_rules = {
+PASSWORD_RULES = {
     "min_length": 8,
     "min_capital_letters": 1,
     "min_numbers": 2,
@@ -38,8 +38,8 @@ def password_errors(password: str) -> list:
     
     errors = []
     
-    if len(password) < password_rules["min_length"]:
-        errors.append("Password must be at least %s characters long." % password_rules['min_length'])
+    if len(password) < PASSWORD_RULES["min_length"]:
+        errors.append("Password must be at least %s characters long." % PASSWORD_RULES['min_length'])
 
     capital_count = 0
     num_count = 0
@@ -52,12 +52,12 @@ def password_errors(password: str) -> list:
         elif (c.isalnum()):
             special_count += 1
 
-    if capital_count < password_rules["min_capital_letters"]:
-        errors.append("Password must contain at least %s capital letter(s)." % password_rules['min_capital_letters'])
-    if num_count < password_rules["min_numbers"]:
-        errors.append("Password must contain at least %s number(s)." % password_rules['min_numbers'])
-    if special_count < password_rules["min_special_chars"]:
-        errors.append("Password must contain at least %s special character(s)." % password_rules['min_special_chars'])
+    if capital_count < PASSWORD_RULES["min_capital_letters"]:
+        errors.append("Password must contain at least %s capital letter(s)." % PASSWORD_RULES['min_capital_letters'])
+    if num_count < PASSWORD_RULES["min_numbers"]:
+        errors.append("Password must contain at least %s number(s)." % PASSWORD_RULES['min_numbers'])
+    if special_count < PASSWORD_RULES["min_special_chars"]:
+        errors.append("Password must contain at least %s special character(s)." % PASSWORD_RULES['min_special_chars'])
 
     return errors
 
