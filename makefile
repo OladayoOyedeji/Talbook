@@ -8,3 +8,8 @@ run:
 	flask --app flask_app.py --debug run
 init_sql:
 	mysql --user=root --password=root < app/init.sql
+
+git g:
+	git add .
+	git commit -m 'sync'
+	git push
