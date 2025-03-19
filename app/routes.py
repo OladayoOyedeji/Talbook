@@ -25,12 +25,11 @@ no_special_char = 2
 user = None
 '''
 
-def is_valid_username(username: str):
-    usernames = list(User.get_usernames())
-    print(usernames)
-    return (usernames == [] or username not in usernames) 
+def is_valid_username(username: str) -> bool:
+    usernames = User.get_usernames()
+    return (usernames == None or username not in usernames) 
 
-def password_errors(password: str):
+def password_errors(password: str) -> list:
     '''
     Returns a list of error messages if password does
     NOT meet complexity requirements.
@@ -63,7 +62,7 @@ def password_errors(password: str):
     return errors
 
 def is_valid_password(password):
-    return True
+    # return True
     return (password_errors(password) == [])
 
 # sends code to specified email. To validate the email,
@@ -105,7 +104,6 @@ def signup():
     """Handles user signup."""
     if (request.method == 'POST'):
         username = request.form.get('username')
-        print("username", username, type(username))
         password = request.form.get('password')
         email = request.form.get('email')
 
@@ -121,10 +119,7 @@ def signup():
 
         # add user to database
         try:
-            password_hash = User.hash_password(password)
-            sql = "INSERT INTO USERS (username, email, password_hash) VALUES (%s, %s, %s)"
-            execute_sql(sql, (username, email, password_hash), commit=True)
-
+            User.register_user(username, email, password)
             return "Registration successful! <a href='/login'>Login here</a>"
 
         except Exception as e:
