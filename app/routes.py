@@ -112,10 +112,10 @@ def signup():
             return "ERROR: missing fields"
         elif (not is_valid_username(username)):
             return "ERROR: invalid username"
+         elif (not is_valid_password(password)):
+            return "ERROR: password does not meet complexity requirements"
         elif (not is_valid_email(email)):
             return "ERROR: invalid email format"
-        elif (not is_valid_password(password)):
-            return "ERROR: password does not meet complexity requirements"
 
         # add user to database
         try:
