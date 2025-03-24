@@ -1,74 +1,7 @@
 # File: routes.py
 from app import app
-from flask import request, render_template, flash, redirect, url_for
-import string
+from flask import request, render_template, flash, redirect, url_for, session
 from app.functions import *
-from app.User import *
-
-user = None
-
-# PASSWORD_RULES = {
-#     "min_length": 8,
-#     "min_capital_letters": 1,
-#     "min_numbers": 2,
-#     "min_special_chars": 2
-# }
-
-# '''
-# # Validation.py
-# password_entered = False
-# password_valid = True
-# valid_length = 8
-# no_capital_letters = 1
-# no_integers = 2
-# no_special_char = 2
-# user = None
-# '''
-
-# def is_valid_username(username: str) -> bool:
-#     usernames = User.get_usernames()
-#     return (usernames == None or username not in usernames) 
-
-# def password_errors(password: str) -> list:
-#     '''
-#     Returns a list of error messages if password does
-#     NOT meet complexity requirements.
-#     Returns an empty list if the password is valid.
-#     '''
-    
-#     errors = []
-    
-#     if len(password) < PASSWORD_RULES["min_length"]:
-#         errors.append("Password must be at least %s characters long." % PASSWORD_RULES['min_length'])
-
-#     capital_count = 0
-#     num_count = 0
-#     special_count = 0
-#     for c in password:
-#         if (c.isupper()):
-#             capital_count += 1
-#         elif (c.isdigit()):
-#             num_count += 1
-#         elif (c.isalnum()):
-#             special_count += 1
-
-#     if capital_count < PASSWORD_RULES["min_capital_letters"]:
-#         errors.append("Password must contain at least %s capital letter(s)." % PASSWORD_RULES['min_capital_letters'])
-#     if num_count < PASSWORD_RULES["min_numbers"]:
-#         errors.append("Password must contain at least %s number(s)." % PASSWORD_RULES['min_numbers'])
-#     if special_count < PASSWORD_RULES["min_special_chars"]:
-#         errors.append("Password must contain at least %s special character(s)." % PASSWORD_RULES['min_special_chars'])
-
-#     return errors
-
-# def is_valid_password(password):
-#     # return True
-#     return (password_errors(password) == [])
-
-# # sends code to specified email. To validate the email,
-# # they must input the code
-# def is_valid_email(email):
-#     return True
 
 ## ======================================================== ##
 ## = these are all the links that will be used in the app = ##
@@ -110,36 +43,36 @@ def signup():
         password = request.form.get('password')
         email = request.form.get('email')
 
-        # check for invalid submissions
-        # if (not username or not password or not email):
-        #     return "ERROR: missing fields"
-        # elif (not is_valid_username(username)):
-        #     return "ERROR: invalid username"
-        #  elif (not is_valid_password(password)):
-        #     return "ERROR: password does not meet complexity requirements"
-        # elif (not is_valid_email(email)):
-        #     return "ERROR: invalid email format"
-
-        # add user to database
+        # verify fields
         is_valid = {'username': is_valid_username(username),
                     'password': is_valid_password(password)}
 
         invalid_message = {'username': 'username already used',
                            'password': invalid_message_password()}
-        # print(is_valid)
+        app.logger.debug(is_valid)
         # sends the verification code
-        if is_valid['username'] and is_valid['password'] and email != None:
-            send_verification_code()
+        if is_valid['username'] and is_valid['password'] and email:
+            session['email'] = email  
+            session['username'] = username
+            session['password'] = password
+            send_verification_code(email)  
+            flash("Verification code sent. Please check your email.")
             return redirect(url_for('email_verification'))
-        
-    else:
-        # if it's a GET request, render the signup form
+    elif request.method == 'GET':
          return render_template('signup.html', is_valid=is_valid, invalid_message=invalid_message)
-    
-@app.route('/email_verification')
-def email_verification():
-    return render_template('email_verification.html', valid_code=is_valid_code)
-# is_valid_code function checks the code if its valid and returns the destination
+
+@app.route('/email_verification', methods=['GET', 'POST'])
+def email_verification():   
+    if request.method == 'POST':
+        if is_valid_code(request.form.get('code')):
+            session['verified'] = True
+            User.register_user(session['username'], session['email'], session['password'])
+            flash("Registration successful! Please login.")
+            return redirect(url_for('login'))
+        else:
+            flash("Invalid code. Please try again.")
+    elif request.method == 'GET':
+        return render_template('email_verification.html')
 
 @app.route('/login')
 def login():
@@ -156,7 +89,7 @@ def login():
         hash = hash_password(password)
 
         id = get_user_id(user_or_email)
-        print(id)
+        app.logger.debug(id)
         is_valid_login = {'user': id != None,
                           'password': valid_hash(id, hash)}
         invalid_message = 'invalid login'

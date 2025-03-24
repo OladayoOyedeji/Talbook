@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import datetime
-from google_app_config import GMAIL, TO, GOOGLE_APP_PASSWORD
+from .google_app_config import GMAIL, TO, GOOGLE_APP_PASSWORD
 
 def sendgmail(to_=TO,
               from_=GMAIL,

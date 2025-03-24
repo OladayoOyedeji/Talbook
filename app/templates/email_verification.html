@@ -1,6 +1,27 @@
-{% if valid_code %}
-<form action='homepage' method='get'><br>
-  {% else %}
-  <form action='email_verification' method='get'><br>
+<html>
+  <!-- allows flash messages to work -->
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="flash-messages">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+    <h1>Email Verification</h1>
+
+    {% if valid_code %}
+        <!-- redirect to homepage after successful verification -->
+        <form action="{{ url_for('home') }}" method="POST">
+    {% else %}
+        <!-- form submits to email_verification -->
+        <form action="{{ url_for('email_verification') }}" method="POST">
     {% endif %}
-<input type='text' name='code'/>
+        <label for="code">Enter Verification Code:</label>
+        <input type="text" name="code" required>
+    </form>
+
+</body>
+</html>

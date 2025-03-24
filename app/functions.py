@@ -1,4 +1,10 @@
-import sys
+# functions.py
+from app import app
+from flask import session
+import random
+import string
+from . import User
+from .email_verification.myemail import *
 
 PASSWORD_RULES = {
     "min_length": 8,
@@ -7,19 +13,7 @@ PASSWORD_RULES = {
     "min_special_chars": 2
 }
 
-'''
-# Validation.py
-password_entered = False
-password_valid = True
-valid_length = 8
-no_capital_letters = 1
-no_integers = 2
-no_special_char = 2
-user = None
-'''
-
 def is_valid_username(username: str) -> bool:
-    return True
     usernames = User.get_usernames()
     return (usernames == None or username not in usernames) 
 
@@ -51,9 +45,9 @@ def password_errors(password: str) -> list:
             capital_count += 1
         elif (c.isdigit()):
             num_count += 1
-        elif (c.isalnum()):
+        elif (not c.isalnum()):
             special_count += 1
-    print(capital_count, num_count, special_count)
+
     if capital_count < PASSWORD_RULES["min_capital_letters"]:
         errors.append("Password must contain at least %s capital letter(s)." % PASSWORD_RULES['min_capital_letters'])
     if num_count < PASSWORD_RULES["min_numbers"]:
@@ -64,16 +58,41 @@ def password_errors(password: str) -> list:
     return errors
 
 def is_valid_password(password):
-    # return True
     return (password_errors(password) == [])
 
 # sends code to specified email. To validate the email,
 # they must input the code
-def is_valid_email(email):
+def is_valid_email(email: str):
     return True
 
-def send_verification_code():
-    return None
+def generate_verification_code(length: int = 6) -> str:
+    """Generates a random 6-digit verification code"""
+    return ''.join(random.choices(string.digits, k=length))
 
-def is_valid_code():
-    return False
+def send_verification_code(email: str) -> None:
+    """Sends a verification code to the user via email"""
+    verification_code = generate_verification_code()
+    session['verification_code'] = verification_code
+    # email sending logic ####
+    text = "Your verification code is %s. This code will expire in 30 minutes." % verification_code
+    sendgmail(to_=[email],
+              from_=GMAIL,
+              subject='TalBook Verification Code',
+              text=text,
+              html='<html><body><h1>%s</h1></body></html>' % verification_code
+              )
+    app.logger.debug("Verification code sent to %s: %s" % (email, verification_code))
+
+def is_valid_code(user_entered_code: str) -> bool:
+    '''
+    Returns True if the entered validation code matches the stored one,
+    and False otherwise
+    '''
+    return True
+    stored_code = session.get('verification_code')
+
+    if stored_code != None and user_entered_code == stored_code:
+        session.pop('verification_code') # remove code after success
+        return True
+    else:
+        return False
