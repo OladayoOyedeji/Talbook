@@ -1,0 +1,6 @@
+{% if valid_code %}
+<form action='homepage' method='get'><br>
+  {% else %}
+  <form action='email_verification' method='get'><br>
+    {% endif %}
+<input type='text' name='code'/>

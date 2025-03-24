@@ -1,0 +1,43 @@
+<html>
+    <h1>SIGNUP</h1>
+    
+    {% if is_valid.username and is_valid.password %}
+    <form action='email_verification' method='GET'>
+    {% else %}
+    <form action='signup' method='POST'>
+    {% endif %}
+      <div class='form-group'>
+      <label for='username'>Username</label>
+      <input
+        type='text'
+        class='form-control'
+        name='username'
+        placeholder='Enter username'/> <br>
+      </div>
+     {% if not is_valid.username %}
+      <h3>{{ invalid_message.username }}</h3>
+      {% endif %}
+      <div class='form-group'>
+        <label for='password'> Password </label>
+        <input
+          type='text'
+          class='form-control'
+          name='password'
+          placeholder='Enter Password'/> <br>
+        </div>
+      {% if not is_valid.password%}
+      <h3>{{ invalid_message.password }}</h3>
+      {% endif %}
+      
+      <div class='form-group'>
+        <label for='email'> Email </label>
+        <input
+          type='text'
+          class='form-control'
+          name='email'
+          placeholder='Enter Email'/> <br>
+        </div>
+      <input type='submit' value='Go'/>
+    </form>
+  </body>
+</html>
