@@ -102,6 +102,9 @@ def base():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     """Handles user signup."""
+    is_valid = {'username': True, 'password': True}  # default values
+    invalid_message = {'username': '', 'password': ''}
+    
     if (request.method == 'POST'):
         username = request.form.get('username')
         password = request.form.get('password')
@@ -123,7 +126,7 @@ def signup():
 
         invalid_message = {'username': 'username already used',
                            'password': invalid_message_password()}
-        print(is_valid)
+        # print(is_valid)
         # sends the verification code
         if is_valid['username'] and is_valid['password'] and email != None:
             send_verification_code()
