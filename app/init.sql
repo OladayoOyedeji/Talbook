@@ -1,5 +1,4 @@
 -- File: init.sql
--- Name: Cole Schwandt
 -- Description: Creates tables for the Talbook database
 
 drop database if exists Talbook;

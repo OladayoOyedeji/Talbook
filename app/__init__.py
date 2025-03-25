@@ -1,5 +1,6 @@
 #__init__.py
 from flask import Flask
+from . import mysql_util
 import logging
 
 app = Flask(__name__)
@@ -16,5 +17,8 @@ logging.basicConfig(level=logging.DEBUG)
 file_handler = logging.FileHandler('app.log')
 file_handler.setLevel(logging.DEBUG)
 app.logger.addHandler(file_handler)
+
+# ensure the database is set up
+mysql_util.ensure_database()
 
 from app import routes

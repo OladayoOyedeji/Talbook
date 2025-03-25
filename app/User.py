@@ -14,39 +14,13 @@ CREATE TABLE User
 '''
 
 from .mysql_util import execute_sql
-import bcrypt
+from .hash import *
  
 def get_usernames():
     sql = '''
     SELECT username from User
     '''
     return execute_sql(sql)
-
-##==============================================================
-## Password Hashing Functions
-## https://www.geeksforgeeks.org/hashing-passwords-in-python-with-bcrypt/
-##==============================================================
-def hash_password(password: str) -> str:
-    """
-    Hashes a password using bcrypt.
-    
-    password: The plaintext password to hash
-    return: The hashed password as a string
-    """
-    # generate a salt and hash the password
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed_password.decode('utf-8')  # convert bytes to string
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Verifies a plaintext password against a hashed password.
-    
-    plain_password: The plaintext password to verify
-    hashed_password: The hashed password to compare against
-    return: True if the passwords match, False otherwise
-    """
-    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 ##==============================================================
 ## User Registration and Login Functions
@@ -70,7 +44,7 @@ def register_user(username: str, email: str, password: str, descrip: str = None,
     INSERT INTO User (username, email, password_hash, descrip, photo_id)
     VALUES (%s, %s, %s, %s, %s)
     '''
-    execute_sql(sql, (username, email, password_hash, descrip, photo_id))
+    execute_sql(sql, (username, email, password_hash, descrip, photo_id), commit=True)
 
 ##==============================================================
 ## Helper Functions
