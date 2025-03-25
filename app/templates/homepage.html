@@ -1,6 +1,21 @@
 <html>
   <body>
-    <h1>{{ user.username }}'s homepage</h1>
-    Hello, World!
+    <!-- allows flash messages to work -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+      <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    
+    {% if user %}
+      <h1>{{ user.username }}'s homepage</h1>
+      Hello, World!
+    {% else %}
+      <p>You are not logged in.</p>
+    {% endif %}
   </body>
 </html>

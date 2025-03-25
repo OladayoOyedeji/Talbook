@@ -74,38 +74,31 @@ def email_verification():
     elif request.method == 'GET':
         return render_template('email_verification.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    
-    global user
-    
-    # is_valid_login = {'user':False, 'password':False}
     invalid_message = ''
-    
+
     if request.method == 'POST':
         user_or_email = request.form.get('user_or_email')
         password = request.form.get('password')
 
-        hash = hash_password(password)
-
-        id = get_user_id(user_or_email)
-        app.logger.debug(id)
-        is_valid_login = {'user': id != None,
-                          'password': valid_hash(id, hash)}
-        invalid_message = 'invalid login'
-        if valid_login['user'] and valid_login['password']:
-            user = User(id)
+        if is_valid_login(user_or_email, password):
+            flash("Login successful.")
             return redirect(url_for('home'))
-    
-    return render_template('login.html', invalid_message=invalid_message)
+        else:
+            invalid_message = "Invalid username, email, or password."
+            return render_template('login.html', invalid_message=invalid_message)
+    elif request.method == 'GET':
+        return render_template('login.html', invalid_message=invalid_message)
 
 @app.route('/home')
 def home():
-    global user
-    if user==None:
-        # get id from username and put it into the User object
-        user = User(id)
-    return render_template('homepage.html', user=user)
+    username = session.get('username')
+    if username:
+        return render_template('homepage.html', user={'username': username})
+    else:
+        flash("You must log in to view this page.")
+        return redirect(url_for('login'))  # redirect to login if not logged in
 
 # @app.route('/')
 # def homepage():

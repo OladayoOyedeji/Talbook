@@ -5,6 +5,8 @@ import random
 import string
 from . import User
 from .email_verification.myemail import *
+from . import hash
+from .mysql_util import *
 
 PASSWORD_RULES = {
     "min_length": 8,
@@ -14,8 +16,18 @@ PASSWORD_RULES = {
 }
 
 def is_valid_username(username: str) -> bool:
-    usernames = User.get_usernames()
-    return (usernames == None or username not in usernames) 
+    """
+    Checks if username is valid and available.
+    Returns False if:
+    - Username contains '@' symbol
+    - Username already exists
+    - Usernames list couldn't be fetched (None)
+    """
+    if '@' in username:
+        return False
+    else:
+        usernames = User.get_usernames()
+        return (usernames == None or username not in usernames) 
 
 def invalid_message_password():
     return'password has to be a minimum of %(i)s characters \
@@ -60,11 +72,6 @@ def password_errors(password: str) -> list:
 def is_valid_password(password):
     return (password_errors(password) == [])
 
-# sends code to specified email. To validate the email,
-# they must input the code
-def is_valid_email(email: str):
-    return True
-
 def generate_verification_code(length: int = 6) -> str:
     """Generates a random 6-digit verification code"""
     return ''.join(random.choices(string.digits, k=length))
@@ -73,7 +80,6 @@ def send_verification_code(email: str) -> None:
     """Sends a verification code to the user via email"""
     verification_code = generate_verification_code()
     session['verification_code'] = verification_code
-    # email sending logic ####
     text = "Your verification code is %s. This code will expire in 30 minutes." % verification_code
     sendgmail(to_=[email],
               from_=GMAIL,
@@ -85,14 +91,44 @@ def send_verification_code(email: str) -> None:
 
 def is_valid_code(user_entered_code: str) -> bool:
     '''
-    Returns True if the entered validation code matches the stored one,
+    Returns True if the entered verification code matches the stored one,
     and False otherwise
     '''
     return True
     stored_code = session.get('verification_code')
 
-    if stored_code != None and user_entered_code == stored_code:
-        session.pop('verification_code') # remove code after success
+    if not stored_code and user_entered_code == stored_code:
         return True
     else:
+        return False
+
+def is_valid_login(user_input: str, plain_password: str):
+    """
+    Authenticates a user by checking if the entered password
+    matches the stored hash
+
+    user_input: either username or email of user
+    plain_password: plaintext password of user
+    """
+    
+    sql = "SELECT id, username, email, password_hash from User \
+    where username = %s or email = %s;"
+    params = (user_input, user_input)
+    
+    user = execute_sql(sql, params)
+    assert len(user) <= 1
+
+    if user:
+        user_id, username, email, stored_hashed_password = user[0]
+
+        if hash.verify_password(plain_password, stored_hashed_password):
+            app.logger.debug("authentication successful for user: %s" % username)
+            session['user_id'] = user_id
+            session['username'] = username
+            return True
+        else:
+            app.logger.debug("password failed for user: %s" % username)
+            return False
+    else:
+        app.logger.debug("user_input failed for user: %s" % username)
         return False
