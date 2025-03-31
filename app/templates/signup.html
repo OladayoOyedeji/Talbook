@@ -11,9 +11,18 @@
   {% endwith %}
   
   <h1>SIGNUP</h1>
-  
-  <form action='{{ url_for("signup") }}' method='POST'>
-    <div class='form-group'>
+
+  <form action='{{ url_for("signup") }}' method='POST'>  
+  <div class='form-group'>
+      <label for='email'> Email </label>
+      <input
+        type='email'
+        class='form-control'
+        name='email'
+        placeholder='Enter Email'/> <br>
+    </div>
+
+  <div class='form-group'>
       <label for='username'>Username</label>
       <input
         type='text'
@@ -37,15 +46,6 @@
       {% if not is_valid.password %}
         <h3>{{ invalid_message.password }}</h3>
       {% endif %}
-    </div>
-    
-    <div class='form-group'>
-      <label for='email'> Email </label>
-      <input
-        type='email'
-        class='form-control'
-        name='email'
-        placeholder='Enter Email'/> <br>
     </div>
     
     <input type='submit' value='Go'/>

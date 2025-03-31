@@ -7,10 +7,12 @@ def handle_signup():
     invalid_message = {'username': '', 'password': ''}
     
     if (request.method == 'POST'):
+        email = request.form.get('email')
         username = request.form.get('username')
         password = request.form.get('password')
-        email = request.form.get('email')
 
+        app.logger.debug("email:%s, username:%s, password:%s" % (email, username, password))
+        
         # verify fields
         is_valid = {'username': is_valid_username(username),
                     'password': is_valid_password(password)}
@@ -26,5 +28,7 @@ def handle_signup():
             send_verification_code(email)  
             flash("Verification code sent. Please check your email.")
             return redirect(url_for('email_verification'))
-    elif request.method == 'GET':
-         return render_template('signup.html', is_valid=is_valid, invalid_message=invalid_message)
+        else:
+            flash("Registration failed: %s %s" % (is_valid, email))
+
+    return render_template('signup.html', is_valid=is_valid, invalid_message=invalid_message)
