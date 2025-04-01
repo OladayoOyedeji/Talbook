@@ -10,10 +10,9 @@ use Talbook;
 --==============================================================
 CREATE TABLE Photo
 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY
     -- x INT, -- width of image
     -- y INT, -- height of image
-    link VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -39,7 +38,7 @@ CREATE TABLE Category
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name varchar(50) NOT NULL,
-    type ENUM('good', 'service') NOT NULL
+    type ENUM('good', 'service') DEFAULT 'good'
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -61,18 +60,38 @@ CREATE TABLE Subcategory
 CREATE TABLE Item
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    item_name VARCHAR(100) NOT NULL,
+    item_name VARCHAR(300) NOT NULL,
     seller_id INT NOT NULL,
-    -- category_id INT NOT NULL,
-    subcategory_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     `condition` ENUM('new', 'like new', 'very good', 'good', 'acceptable') DEFAULT NULL,
-    quantity INT DEFAULT NULL,
+    -- quantity INT DEFAULT 1,
     descrip TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY (seller_id) REFERENCES User(id),
-    -- FOREIGN KEY (category_id) REFERENCES Category(id),
-    FOREIGN KEY (subcategory_id) REFERENCES Subcategory(id)
+    FOREIGN KEY (seller_id) REFERENCES User(id)
+) ENGINE=InnoDB;
+
+--==============================================================
+-- Join Table: Link Categories to Listings (Items)
+--==============================================================
+CREATE TABLE Item_Category
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    category_id INT NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES Item(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+--==============================================================
+-- Join Table: Link Subcategories to Listings (Items)
+--==============================================================
+CREATE TABLE Item_Subcategory
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    subcategory_id INT NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES Item(id) ON DELETE CASCADE,
+    FOREIGN KEY (subcategory_id) REFERENCES Subcategory(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -160,11 +179,6 @@ CREATE TABLE Follow
     FOREIGN KEY (followed_id) REFERENCES User(id)
 ) ENGINE=InnoDB;
 
---==============================================================
--- NO 12. Item_Photo: join table to allow for multiple photos to be
--- attached to an item (how do you make it so you know which is
--- to be displayed first?)
---==============================================================
 CREATE TABLE Item_Photo
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
