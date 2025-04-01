@@ -1,6 +1,6 @@
 #__init__.py
 from flask import Flask
-from . import mysql_util
+from app.utils import mysql_util
 import logging
 
 app = Flask(__name__)
