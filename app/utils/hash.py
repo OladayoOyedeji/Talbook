@@ -33,7 +33,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def hash_password_test():
     plaintext_password = "42Mutlu$%"
     rounds = ROUNDS # not the same as "hashing password x amount of times"
-                    # but providess even more security
+                    # but provides even more security
 
     start_time = time.time()
     hashed_password = hash_password(plaintext_password, rounds)

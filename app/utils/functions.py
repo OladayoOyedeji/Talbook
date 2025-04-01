@@ -131,5 +131,5 @@ def is_valid_login(user_input: str, plain_password: str):
             app.logger.debug("password failed for user: %s" % username)
             return False
     else:
-        app.logger.debug("user_input failed for user: %s" % username)
+        app.logger.debug("user_input failed for user: %s" % user_input)
         return False
