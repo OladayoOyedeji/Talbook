@@ -7,8 +7,8 @@ run:
 	export FLASK_ENV=development
 	firefox localhost:5000 &
 	flask --app flask_app.py --debug run
-init_sql:
-	mysql --user=root --password=root < app/db/init.sql
+init_sql i:
+	mysql --user=root --password=root < app/init.sql
 
 git g:
 	git add .
@@ -19,7 +19,7 @@ phpmyadmin:
 	bash -c 'systemctl start httpd.service && apachectl start';
 	xdg-open http://localhost/phpmyadmin
 
-reset_venv:
+reset_venv r:
 	rm -rf venv
 	python3 -m venv venv
 	source venv/bin/activate
