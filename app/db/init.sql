@@ -13,7 +13,6 @@ CREATE TABLE Photo
     id INT AUTO_INCREMENT PRIMARY KEY,
     -- x INT, -- width of image
     -- y INT, -- height of image
-    link VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -22,7 +21,7 @@ CREATE TABLE Photo
 CREATE TABLE User
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    photo_id INT, -- profile picture
+    photo_id INT default 0, -- profile picture
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(254) UNIQUE NOT NULL,
     -- state enum('MO', 'MA', ...)???
@@ -174,3 +173,5 @@ CREATE TABLE Item_Photo
     FOREIGN KEY (item_id) REFERENCES Item(id),
     FOREIGN KEY (photo_id) REFERENCES Photo(id)
 ) ENGINE=InnoDB;
+
+insert into Photo id=0;
