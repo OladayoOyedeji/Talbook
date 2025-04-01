@@ -36,7 +36,25 @@ def execute_sql(sql, params=(), commit=False):
         conn.rollback() # rollback on failure
     finally: # this always executes, even after the return in the try
         cursor.close()
-        conn.close() 
+        conn.close()
+
+def execute_many_sql(sql, param_list, commit=False):
+    """
+    Executes a batch of SQL statements
+    """
+    conn = get_db_connection(DB_NAME)
+    cursor = conn.cursor()
+
+    try:
+        cursor.executemany(sql, param_list)
+        if commit:
+            conn.commit()
+    except Exception as e:
+        print("error in execute_many_sql():", e)
+        conn.rollback()
+        
+    cursor.close()
+    conn.close()
 
 def database_exists(db_name=DB_NAME):
     """

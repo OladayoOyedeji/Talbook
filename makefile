@@ -8,7 +8,7 @@ run:
 	firefox localhost:5000 &
 	flask --app flask_app.py --debug run
 init_sql:
-	mysql --user=root --password=root < app/init.sql
+	mysql --user=root --password=root < app/db/init.sql
 
 git g:
 	git add .
