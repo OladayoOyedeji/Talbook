@@ -1,7 +1,8 @@
 # File: email_verification.py
 from flask import request, render_template, flash, redirect, url_for, session
-from app.functions import is_valid_code
-from app.User import register_user
+
+from app.utils.functions import is_valid_code
+from app.utils.User import register_user
 
 def handle_email_verification():
     if request.method == 'POST':

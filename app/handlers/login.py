@@ -1,6 +1,6 @@
 # File: login.py
 from flask import request, render_template, flash, redirect, url_for
-from app.functions import is_valid_login
+from app.utils.functions import is_valid_login
 
 def handle_login():
     invalid_message = ''

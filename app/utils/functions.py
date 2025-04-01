@@ -3,10 +3,11 @@ from app import app
 from flask import session
 import random
 import string
-from . import User
-from .email_verification.myemail import *
-from . import hash
-from .mysql_util import *
+
+from app.utils import User
+from app.email_verification.myemail import *
+from app.utils import hash
+from app.utils.mysql_util import *
 
 PASSWORD_RULES = {
     "min_length": 8,

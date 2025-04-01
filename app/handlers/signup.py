@@ -1,6 +1,6 @@
 # File: signup.py
 from flask import request, render_template, flash, redirect, url_for, session, current_app as app
-from app.functions import is_valid_username, is_valid_password, invalid_message_password, send_verification_code
+from app.utils.functions import is_valid_username, is_valid_password, invalid_message_password, send_verification_code
 
 def handle_signup():
     is_valid = {'username': True, 'password': True}  # default values
