@@ -1,0 +1,36 @@
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah$%
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah$%
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+{'username': True, 'password': True}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah$
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+{'username': True, 'password': False}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah$%
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+{'username': True, 'password': True}
+email:bigbrovc@gmail.com, username:bigbrovc, password:blehblehbleh
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+{'username': True, 'password': False}
+email:bigbrovc@gmail.com, username:bigbrovc, password:blehblehbleh
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+{'username': True, 'password': False}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah#%
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+{'username': True, 'password': True}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah$%
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+is_valid_username():True
+{'username': True, 'password': True}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah$%
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+bigbrovc is_valid_username():True
+{'username': True, 'password': True}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah#$
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+username:bigbrovc, tuple(username):('b', 'i', 'g', 'b', 'r', 'o', 'v', 'c'), is_valid_username():True
+{'username': True, 'password': True}
+email:bigbrovc@gmail.com, username:bigbrovc, password:42Farrah#$
+[('bigbrovc',), ('nashydog',), ('Robiefresh',)]
+username:bigbrovc, tuple(username):('b', 'i', 'g', 'b', 'r', 'o', 'v', 'c'), is_valid_username():False
+{'username': False, 'password': True}
+authentication successful for user: bigbrovc

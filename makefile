@@ -7,15 +7,21 @@ run:
 	export FLASK_ENV=development
 	firefox localhost:5000 &
 	flask --app flask_app.py --debug run
+
 init_sql i:
-	mysql --user=root --password=root < app/init.sql
+	mysql --user=root --password=root < app/db/init.sql
+	mysql --user=root --password=root < app/db/category.sql
+	mysql --user=root --password=root < app/db/subcategory.sql
+	python -m app.db.accounts
+	mysql --user=root --password=root < app/db/accounts.sql
+	mysql --user=root --password=root < app/db/listings.sql
 
 git g:
 	git add .
 	git commit -m 'sync'
 	git push
 
-phpmyadmin:
+phpmyadmin p:
 	bash -c 'systemctl start httpd.service && apachectl start';
 	xdg-open http://localhost/phpmyadmin
 
@@ -26,3 +32,4 @@ reset_venv r:
 	python -m ensurepip
 	pip install --upgrade pip
 	pip install -r requirements.txt
+

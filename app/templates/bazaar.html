@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazaar</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .item-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .item-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bazaar</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="grid-container">
+        {% for item in items %}
+        <div class="item-card">
+            <img src="{{ item[3] or '/static/default.jpg' }}" alt="Item Photo" class="item-image">
+            <h3>{{ item[1] }}</h3>
+            <p>Price: ${{ item[2] }}</p>
+            <p>Condition: {{ item[3] }}</p>
+            <p>Seller: {{ item[4] }}</p>
+            <a href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

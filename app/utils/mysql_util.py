@@ -2,7 +2,8 @@
 import pymysql
 
 DB_NAME = "Talbook"
-INIT_SQL_FILE = "app/init.sql"  # path to MySQL initialization script
+USE_DB = "use %s;" % DB_NAME
+INIT_SQL_FILE = "app/db/init.sql"  # path to MySQL initialization script
 
 def get_db_connection(db=None):
     """
@@ -87,3 +88,15 @@ def ensure_database():
         sql = "CREATE DATABASE %s;"
         execute_sql(sql, (DB_NAME,), commit=True)
         execute_sql_file(INIT_SQL_FILE)
+
+def append_sql(filename: str, sql: str) -> None:
+    ''' Appends MySQL content to a file'''
+    f = open(filename, 'a')
+    f.write(sql + '\n')
+    f.close()
+
+def write_sql(filename: str, sql: str) -> None:
+    '''Writes MySQL content to a file (overwrites)'''
+    f = open(filename, 'w')
+    f.write(sql + '\n')
+    f.close()  

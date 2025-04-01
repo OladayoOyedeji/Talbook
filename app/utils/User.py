@@ -13,6 +13,8 @@ CREATE TABLE User
 ) ENGINE=InnoDB;
 '''
 
+from app import app
+
 from .mysql_util import execute_sql
 from .hash import *
  
@@ -20,7 +22,9 @@ def get_usernames():
     sql = '''
     SELECT username from User
     '''
-    return execute_sql(sql)
+    ret = execute_sql(sql)
+    app.logger.debug(ret)
+    return ret
 
 ##==============================================================
 ## User Registration and Login Functions
