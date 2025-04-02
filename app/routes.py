@@ -1,5 +1,5 @@
 # File: routes.py
-from flask import Flask
+from flask import Flask, render_template
 from app import app
 
 # import all route handlers from handlers/
@@ -47,3 +47,10 @@ def item_details(item_id):
 @app.route('/bazaar', methods=['GET', 'POST'])
 def bazaar():
     return handle_bazaar()
+
+##==============================================================
+## Testing routes
+##==============================================================
+@app.route('/tags')
+def tags():
+    return render_template('tags.html')

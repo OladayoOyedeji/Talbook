@@ -1,0 +1,64 @@
+/* File: tags.css */
+
+/* Tag Container */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+/* Base Tag Style */
+.tag {
+    cursor: pointer;
+    background: #333;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+    border: 1px solid #555;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Tag Hover Effects */
+.tag:hover {
+    background: #444;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Small Tags */
+.tag-sm {
+    cursor: pointer;
+    padding: 3px 8px;
+    font-size: 12px;
+}
+
+/* Large Tags */
+.tag-lg {
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+/* Clickable Tags */
+.tag-clickable {
+    cursor: pointer;
+}
+
+.tag-clickable:hover {
+    background: #555;
+}
+
+/* Tag Count Number */
+.tag-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
