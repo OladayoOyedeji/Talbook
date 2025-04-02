@@ -10,11 +10,10 @@ run:
 
 init_sql i:
 	mysql --user=root --password=root < app/db/init.sql;
-	mysql --user=root --password=root < app/db/category.sql;
-	mysql --user=root --password=root < app/db/subcategory.sql;
-	python -m app.db.accounts;
-	mysql --user=root --password=root < app/db/accounts.sql;
-	mysql --user=root --password=root < app/db/listings.sql;
+	mysql --user=root --password=root < app/db/Tag.sql
+	python -m app.db.User;
+	mysql --user=root --password=root < app/db/User.sql;
+	mysql --user=root --password=root < app/db/Item.sql;
 
 git g:
 	git add .
