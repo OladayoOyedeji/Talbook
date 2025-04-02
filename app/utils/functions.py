@@ -24,12 +24,16 @@ def is_valid_username(username: str) -> bool:
     - Username already exists
     - Usernames list couldn't be fetched (None)
     """
+    ret = False
     if '@' in username:
-        return False
+        ret = False
     else:
         usernames = User.get_usernames()
-        return (usernames == None or username not in usernames) 
+        ret = (usernames is None or (username,) not in usernames)
 
+    app.logger.debug("username:%s, is_valid_username():%s" % (username, ret))
+    return ret
+    
 def invalid_message_password():
     return'password has to be a minimum of %(i)s characters \
     containing %(j)s capital letters, %(k)s integers, %(l)s \

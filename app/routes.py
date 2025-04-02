@@ -8,7 +8,12 @@ from app.handlers.signup import handle_signup
 from app.handlers.email_verification import handle_email_verification
 from app.handlers.login import handle_login
 from app.handlers.home import handle_home
+<<<<<<< HEAD
 from app.handlers.user_profile import handle_user_profile
+=======
+from app.handlers.bazaar import handle_bazaar
+from app.handlers.item_details import handle_item_details
+>>>>>>> main
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -34,6 +39,16 @@ def login():
 def home():
     return handle_home()
 
+<<<<<<< HEAD
 @app.route('/user_profile/<username>')
 def user_profile(username):
     return handle_user_profile(username)
+=======
+@app.route("/item/<int:item_id>")
+def item_details(item_id):
+    return handle_item_details(item_id)
+    
+@app.route('/bazaar', methods=['GET', 'POST'])
+def bazaar():
+    return handle_bazaar()
+>>>>>>> main
