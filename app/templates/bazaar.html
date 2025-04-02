@@ -11,13 +11,13 @@
             gap: 20px;
         }
         .item-card {
-            border: 1px solid #ddd;
+            border: 3px solid #000000;
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
         }
         .item-image {
-            width: 100%;
+            width: 200px;
             height: 150px;
             object-fit: cover;
         }
@@ -38,7 +38,9 @@
     <div class="grid-container">
         {% for item in items %}
         <div class="item-card">
-            <img src="{{ item[3] or '/static/default.jpg' }}" alt="Item Photo" class="item-image">
+            <img src="/static/images/uploads/{{ item[0] }}.png" 
+                 onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+                 class="item-image">
             <h3>{{ item[1] }}</h3>
             <p>Price: ${{ item[2] }}</p>
             <p>Condition: {{ item[3] }}</p>

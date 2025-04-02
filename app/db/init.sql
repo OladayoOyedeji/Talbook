@@ -71,6 +71,19 @@ CREATE TABLE Item
 ) ENGINE=InnoDB;
 
 --==============================================================
+-- Join Table: Link Photos to Listings (Items)
+--==============================================================
+CREATE TABLE Item_Photo
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    photo_id INT NOT NULL,
+    display_order INT NOT NULL, -- determines the order of photos
+    FOREIGN KEY (item_id) REFERENCES Item(id),
+    FOREIGN KEY (photo_id) REFERENCES Photo(id)
+) ENGINE=InnoDB;
+
+--==============================================================
 -- Join Table: Link Categories to Listings (Items)
 --==============================================================
 CREATE TABLE Item_Category
@@ -178,15 +191,3 @@ CREATE TABLE Follow
     FOREIGN KEY (follower_id) REFERENCES User(id),
     FOREIGN KEY (followed_id) REFERENCES User(id)
 ) ENGINE=InnoDB;
-
-CREATE TABLE Item_Photo
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    item_id INT NOT NULL,
-    photo_id INT NOT NULL,
-    display_order INT NOT NULL, -- determines the order of photos
-    FOREIGN KEY (item_id) REFERENCES Item(id),
-    FOREIGN KEY (photo_id) REFERENCES Photo(id)
-) ENGINE=InnoDB;
-
-insert into Photo id=0;
