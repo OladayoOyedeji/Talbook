@@ -21,13 +21,13 @@ CREATE TABLE Photo
 CREATE TABLE User
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    photo_id INT default 0, -- profile picture
+    photo_id INT default NULL, -- profile picture
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(254) UNIQUE NOT NULL,
     -- state enum('MO', 'MA', ...)???
     password_hash VARCHAR(255) NOT NULL,
     descrip TEXT,
-    FOREIGN KEY (photo_id) REFERENCES Photo(id)
+    FOREIGN KEY (photo_id) REFERENCES Photo(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 --==============================================================

@@ -2,14 +2,13 @@ use Talbook;
 
 -- cole
 --=========
-SET @seller_id = (SELECT id FROM User WHERE username='bigbrovc');
+SET @seller_id = (SELECT id FROM User WHERE username='bigbrovc');       
 
 -- harp
 -----------
-SET @category_id = (SELECT id FROM Category WHERE name='Musical Instruments & Gear');
 INSERT INTO Item (item_name, seller_id, price, `condition`, descrip) VALUES
 (
-'Roosebeck 22-String Heather Harp w/ Full Chelby Levers',
+'Roosebeck 22-String Heather Harp w/ Full 3Chelby Levers',
 @seller_id,
 1999.99,
 'very good', 
@@ -17,6 +16,7 @@ INSERT INTO Item (item_name, seller_id, price, `condition`, descrip) VALUES
 );
 
 -- link item to category
+SET @category_id = (SELECT id FROM Category WHERE name='Musical Instruments & Gear');
 SET @item_id = LAST_INSERT_ID();
 INSERT INTO Item_Category (item_id, category_id) VALUES
 (@item_id, @category_id);
