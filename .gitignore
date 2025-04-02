@@ -1,3 +1,3 @@
-/app.log
+app.log
 /venv
-__pycache__
+__pycache__/
