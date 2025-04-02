@@ -21,7 +21,7 @@ CREATE TABLE Photo
 CREATE TABLE User
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    photo_id INT, -- profile picture
+    photo_id INT default 0, -- profile picture
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(254) UNIQUE NOT NULL,
     -- state enum('MO', 'MA', ...)???
