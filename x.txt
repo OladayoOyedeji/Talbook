@@ -1,3 +1,0 @@
-git config --global user.name “OladayoOyedeji”
-git config --global user.email “robertoyedeji7gmail.com”
-git config --global core.editor “emacs-gtk+x11”
