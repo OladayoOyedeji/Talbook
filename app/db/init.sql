@@ -2,7 +2,9 @@
 -- Description: Creates tables for the Talbook database
 
 drop database if exists Talbook;
-create database Talbook;
+create database Talbook
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 use Talbook;
 
 --==============================================================
@@ -22,46 +24,25 @@ CREATE TABLE User
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     photo_id INT default NULL, -- profile picture
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(254) UNIQUE NOT NULL,
+    username VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
+    email VARCHAR(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
     -- state enum('MO', 'MA', ...)???
     password_hash VARCHAR(255) NOT NULL,
-    descrip TEXT,
+    descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     FOREIGN KEY (photo_id) REFERENCES Photo(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
--- NO 3. Category: categories for items (e.g., Instruments, Audio
--- Equipment, etc.)
+-- Tag: User Specified Categories
 --==============================================================
-CREATE TABLE Category
+CREATE TABLE Tag
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name varchar(50) NOT NULL,
-    type ENUM('good', 'service') DEFAULT 'good'
-) ENGINE=InnoDB;
+    name VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
--- NO 4. Subcategory: subcategories for categories (e.g., within the
--- category of "Instruments" you'd have "Brass Instruments",
--- "Stringed Instruments", etc.)
---==============================================================
-CREATE TABLE Subcategory
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    category_id INT NOT NULL, -- parent category
-    name VARCHAR(50) NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Category(id)
-) ENGINE=InnoDB;
-
-CREATE TABLE Hashtag
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-) ENGINE=InnoDB;
-
---==============================================================
--- NO 5. Item: profiles of sale listings
+-- NO 5. Item: Profiles of sale listings
 --==============================================================
 CREATE TABLE Item
 (
@@ -71,10 +52,10 @@ CREATE TABLE Item
     price DECIMAL(10, 2) NOT NULL,
     `condition` ENUM('new', 'like new', 'very good', 'good', 'acceptable') DEFAULT NULL,
     -- quantity INT DEFAULT 1,
-    descrip TEXT,
+    descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
     FOREIGN KEY (seller_id) REFERENCES User(id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
 -- Join Table: Link Photos to Listings (Items)
@@ -90,27 +71,15 @@ CREATE TABLE Item_Photo
 ) ENGINE=InnoDB;
 
 --==============================================================
--- Join Table: Link Categories to Listings (Items)
+-- Join Table: Link Tags to Listings (Items)
 --==============================================================
-CREATE TABLE Item_Category
+CREATE TABLE Item_Tag
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
-    category_id INT NOT NULL,
+    tag_id INT NOT NULL,
     FOREIGN KEY (item_id) REFERENCES Item(id) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
---==============================================================
--- Join Table: Link Subcategories to Listings (Items)
---==============================================================
-CREATE TABLE Item_Subcategory
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    item_id INT NOT NULL,
-    subcategory_id INT NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES Item(id) ON DELETE CASCADE,
-    FOREIGN KEY (subcategory_id) REFERENCES Subcategory(id) ON DELETE CASCADE
+    FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -121,10 +90,10 @@ CREATE TABLE User_Preference
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    subcategory_id INT NOT NULL,
+    tag_id INT NOT NULL,
     weight INT DEFAULT 1,
     FOREIGN KEY (user_id) REFERENCES User(id),
-    FOREIGN KEY (subcategory_id) REFERENCES Subcategory(id)
+    FOREIGN KEY (tag_id) REFERENCES Tag(id)
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -164,11 +133,11 @@ CREATE TABLE Message
     id INT AUTO_INCREMENT PRIMARY KEY,
     chat_id INT NOT NULL,
     sender_id INT NOT NULL,
-    content TEXT NOT NULL,
+    content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
     FOREIGN KEY (chat_id) REFERENCES Chat(id),
     FOREIGN KEY (sender_id) REFERENCES User(id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
 -- NO 10. Rating: ratings and reviews given by users

@@ -2,7 +2,7 @@
 from app.utils import hash
 from app.utils import mysql_util
 
-FILENAME = "app/db/accounts.sql"
+FILENAME = "app/db/User.sql"
 
 def insert_test_data():
     users = [

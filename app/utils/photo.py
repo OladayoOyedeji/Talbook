@@ -42,3 +42,5 @@ def upload_image(file):
 
 if __name__ == '__main__':
     upload_image('app/static/images/uploads/harp.webp')
+    upload_image('app/static/images/uploads/t1.png')
+    upload_image('app/static/images/uploads/t2.webp')
