@@ -45,16 +45,22 @@ def execute_many_sql(sql, param_list, commit=False):
     conn = get_db_connection(DB_NAME)
     cursor = conn.cursor()
 
+    added = False
+    
     try:
         cursor.executemany(sql, param_list)
         if commit:
             conn.commit()
+
+        added = True
     except Exception as e:
         print("error in execute_many_sql():", e)
         conn.rollback()
         
+        
     cursor.close()
     conn.close()
+    return added
 
 def database_exists(db_name=DB_NAME):
     """

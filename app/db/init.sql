@@ -10,7 +10,7 @@ use Talbook;
 --==============================================================
 CREATE TABLE Photo
 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY
     -- x INT, -- width of image
     -- y INT, -- height of image
 ) ENGINE=InnoDB;
@@ -21,7 +21,7 @@ CREATE TABLE Photo
 CREATE TABLE User
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    photo_id INT default 0, -- profile picture
+    photo_id INT default 1 not NULL, -- profile picture
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(254) UNIQUE NOT NULL,
     -- state enum('MO', 'MA', ...)???
@@ -174,4 +174,4 @@ CREATE TABLE Item_Photo
     FOREIGN KEY (photo_id) REFERENCES Photo(id)
 ) ENGINE=InnoDB;
 
-insert into Photo id=0;
+insert Photo set id=1;

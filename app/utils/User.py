@@ -13,6 +13,7 @@ CREATE TABLE User
 ) ENGINE=InnoDB;
 '''
 
+import os
 from .mysql_util import execute_sql
 from .hash import *
  
@@ -41,10 +42,10 @@ def register_user(username: str, email: str, password: str, descrip: str = None,
 
     # insert the user into the database
     sql = '''
-    INSERT INTO User (username, email, password_hash, descrip, photo_id)
-    VALUES (%s, %s, %s, %s, %s)
+    INSERT INTO User (username, email, password_hash, descrip)
+    VALUES (%s, %s, %s, %s)
     '''
-    execute_sql(sql, (username, email, password_hash, descrip, photo_id), commit=True)
+    return execute_sql(sql, (username, email, password_hash, descrip), commit=True)
 
 ##==============================================================
 ## Helper Functions
@@ -83,6 +84,30 @@ def get_listed_items(user_id):
     WHERE seller_id = %s
     '''
     return execute_sql(sql, (user_id,))
+
+def get_user_id(username):
+    sql = '''
+    SELECT id FROM User
+    WHERE username = %s
+    '''
+    return execute_sql(sql, (user_id,))
+
+def get_image_link(username):
+    sql = '''
+    SELECT photo_id FROM User
+    WHERE username = %s
+    '''
+    photo_id = execute_sql(sql, (username,))[0][0]
+
+    print(type(photo_id), str(photo_id), os.path.join('/static/images','%s.jpg' % photo_id), '\n')
+    return os.path.join('/static/images','%s.jpg' % photo_id)
+
+def get_subcategories(user_id):
+    sql = '''
+    SELECT services_id FROM User_Subcategory
+    JOIN Category ON Category.id = Subcategory.category_id
+    WHERE user_id = %s
+    and Category.type = "service"'''
 
 ##==============================================================
 ## User Class

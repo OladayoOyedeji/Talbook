@@ -8,6 +8,7 @@ from app.handlers.signup import handle_signup
 from app.handlers.email_verification import handle_email_verification
 from app.handlers.login import handle_login
 from app.handlers.home import handle_home
+from app.handlers.user_profile import handle_user_profile
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -32,3 +33,7 @@ def login():
 @app.route('/home')
 def home():
     return handle_home()
+
+@app.route('/user_profile/<username>')
+def user_profile(username):
+    return handle_user_profile(username)
