@@ -1,3 +1,29 @@
-/app.log
-/venv
-/__pycache__/
+# Ignore Python bytecode and cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environment directories
+venv/
+env/
+.venv/
+.venv*/
+
+# Ignore logs and database files
+*.log
+*.sqlite3
+*.db
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# Ignore compiled Cython files
+*.so
