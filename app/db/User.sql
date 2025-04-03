@@ -1,4 +1,4 @@
-use Talbook;
-INSERT INTO User (email, username, password_hash) VALUES ('bigbrovc@gmail.com', 'bigbrovc', '$2b$11$M.j2/mMle0ByUKpnJA9uluHmz83hT9eb28nRw1.Zcj6ugymIGOVyS');
-INSERT INTO User (email, username, password_hash) VALUES ('oroyedeji1@cougars.ccis.edu', 'Robiefresh', '$2b$11$uzAQSxAD1NVqJv0E2hu5COQ.J2m6kLUuNg09lP1RjpqQgZHGQq1vC');
-INSERT INTO User (email, username, password_hash) VALUES ('nalahaideb@cougars.ccis.edu', 'nashydog', '$2b$11$/WIs4NAJr7vc8T5juLH0DeSC2NjVLQEwKrrgnenqkaAXrT0tkdXdK');
+USE Talbook;
+INSERT INTO User (email, username, password_hash) VALUES ('bigbrovc@gmail.com', 'bigbrovc', '$2b$11$2aYJB9uXHmpeJg..NJepQ.4Oy9jOFxytQeamTH5/rnvqNrd4F2T.6');
+INSERT INTO User (email, username, password_hash) VALUES ('oroyedeji1@cougars.ccis.edu', 'Robiefresh', '$2b$11$bzg5Qt4zXoIcAV8hKZ/h3Ohw2VQRNg.6DZWlvdcKTUC1lCu.nUgcK');
+INSERT INTO User (email, username, password_hash) VALUES ('nalahaideb@cougars.ccis.edu', 'nashydog', '$2b$11$6FGMHxn6fKtmBg9qvRG/XeuLtPTJaDi3x5Fz5Is7CbVXIvrC2FuZK');
