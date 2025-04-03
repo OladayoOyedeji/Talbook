@@ -13,7 +13,7 @@ init_sql i:
 	mysql --user=root --password=root < app/db/Tag.sql
 	python -m app.db.User;
 	mysql --user=root --password=root < app/db/User.sql;
-	mysql --user=root --password=root < app/db/Item.sql;
+	python -m app.db.Item;
 
 git g:
 	git add .

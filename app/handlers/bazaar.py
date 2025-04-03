@@ -8,9 +8,15 @@ def handle_bazaar():
     """
     sql = '''
        SELECT 
-            i.id, i.item_name, i.price, i.condition, u.username
-        FROM Item as i
-        JOIN User as u ON i.seller_id = u.id;
+            I.id,
+            I.item_name,
+            I.price,
+            I.condition,
+            U.username,
+            IP.photo_id
+        FROM Item as I
+        JOIN User as U ON I.seller_id=U.id
+        JOIN Item_Photo as IP ON I.id=IP.item_id and IP.display_order=0;
     '''
     items = execute_sql(sql)
     return render_template("bazaar.html", items=items)

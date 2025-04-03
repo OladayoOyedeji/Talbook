@@ -1,10 +1,10 @@
-# File: accounts.py
+# File: User.py
 from app.utils import hash
 from app.utils import mysql_util
 
 FILENAME = "app/db/User.sql"
 
-def insert_test_data():
+def insert():
     users = [
         ("bigbrovc@gmail.com", "bigbrovc", "42Farrah$%"),
         ("oroyedeji1@cougars.ccis.edu", "Robiefresh", "24Mutlu^&"),
@@ -22,4 +22,4 @@ def insert_test_data():
     mysql_util.append_sql(FILENAME, sql)
 
 if __name__ == '__main__':
-    insert_test_data()
+    insert()

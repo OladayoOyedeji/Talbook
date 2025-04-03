@@ -2,7 +2,7 @@
 import pymysql
 
 DB_NAME = "Talbook"
-USE_DB = "use %s;" % DB_NAME
+USE_DB = "USE %s;" % DB_NAME
 INIT_SQL_FILE = "app/db/init.sql"  # path to MySQL initialization script
 
 def get_db_connection(db=None):
@@ -15,7 +15,7 @@ def get_db_connection(db=None):
     else:
         return pymysql.connect(user="root", password="root")
     
-def execute_sql(sql, params=(), commit=False, get_lastrowid=False):
+def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=False):
     """
     Executes a SQL statement and returns the results.
     - If `commit=True`, commits the transaction.
@@ -33,7 +33,10 @@ def execute_sql(sql, params=(), commit=False, get_lastrowid=False):
             conn.commit() # commit changes
         if get_lastrowid:
             return cursor.lastrowid
-        return list(cursor.fetchall())
+        if fetchone:
+            return cursor.fetchone()
+        else:
+            return list(cursor.fetchall())
     except Exception as e:
         print("error in execute_sql():", e)
         conn.rollback() # rollback on failure
