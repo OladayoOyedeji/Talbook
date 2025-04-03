@@ -15,7 +15,7 @@ def get_db_connection(db=None):
     else:
         return pymysql.connect(user="root", password="root")
     
-def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=False):
+def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=False, fetchdict=False):
     """
     Executes a SQL statement and returns the results.
     - If `commit=True`, commits the transaction.
@@ -25,7 +25,10 @@ def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=Fals
     `SELECT` that don't change the database.
     """
     conn = get_db_connection(DB_NAME)
-    cursor = conn.cursor()
+    if fetchdict:
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+    else:
+        cursor = conn.cursor()
 
     try:
         cursor.execute(sql, params)
@@ -33,8 +36,10 @@ def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=Fals
             conn.commit() # commit changes
         if get_lastrowid:
             return cursor.lastrowid
-        if fetchone:
+        elif fetchone:
             return cursor.fetchone()
+        elif fetchdict:
+            return cursor.fetchall()
         else:
             return list(cursor.fetchall())
     except Exception as e:

@@ -50,7 +50,7 @@ CREATE TABLE Item
     item_name VARCHAR(300) NOT NULL,
     seller_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    `condition` ENUM('new', 'like new', 'very good', 'good', 'acceptable') DEFAULT NULL,
+    `condition` ENUM('new', 'like new', 'very good', 'good', 'acceptable', 'damaged') DEFAULT NULL,
     -- quantity INT DEFAULT 1,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
