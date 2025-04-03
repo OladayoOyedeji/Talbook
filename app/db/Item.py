@@ -49,6 +49,9 @@ def insert():
     )
     harp_photos = ['1.png']
     insert_item(seller_username, harp_tags, harp_sql, harp_values, harp_photos)
+    # cole
+    #===========================
+    seller_username = 'nashydog'
 
     # cd
     #---------------------------
@@ -61,13 +64,35 @@ def insert():
         '(AUTOGRAPHED) Tsuneo Imahori "TRIGUN" Soundtrack Trigun The First Donuts Japan Music CD',
         124.50,
         'new',
-        'TV anime adaptation of the popular comic originally written by Naito Yasuhiro and broadcast in 1998.\n'
-        'The first soundtrack by Tsuneo Imahori (今堀恒雄, Imahori Tsuneo).\n'
-        'Signed by Imahori Tsuneo (今堀恒雄).\n'
-        'Includes OP theme "H.T" and ED theme "風は未来に吹く" among other tracks.'
+        '''TV anime adaptation of the popular comic originally written by Naito Yasuhiro and broadcast in 1998.
+The first soundtrack by Tsuneo Imahori (今堀恒雄, Imahori Tsuneo).
+Signed by Imahori Tsuneo (今堀恒雄).
+Includes OP theme "H.T" and ED theme "風は未来に吹く" among other tracks.
+
+Tracklist:
+1. NO-BEAT
+2. BIG BLUFF
+3. BLOOD AND THUNDER
+4. KNIVES
+5. Permanent Vacation
+6. BLUE FUNK
+7. PHILOSOPHY in a Tea Cup
+8. NOT AN ANGEL
+9. Cynical Pink
+10. Sound Life ~LEM
+11. 風は未来に吹く
+12. H.T
+13. WINNERS
+14. Never could have been worse
+15. Stories to Tell
+16. People Everyday
+17. Fool's Paradise
+18. YELLOW ALERT
+19. Carrot & Stick
+20. Perfect Night'''
     )
     cd_photos = ['2.png', '3.png']
     insert_item(seller_username, cd_tags, cd_sql, cd_values, cd_photos)
-
+    
 if __name__ == '__main__':
     insert()
