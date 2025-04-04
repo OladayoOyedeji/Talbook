@@ -11,6 +11,7 @@ run:
 init_sql i:
 	mysql --user=root --password=root < app/db/init.sql;
 	mysql --user=root --password=root < app/db/Tag.sql
+	python -m app.db.Location.Location;
 	python -m app.db.User;
 	mysql --user=root --password=root < app/db/User.sql;
 	python -m app.db.Item;

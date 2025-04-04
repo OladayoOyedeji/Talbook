@@ -54,6 +54,7 @@ CREATE TABLE Item
     -- quantity INT DEFAULT 1,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    
     FOREIGN KEY (seller_id) REFERENCES User(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -167,3 +168,19 @@ CREATE TABLE Follow
     FOREIGN KEY (followed_id) REFERENCES User(id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE Location
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    city VARCHAR(100) NOT NULL,
+    state CHAR(2) NOT NULL,
+    INDEX idx_city_state (city, state)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE Item_Location
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT,
+    location_id INT,
+    FOREIGN KEY(item_id) REFERENCES Item(id),
+    FOREIGN KEY(location_id) REFERENCES Location(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

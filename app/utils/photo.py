@@ -49,6 +49,9 @@ def link_item_photo(item_id: int, photo_id: int, display_order: int):
     mysql_util.execute_sql(sql, (item_id, photo_id, display_order), True)
 
 if __name__ == '__main__':
-    upload_image('app/static/images/uploads/harp.webp')
-    upload_image('app/static/images/uploads/t1.png')
-    upload_image('app/static/images/uploads/t2.png')
+    #upload_image('app/static/images/uploads/harp.webp')
+    #upload_image('app/static/images/uploads/t1.png')
+    #upload_image('app/static/images/uploads/t2.png')
+    upload_image('app/static/images/uploads/g0.webp')
+    upload_image('app/static/images/uploads/g1.webp')
+    upload_image('app/static/images/uploads/g2.webp')
