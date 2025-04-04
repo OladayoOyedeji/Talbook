@@ -5,10 +5,13 @@ from app.utils.functions import *
 
 def handle_user_profile(username):
     
-    editable = session['username'] == username
-    #id = get_user_id(username)
-    image_link = User.get_image_link(username)
-    print(image_link)
-    #things_you_do = get_subcategories(username)
-    profile = {'username':username, 'image':image_link}#, 'things_you_do':things_you_do}
-    return render_template('user_profile.html',profile=profile,editable=editable)
+    if session['username'] != username:
+        profile = get_data(username)
+        
+        profile['image_link'] = User.get_image_link(id)
+        profile['skills'] = get_skills(id)
+        profile['listings'] = get_listings(id)
+        
+        return render_template('user_profile.html',profile=profile, editable=False)
+    else:
+        return render_template('user_profile.html', profile=session, editable=True)

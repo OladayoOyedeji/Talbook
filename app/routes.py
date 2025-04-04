@@ -39,7 +39,19 @@ def home():
 @app.route('/user_profile/<username>')
 def user_profile(username):
     return handle_user_profile(username)
-    
+
+@app.route('/search')
+def search():
+    return handle_search()
+
+@app.route('/inbox')
+def inbox():
+    return handle_inbox()
+
+@app.route('/selling')
+def selling():
+    return handle_selling()
+
 @app.route("/item/<int:item_id>")
 def item_details(item_id):
     return handle_item_details(item_id)
