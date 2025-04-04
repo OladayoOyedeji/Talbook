@@ -2,6 +2,7 @@
 from flask import Flask
 from app.utils import mysql_util
 import logging
+from datetime import datetime
 
 app = Flask(__name__, static_folder="static")
 # the secret key shouldn't be hardcoded
@@ -20,5 +21,9 @@ app.logger.addHandler(file_handler)
 
 # ensure the database is set up
 mysql_util.ensure_database()
+
+@app.template_filter('datetimeformat')
+def datetimeformat(value, format='%B %d, %Y at %I:%M %p'):
+    return datetime.strptime(str(value), '%Y-%m-%d %H:%M:%S').strftime(format)
 
 from app import routes
