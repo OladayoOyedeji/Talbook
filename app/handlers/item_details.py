@@ -20,12 +20,21 @@ def handle_item_details(item_id):
     '''
     
     sql3 = '''
-    SELECT T.name, COUNT(IT.item_id) as tag_count
-    FROM Tag as T
-    JOIN Item_Tag as IT ON T.id=IT.tag_id
-    WHERE IT.item_id = %s
+    SELECT T.name, COUNT(IT.item_id) AS tag_count
+    FROM Tag AS T
+    JOIN Item_Tag AS IT ON T.id=IT.tag_id
+    WHERE T.id IN (
+        SELECT tag_id FROM Item_Tag WHERE item_id=%s
+        )
     GROUP BY T.name
     ORDER BY tag_count DESC, T.name ASC;
+    '''
+
+    sql4 = '''
+    SELECT L.city, L.state
+    FROM Location as L
+    JOIN Item_Location as IL
+    ON IL.item_id=%s and IL.location_id=L.id;
     '''
 
     values = execute_sql(sql1, (item_id,), fetchone=True, fetchdict=True)
@@ -34,9 +43,13 @@ def handle_item_details(item_id):
 
     photos = execute_sql(sql2, (item_id,), fetchdict=True)
     tags = execute_sql(sql3, (item_id,), fetchdict=True)
+    location = execute_sql(sql4, (item_id,), fetchone=True, fetchdict=True)
+    city = location["city"]
+    state = location["state"]
+    
+    app.logger.debug("fetching values: %s" % values)
+    app.logger.debug("fetching photos: %s" % photos)
+    app.logger.debug("fetching tags: %s" % tags)
+    app.logger.debug("fetching location: %s" % location)
 
-    app.logger.debug("fetching values: %s", values)
-    app.logger.debug("fetching photos: %s", photos)
-    app.logger.debug("fetching tags: %s", tags)
-
-    return render_template("item_details.html", values=values, photos=photos, tags=tags)
+    return render_template("item_details.html", values=values, photos=photos, tags=tags, city=city, state=state)

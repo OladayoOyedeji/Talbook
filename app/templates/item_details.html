@@ -19,18 +19,19 @@
         </header>
 
         <main class="item-details">
-            {% if photos %}
-            <section class="gallery-section">
-                <h2 class="section-title">Photos</h2>
-                <div class="photo-gallery">
-                    {% for photo in photos %}
-                    <div class="photo-item">
-                        <img src="/static/images/uploads/{{ photo.photo_id }}.png" class="item-photo" alt="Item photo">
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            {% endif %}
+          <section class="gallery-section">
+            <h2 class="section-title">Photos</h2>
+            <div class="photo-gallery">
+              {% for photo in photos %}
+              <div class="photo-item">
+                <a href="/static/images/uploads/{{ photo.photo_id }}.png" target="_blank" rel="noopener noreferrer">
+                  <img src="/static/images/uploads/{{ photo.photo_id }}.png" class="item-photo" alt="Item photo">
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </section>
+
 
             <section class="info-section">
                 <div class="info-card">
@@ -53,7 +54,30 @@
                     </div>
                 </div>
 
-                {% if tags %}
+                <div class="description-card">
+                  <h3 class="description-title">Description</h3>
+                  <p class="description-text">{{ values["descrip"] }}</p>
+                </div>
+            </section>
+
+            {% if city and state %}
+                <section class="map-section">
+                    <h2 class="map-title">Location: {{ city }}, {{ state }}</h2>
+                    <div class="map-container">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps?q={{ city | urlencode }},{{ state | urlencode }}&output=embed">
+                        </iframe>
+                    </div>
+                </section>
+                {% endif %}
+
+                  {% if tags %}
                 <section class="tags-section">
                   <h2 class="section-title">Tags</h2>
                   <div class="tags">
@@ -63,12 +87,7 @@
                   </div>
                 </section>
                 {% endif %}
-
-                <div class="description-card">
-                  <h3 class="description-title">Description</h3>
-                  <p class="description-text">{{ values["descrip"] }}</p>
-                </div>
-            </section>
+                
         </main>
     </div>
 </body>
