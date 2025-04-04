@@ -42,6 +42,23 @@ CREATE TABLE Tag
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
+-- Tag: User Specified Categories
+--==============================================================
+CREATE TABLE Service
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    skills VARCHAR(50) UNIQUE NOT NULL
+)Engine=innodb;
+
+CREATE TABLE User_Service
+(
+    user_id INT,
+    service_id INT,
+    FOREIGN KEY(user_id) REFERENCES User.id,
+    FOREIGN KEY(service_id) REFERENCES Service.id
+)
+
+--==============================================================
 -- NO 5. Item: Profiles of sale listings
 --==============================================================
 CREATE TABLE Item
