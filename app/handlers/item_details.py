@@ -6,7 +6,7 @@ from app.utils.mysql_util import execute_sql
 def handle_item_details(item_id):
     sql1 = '''
     SELECT 
-        I.id, I.item_name, I.price, I.condition, I.descrip, U.username as seller
+        I.id, I.item_name, I.price, I.condition, I.descrip, U.username as seller, I.created_at
     FROM Item as I
     JOIN User as U ON I.seller_id = U.id
     WHERE I.id = %s;
