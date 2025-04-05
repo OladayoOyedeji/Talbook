@@ -5,13 +5,14 @@ from app.utils.functions import *
 
 def handle_user_profile(username):
     
-    if session['username'] != username:
-        profile = get_data(username)
+    profile = get_data(username)
+    for values, key in profile:
+        profile[key] = values[0]
+    
+    id = profile['id']
+    
+    profile['skills'] = get_skills(id)
+    profile['listings'] = get_listings(id)
         
-        profile['image_link'] = User.get_image_link(id)
-        profile['skills'] = get_skills(id)
-        profile['listings'] = get_listings(id)
-        
-        return render_template('user_profile.html',profile=profile, editable=False)
-    else:
-        return render_template('user_profile.html', profile=session, editable=True)
+    return render_template('user_profile.html',profile=profile,
+                           editable=(session['username']==username))

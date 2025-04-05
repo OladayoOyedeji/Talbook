@@ -1,4 +1,82 @@
-<html>
-  <h1>{{ profile.username }}<h1>
-  <img src="{{ profile.image }}"/>
+
+<!------ Include the above in your HEAD tag ---------->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/static/styles/user_profile.css">
+  </head>
+  <body>
+    <div class="container emp-profile">
+      <form method="post">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="profile-img">
+              <img src="/static/Images/{{ profile.photo_id }}.png" alt=""/>
+              {% if edditable == True %}
+              <div class="file btn btn-lg btn-primary">
+                Change Photo
+                <input type="file" name="file"/>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="profile-head">
+              <h5>
+                {{ profile.username }}
+              </h5>
+              <h6>
+                {{ profile.descrip }}
+              </h6>
+              <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Listings</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Media</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% if edditable == True %}
+          <div class="col-md-2">
+            <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+          </div>
+          {% endif %}
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="profile-work">
+              <p>SKILLS</p>
+              {% for skill in profile.skills %}
+              <a href=""> {{skill}} </a><br/>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+              <div class="tab-pane fade show active" id="home"
+                   role="tabpanel" aria-labelledby="home-tab">
+                {% for item in profile.listings %}
+                <div class="item-card">
+                  <img src="/static/images/uploads/{{ item[5] }}.png" 
+                       onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+                       class="item-image">
+                  <h3>{{ item[1] }}</h3>
+                  <p>Price: ${{ item[2] }}</p>
+                  <p>Condition: {{ item[3] }}</p>
+                  <p>Seller: {{ item[4] }}</p>
+                  <a href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>           
+    </div>
+  </body>
 </html>
