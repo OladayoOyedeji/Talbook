@@ -16,6 +16,7 @@ def upload_image(file: str):
         original_path = file
         if not os.path.exists(file):
             raise FileNotFoundError("Image not found: %s" % file)
+            return
         img = Image.open(file)
     
     # convert image to PNG
@@ -52,6 +53,9 @@ if __name__ == '__main__':
     #upload_image('app/static/images/uploads/harp.webp')
     #upload_image('app/static/images/uploads/t1.png')
     #upload_image('app/static/images/uploads/t2.png')
-    upload_image('app/static/images/uploads/g0.webp')
-    upload_image('app/static/images/uploads/g1.webp')
-    upload_image('app/static/images/uploads/g2.webp')
+    #upload_image('app/static/images/uploads/g0.webp')
+    #upload_image('app/static/images/uploads/g1.webp')
+    #upload_image('app/static/images/uploads/g2.webp')
+    upload_image('app/static/images/uploads/trumpet1.jpg')
+    upload_image('app/static/images/uploads/trumpet2.jpg')
+    upload_image('app/static/images/uploads/trumpet3.jpg')

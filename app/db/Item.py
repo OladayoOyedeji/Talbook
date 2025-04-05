@@ -78,7 +78,7 @@ def insert():
     cd_values = (
         '(AUTOGRAPHED) Tsuneo Imahori "TRIGUN" Soundtrack Trigun The First Donuts Japan Music CD',
         124.50,
-        'new',
+        'like new',
         '''TV anime adaptation of the popular comic originally written by Naito Yasuhiro and broadcast in 1998.
 The first soundtrack by Tsuneo Imahori (今堀恒雄, Imahori Tsuneo).
 Signed by Imahori Tsuneo (今堀恒雄).
@@ -173,6 +173,45 @@ Case Type: Deluxe Rickenbacker Hardshell Case'''
     city = "Atlanta"
     state = "GA"
     insert_item(seller_username, tags, bass_sql, bass_values, photos, city, state)
+
+    # trumpet
+    #--------------------
+    trumpet_tags = [
+        'musical instrument', 
+        'brass instrument', 
+        'trumpet', 
+        'jupiter', 
+        'student model',
+        'valve oil'
+    ]
+    
+    trumpet_sql = '''
+    INSERT INTO Item (item_name, seller_id, price, `condition`, descrip) VALUES
+    (%s, %s, %s, %s, %s)
+    '''
+    
+    trumpet_values = (
+        'Jupiter JTR-600M Trumpet',
+        150.00,
+        'good',
+        '''Used Jupiter JTR-600M trumpet. Previously used in high school, but I don't use it anymore. 
+Some minimal scratches, but otherwise great condition. 
+Comes with a mouthpiece and some valve oil. 
+Message with any questions!
+
+Model: JTR-600M
+Key: Bb
+Bore: 0.459" (11.66mm)
+Bell: 4.75" (121mm)
+Finish: Lacquer
+Includes: Case, mouthpiece, valve oil'''
+    )
+    
+    trumpet_photos = ["7.png", "8.png", "9.png"]
+    trumpet_city = "Intercourse"
+    trumpet_state = "PA"
+    
+    insert_item(seller_username, trumpet_tags, trumpet_sql, trumpet_values, trumpet_photos, trumpet_city, trumpet_state)
     
 if __name__ == '__main__':
     insert()
