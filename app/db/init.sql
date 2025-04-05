@@ -47,16 +47,17 @@ CREATE TABLE Tag
 CREATE TABLE Service
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    skills VARCHAR(50) UNIQUE NOT NULL
-)Engine=innodb;
+    skills VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE User_Service
 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     service_id INT,
-    FOREIGN KEY(user_id) REFERENCES User.id,
-    FOREIGN KEY(service_id) REFERENCES Service.id
-)
+    FOREIGN KEY(user_id) REFERENCES User(id),
+    FOREIGN KEY(service_id) REFERENCES Service(id)
+) ENGINE=InnoDB;
 
 --==============================================================
 -- NO 5. Item: Profiles of sale listings
@@ -71,7 +72,6 @@ CREATE TABLE Item
     -- quantity INT DEFAULT 1,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    
     FOREIGN KEY (seller_id) REFERENCES User(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
