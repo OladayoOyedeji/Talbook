@@ -25,7 +25,7 @@
             <li><a href="/search">Search</a></li>
             <li><a href="/inbox">Inbox</a></li>
             <li><a href="/selling">Selling</a></li>
-            <li><a href="/user_profile/{{user.username}}">Profile</a></li>
+            <li><a href="/user_profile/{{ user.username }}">Profile</a></li>
         </ul>
     </nav>
     {% else %}
@@ -34,16 +34,13 @@
 
     <div class="grid-container">
         {% for item in items %}
-        <div class="item-card">
-            <img src="/static/images/uploads/{{ item[5] }}.png" 
+        <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
+            <img src="/static/images/uploads/{{ item[5] }}.png"
                  onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
                  class="item-image">
-            <h3>{{ item[1] }}</h3>
-            <p class="price">Price: ${{ item[2] }}</p>
-            <p class="condition">Condition: {{ item[3] }}</p>
-            <p class="seller">Seller: {{ item[4] }}</p>
-            <a class="details-link" href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
-        </div>
+            <div class="item-title">{{ item[1] }}</div>
+            <div class="item-price">${{ item[2] }}</div>
+        </a>
         {% endfor %}
     </div>
 </body>
