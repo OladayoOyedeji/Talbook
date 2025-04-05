@@ -1,65 +1,50 @@
-
-<html>
-  <body>
-    <!-- allows flash messages to work -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazaar</title>
+    <link rel="stylesheet" href="/static/styles/home.css">
+</head>
+<body>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <div class="flash-messages">
-      {% for message in messages %}
-      <p>{{ message }}</p>
-      {% endfor %}
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
     </div>
     {% endif %}
     {% endwith %}
-    
+
     {% if user %}
-      <!DOCTYPE html>
-<html>
-<head>
-<style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333333;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 16px;
-  text-decoration: none;
-}
-
-li a:hover {
-  background-color: #111111;
-}
-</style>
-</head>
-<body>
-
-<h2>Talbook</h2>
-
-
-<ul>
-  <li><a href="/home">Home</a></li>
-  <li><a href="/search">Search</a></li>
-  <li><a href="/inbox">Inbox</a></li>
-  <li><a href="/selling">Selling</a></li>
-  <li><a href="/user_profile/{{user.username}}">Profile</a></li>
-</ul>
-
-</body>
-</html>
-
+    <nav class="navbar">
+        <div class="nav-title">Talbook</div>
+        <ul class="nav-links">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/search">Search</a></li>
+            <li><a href="/inbox">Inbox</a></li>
+            <li><a href="/selling">Selling</a></li>
+            <li><a href="/user_profile/{{user.username}}">Profile</a></li>
+        </ul>
+    </nav>
     {% else %}
-      <p>You are not logged in.</p>
+    <p>You are not logged in.</p>
     {% endif %}
-  </body>
+
+    <div class="grid-container">
+        {% for item in items %}
+        <div class="item-card">
+            <img src="/static/images/uploads/{{ item[5] }}.png" 
+                 onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+                 class="item-image">
+            <h3>{{ item[1] }}</h3>
+            <p class="price">Price: ${{ item[2] }}</p>
+            <p class="condition">Condition: {{ item[3] }}</p>
+            <p class="seller">Seller: {{ item[4] }}</p>
+            <a class="details-link" href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
 </html>
