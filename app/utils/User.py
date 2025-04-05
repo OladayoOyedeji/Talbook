@@ -106,13 +106,31 @@ def get_image_link(username):
     print(type(photo_id), str(photo_id), os.path.join('/static/images','%s.jpg' % photo_id), '\n')
     return os.path.join('/static/images','%s.jpg' % photo_id)
 
-def get_subcategories(user_id):
+def get_skills(user_id):
     sql = '''
-    SELECT services_id FROM User_Subcategory
-    JOIN Category ON Category.id = Subcategory.category_id
-    WHERE user_id = %s
-    and Category.type = "service"'''
+    SELECT Service.skill FROM User_Service
+    JOIN Service ON User_Service.service_id = Service.id
+    WHERE User_Service.user_id = %s
+    '''
 
+    return execute_sql(sql, (user_id))
+
+def get_listings(user_id):
+    
+    sql = '''SELECT * FROM Item
+    WHERE seller_id = %s
+    '''
+
+    return execute_sql(sql, (user_id))
+
+def get_data(username):
+    sql = '''
+    SELECT * FROM User
+    WHERE username = %s
+    '''
+
+    return execute_sql(sql, (username,))
+    
 ##==============================================================
 ## User Class
 ##==============================================================
