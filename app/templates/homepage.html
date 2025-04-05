@@ -32,6 +32,9 @@
     <p>You are not logged in.</p>
     {% endif %}
 
+    <!-- add Bazaar title card -->
+    Bazaar
+
     <div class="grid-container">
         {% for item in items %}
         <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
@@ -40,6 +43,7 @@
                  class="item-image">
             <div class="item-title">{{ item[1] }}</div>
             <div class="item-price">${{ item[2] }}</div>
+            <div class="item-seller">@{{ item[4] }}</div><!-- add hyperlink to user profile -->
         </a>
         {% endfor %}
     </div>
