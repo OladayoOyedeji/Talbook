@@ -9,6 +9,7 @@ run:
 	flask --app flask_app.py --debug run
 
 init_sql i:
+	pip install -r requirements.txt
 	mysql --user=root --password=root < app/db/init.sql;
 	mysql --user=root --password=root < app/db/Tag.sql
 	python -m app.db.Location.Location;
