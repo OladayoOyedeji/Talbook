@@ -129,7 +129,7 @@ def get_data(username):
     WHERE username = %s
     '''
 
-    return execute_sql(sql, (username,))
+    return execute_sql(sql, (username,), False, False, False, True)
     
 ##==============================================================
 ## User Class

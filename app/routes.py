@@ -11,6 +11,7 @@ from app.handlers.home import handle_home
 from app.handlers.user_profile import handle_user_profile
 from app.handlers.bazaar import handle_bazaar
 from app.handlers.item_details import handle_item_details
+from app.handlers.edit_profile import handle_edit_profile
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -39,6 +40,10 @@ def home():
 @app.route('/user_profile/<username>')
 def user_profile(username):
     return handle_user_profile(username)
+
+@app.route('/edit_profile')
+def edit_profile():
+    return handle_edit_profile()
 
 @app.route('/search')
 def search():
