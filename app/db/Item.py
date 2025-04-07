@@ -212,6 +212,32 @@ Includes: Case, mouthpiece, valve oil'''
     trumpet_state = "PA"
     
     insert_item(seller_username, trumpet_tags, trumpet_sql, trumpet_values, trumpet_photos, trumpet_city, trumpet_state)
+
+    # barack_obama
+    #===========================
+    seller_username = "barack_obama"
+
+    # vocaloid cd
+    #---------------------------
+    vocaloid_tags = ['music', 'cd', 'vocaloid', 'japanese', 'hatsune miku', 'supercell', 'import']
+    vocaloid_sql = '''
+    INSERT INTO Item (item_name, seller_id, price, `condition`, descrip) VALUES
+    (%s, %s, %s, %s, %s)
+    '''
+    vocaloid_values = (
+        'Supercell feat Hatsune Miku Music CD CD+DVD Japanese Import Vocaloid',
+        21.99,
+        'good',
+        '''Supercell feat Hatsune Miku Japanese music CD with DVD. 
+Good condition with some light wear to case and insert.
+Japanese import from a US seller.
+
+Tracklist includes popular Vocaloid songs featuring Hatsune Miku.'''
+    )
+    vocaloid_photos = ['10.png', '11.png', '12.png', '13.png']
+    vocaloid_city = "Yeehaw Junction"
+    vocaloid_state = "FL"
+    insert_item(seller_username, vocaloid_tags, vocaloid_sql, vocaloid_values, vocaloid_photos, vocaloid_city, vocaloid_state)
     
 if __name__ == '__main__':
     insert()

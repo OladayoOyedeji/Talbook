@@ -32,9 +32,9 @@
     <p>You are not logged in.</p>
     {% endif %}
 
-    <!-- add Bazaar title card -->
-    Bazaar
-
+     <!-- bazaar title card -->
+    
+    <!-- item listings -->
     <div class="grid-container">
         {% for item in items %}
         <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
