@@ -1,9 +1,42 @@
 # File: photo.py
 from PIL import Image
 import io
+from flask import Flask, flash, request, redirect, url_for, render_template
+import urllib.request
 import os
+from werkzeug.utils import secure_filename
 
 from app.utils import mysql_util
+from app import app
+
+UPLOAD_FOLDER = 'app/static/uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+     
+
+def get_image(request):
+    if 'file' not in request.files:
+        flash('No file part')
+        return None
+    
+    file = request.files['file']
+    if file.filename == '':
+        flash('No image selected for uploading')
+        return None
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #print('upload_image filename: ' + filename)
+        flash('Image successfully uploaded and displayed below')
+        return filename
+    else:
+        flash('Allowed image types are - png, jpg, jpeg, gif')
+        return None
 
 def upload_image(file: str):
     """
@@ -49,6 +82,11 @@ def link_item_photo(item_id: int, photo_id: int, display_order: int):
     '''
     mysql_util.execute_sql(sql, (item_id, photo_id, display_order), True)
 
+def update_User_photo_id(photo_id, user_id):
+    sql = '''
+    UPDATE User SET photo_id = %s WHERE user_id = %s
+    '''
+    mysql_util.execute(sql, (photo_id, user_id))
 if __name__ == '__main__':
     #upload_image('app/static/images/uploads/harp.webp')
     #upload_image('app/static/images/uploads/t1.png')

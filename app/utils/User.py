@@ -108,7 +108,7 @@ def get_image_link(username):
 
 def get_skills(user_id):
     sql = '''
-    SELECT Service.skill FROM User_Service
+    SELECT Service.skills FROM User_Service
     JOIN Service ON User_Service.service_id = Service.id
     WHERE User_Service.user_id = %s
     '''
@@ -117,7 +117,14 @@ def get_skills(user_id):
 
 def get_listings(user_id):
     
-    sql = '''SELECT * FROM Item
+    sql = '''SELECT
+            I.id,
+            I.item_name,
+            I.price,
+            I.condition,
+            IP.photo_id
+    FROM Item as I
+    JOIN Item_Photo as IP on I.id=IP.item_id and IP.display_order=0
     WHERE seller_id = %s
     '''
 
@@ -130,7 +137,32 @@ def get_data(username):
     '''
 
     return execute_sql(sql, (username,), False, False, False, True)
-    
+
+def update_username(profile, username):
+    if profile['username'] != username:
+        sql = '''
+        UPDATE User SET username = %s WHERE id=%s
+        '''
+        print("bad bitches")
+        return execute_sql(sql, (username,profile['id']), True)
+
+def update_email(profile, email):
+    if profile['email'] != email:
+        sql = '''
+        UPDATE User SET email = %s WHERE id=%s
+        '''
+        print("bad bitches")
+        return execute_sql(sql, (email,profile['id']), True)
+
+def update_descrip(profile, descrip):
+    if profile['descrip'] != descrip:
+        sql = '''
+        UPDATE User SET descrip = %s WHERE id=%s
+        '''
+        print("bad bitches")
+        return execute_sql(sql, (descrip,profile['id']), True)
+
+
 ##==============================================================
 ## User Class
 ##==============================================================

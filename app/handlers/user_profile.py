@@ -12,13 +12,15 @@ def handle_user_profile(username):
 
     
     id = profile['id']
-    
-    profile['skills'] = get_skills(id)
 
+    print("here")
+    profile['skills'] = get_skills(id)
+    print("or here?")
     if profile['skills'] == None:
         profile['skills'] = ['']
     
     profile['listings'] = get_listings(id)
-        
+    print()
+    print(profile['listings'])
     return render_template('user_profile.html',profile=profile,
                            editable=(session['username']==username))

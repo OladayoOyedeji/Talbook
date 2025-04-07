@@ -10,6 +10,7 @@ app.secret_key = "1f5ed6af44756bd1395d80dfc8861c4b45b7eba8a85d07afcf89d9c581d850
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
+
 # configure logging to show DEBUG messages
 app.logger.setLevel(logging.DEBUG)
 logging.basicConfig(level=logging.DEBUG)

@@ -41,7 +41,7 @@ def home():
 def user_profile(username):
     return handle_user_profile(username)
 
-@app.route('/edit_profile')
+@app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     return handle_edit_profile()
 
