@@ -8,7 +8,8 @@ def insert():
     users = [
         ("bigbrovc@gmail.com", "bigbrovc", "42Farrah$%"),
         ("oroyedeji1@cougars.ccis.edu", "Robiefresh", "24Mutlu^&"),
-        ("nalahaideb@cougars.ccis.edu", "nashydog", "i1uv1itt1egir1s!!")
+        ("nalahaideb@cougars.ccis.edu", "nashydog", "i1uv1itt1egir1s!!"),
+        ("barack.obama@whitehouse.gov", "barack_obama", "!YesWeCan2008!")
     ]
 
     sql_statements = []
