@@ -24,14 +24,16 @@ def handle_edit_profile():
                 profile['descrip'] = descrip
             flash("info updated")
             # handle photo upload
+            
         elif 'submit_photo' in request.form:
                 # handle user info update
-                
+            
             filename = get_image(request)
         
             print("filename", filename)
             if filename:
                 image_id = upload_image(filename)
+                profile['photo_id'] = image_id
                 print(image_id)
                 update_User_photo_id(image_id, profile['id'])
                 flash("profile photo updated")
