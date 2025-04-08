@@ -136,6 +136,7 @@
 </body>
 
 <script>
+  window.tag_counts = JSON.parse('{{ tag_count|tojson|safe }}');
   document.addEventListener('DOMContentLoaded', function() {
       // Photo upload elements
       const photoUploadArea = document.getElementById('photo-upload-area');
@@ -239,38 +240,56 @@
           }
       });
 
-      // Also handle paste events for tags
+      // Handle paste events for tags
       tagsInput.addEventListener('paste', function(e) {
           e.preventDefault();
           const pastedText = e.clipboardData.getData('text');
           pastedText.split(',').forEach(tag => {
-              addTag(tag.trim());
+              const trimmedTag = tag.trim();
+              if (trimmedTag) {
+                  // Get count from tag_count if available, default to 0
+                  const count = tag_count[trimmedTag.toLowerCase()] || 0;
+                  addTag(trimmedTag, count);
+              }
           });
           tagsInput.value = '';
       });
 
-      function addTag(text) {
-          // Clean the tag text (remove any commas)
-          const cleanText = text.replace(/,/g, '');
-          
-          // Don't add empty tags
+      function addTag(text, count = 0) {
+          // Clean the tag text
+          const cleanText = text.replace(/,/g, '').trim();
           if (!cleanText) return;
           
-          // Check for duplicates
-          const existingTags = Array.from(tagsContainer.querySelectorAll('.tag'))
-                .map(tag => tag.textContent.toLowerCase());
+          // Check tag_count dictionary first (case insensitive lookup)
+          const lowerText = cleanText.toLowerCase();
+          const tagCount = (window.tag_counts && window.tag_counts[lowerText]) || count;
           
-          if (existingTags.includes(cleanText.toLowerCase())) {
-              // Optional: Highlight duplicate briefly
-              tagsInput.style.borderColor = 'red';
-              setTimeout(() => tagsInput.style.borderColor = '', 1000);
+          // Check for existing tag (case insensitive)
+          const existingTag = Array.from(tagsContainer.querySelectorAll('.tag'))
+                .find(tag => tag.dataset.tag.toLowerCase() === lowerText);
+          
+          if (existingTag) {
+              // If tag exists, just update its count
+              const countSpan = existingTag.querySelector('.tag-count');
+              countSpan.textContent = parseInt(countSpan.textContent);
               return;
           }
           
-          // Create the tag element
+          // Create new tag element
           const tag = document.createElement('div');
           tag.className = 'tag tag-clickable';
-          tag.textContent = cleanText;
+          tag.dataset.tag = cleanText;
+          
+          // Create tag text
+          const tagText = document.createElement('span');
+          tagText.textContent = cleanText;
+          tag.appendChild(tagText);
+          
+          // Create count span - use count from tag_count if available, otherwise use passed count
+          const countSpan = document.createElement('span');
+          countSpan.className = 'tag-count';
+          countSpan.textContent = tagCount;  // Use the determined count
+          tag.appendChild(countSpan);
           
           // Add click to remove functionality
           tag.addEventListener('click', function() {
@@ -287,10 +306,23 @@
 
       function updateHiddenTags() {
           const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
-                .map(tag => tag.textContent);
+                .map(tag => ({
+                    name: tag.dataset.tag,
+                    count: parseInt(tag.querySelector('.tag-count').textContent)
+                }));
+          
           // If you have a hidden input for tags:
-          // document.getElementById('tags-data').value = tags.join(',');
+          // document.getElementById('tags-data').value = JSON.stringify(tags);
       }
+
+      // Initialize existing tags from tag_count when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+          // Assuming tag_count is available as a global variable
+          // or passed from your backend template
+          Object.entries(tag_count).forEach(([tag, count]) => {
+              addTag(tag, count);
+          });
+      });
   });
 </script>
 
