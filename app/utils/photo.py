@@ -21,11 +21,13 @@ def allowed_file(filename):
 def get_image(request):
     if 'file' not in request.files:
         flash('No file part')
+        print('No file part')
         return None
     
     file = request.files['file']
     if file.filename == '':
         flash('No image selected for uploading')
+        print('No image selected for uploading')
         return None
     
     if file and allowed_file(file.filename):
@@ -33,9 +35,11 @@ def get_image(request):
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         #print('upload_image filename: ' + filename)
         flash('Image successfully uploaded and displayed below')
-        return filename
+        print((os.path.join(app.config['UPLOAD_FOLDER'], filename)))
+        return (os.path.join(app.config['UPLOAD_FOLDER'], filename))
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
+        print("here?")
         return None
 
 def upload_image(file: str):
@@ -84,9 +88,9 @@ def link_item_photo(item_id: int, photo_id: int, display_order: int):
 
 def update_User_photo_id(photo_id, user_id):
     sql = '''
-    UPDATE User SET photo_id = %s WHERE user_id = %s
+    UPDATE User SET photo_id = %s WHERE id = %s
     '''
-    mysql_util.execute(sql, (photo_id, user_id))
+    mysql_util.execute_sql(sql, (photo_id, user_id), True)
 if __name__ == '__main__':
     #upload_image('app/static/images/uploads/harp.webp')
     #upload_image('app/static/images/uploads/t1.png')
