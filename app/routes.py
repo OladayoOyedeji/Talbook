@@ -12,6 +12,7 @@ from app.handlers.user_profile import handle_user_profile
 from app.handlers.bazaar import handle_bazaar
 from app.handlers.item_details import handle_item_details
 from app.handlers.edit_profile import handle_edit_profile
+from app.handlers.selling import handle_selling
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
