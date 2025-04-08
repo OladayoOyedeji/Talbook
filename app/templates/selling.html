@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell on Talbook</title>
+    <link rel="stylesheet" href="/static/styles/selling.css">
+    <link rel="stylesheet" href="/static/styles/tags.css">
+    <!-- below adds camera icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sell an Item on Talbook</h1>
+        
+        <form id="selling-form">
+            <!-- Title -->
+            <div class="form-group">
+                <label for="title" class="required-field">Title</label>
+                <input type="text" id="title" name="title" placeholder="What are you selling?" required>
+            </div>
+            
+            <!-- Photos -->
+            <div class="form-group">
+                <label for="photos">Photos</label>
+                <div class="photo-upload" id="photo-upload-area">
+                    <i class="fas fa-camera"></i>
+                    <p>Click to add photos or drag and drop (up to 10)</p>
+                    <input type="file" id="photos" name="photos" multiple accept="image/*" style="display: none;">
+                </div>
+                <div class="image-previews" id="image-previews"></div>
+            </div>
+            
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price" class="required-field">Price ($)</label>
+                <input type="number" id="price" name="price" min="0" step="0.01" placeholder="0.00" required>
+            </div>
+            
+            <!-- Condition -->
+            <div class="form-group">
+                <label for="condition" class="required-field">Condition</label>
+                <select id="condition" name="condition" required>
+                    <option value="" disabled selected>Select condition</option>
+                    <option value="new">New</option>
+                    <option value="like_new">Like New</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                </select>
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Tell potential buyers more about what you're selling..."></textarea>
+            </div>
+            
+            <!-- city and state -->
+            <div class="form-group">
+              <label for="city" class="required-field">City</label>
+              <input type="text" id="city" name="city" required>
+            </div>
+
+            <div class="form-group">
+              <label for="state" class="required-field">State or Territory</label>
+              <select id="state" name="state" required>
+                <option value="" disabled selected>Select state</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="PR">Puerto Rico</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+            </div>
+            
+            <!-- tags -->
+            <div class="form-group">
+              <label for="tags">Tags</label>
+              <input type="text" id="tags" name="tags" placeholder="Add tags to help buyers find your item (e.g. musical instrument, brass, trumpet)">
+              <div class="tags" id="tags-container">
+                <!-- tag logic here -->
+              </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Publish Listing</button>
+        </form>
+    </div>
+</body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Photo upload elements
+      const photoUploadArea = document.getElementById('photo-upload-area');
+      const fileInput = document.getElementById('photos');
+      const imagePreviews = document.getElementById('image-previews');
+      
+      // Tag elements
+      const tagsInput = document.getElementById('tags');
+      const tagsContainer = document.getElementById('tags-container');
+      
+      // Handle photo upload click
+      photoUploadArea.addEventListener('click', function() {
+          fileInput.click();
+      });
+      
+      // Handle drag and drop for photos
+      photoUploadArea.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          photoUploadArea.style.borderColor = '#1877f2';
+          photoUploadArea.style.backgroundColor = '#f0f8ff';
+      });
+      
+      photoUploadArea.addEventListener('dragleave', function() {
+          photoUploadArea.style.borderColor = '#dddfe2';
+          photoUploadArea.style.backgroundColor = 'transparent';
+      });
+      
+      photoUploadArea.addEventListener('drop', function(e) {
+          e.preventDefault();
+          photoUploadArea.style.borderColor = '#dddfe2';
+          photoUploadArea.style.backgroundColor = 'transparent';
+          
+          if (e.dataTransfer.files.length) {
+              fileInput.files = e.dataTransfer.files;
+              handleFileUpload(fileInput.files);
+          }
+      });
+      
+      // Handle file selection
+      fileInput.addEventListener('change', function() {
+          if (fileInput.files.length) {
+              handleFileUpload(fileInput.files);
+          }
+      });
+      
+      // Process uploaded files and create previews
+      // previews: https://stackoverflow.com/questions/5802580/html-input-type-file-get-the-image-before-submitting-the-form
+      function handleFileUpload(files) {
+          // Clear existing previews if needed
+          // imagePreviews.innerHTML = '';
+          
+          // Limit to 10 files
+          const filesToProcess = Array.from(files).slice(0, 10);
+          
+          filesToProcess.forEach(file => {
+              if (!file.type.match('image.*')) {
+                  return; // Skip non-image files
+              }
+              
+              const reader = new FileReader();
+
+              reader.onload = function(e) {
+                  const preview = document.createElement('div');
+                  preview.className = 'image-preview';
+                  
+                  const img = document.createElement('img');
+                  img.src = e.target.result;
+                  
+                  const removeBtn = document.createElement('button');
+                  removeBtn.className = 'remove-image';
+                  removeBtn.innerHTML = '×';
+                  removeBtn.addEventListener('click', function() {
+                      preview.remove();
+                      updateFileInput();
+                  });
+                  
+                  preview.appendChild(img);
+                  preview.appendChild(removeBtn);
+                  imagePreviews.appendChild(preview);
+              };
+              
+              reader.readAsDataURL(file);
+          });
+      }
+      
+      // Update the file input when images are removed
+      function updateFileInput() {
+          // This would need more complex handling to actually remove files from the input
+          // For a complete solution, you might want to use a hidden field or FormData
+      }
+      
+      // Tag input handler
+      tagsInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ',') {
+              e.preventDefault();
+              const tagText = tagsInput.value.trim();
+              if (tagText) {
+                  addTag(tagText);
+                  tagsInput.value = '';
+              }
+          }
+      });
+
+      // Also handle paste events for tags
+      tagsInput.addEventListener('paste', function(e) {
+          e.preventDefault();
+          const pastedText = e.clipboardData.getData('text');
+          pastedText.split(',').forEach(tag => {
+              addTag(tag.trim());
+          });
+          tagsInput.value = '';
+      });
+
+      function addTag(text) {
+          // Clean the tag text (remove any commas)
+          const cleanText = text.replace(/,/g, '');
+          
+          // Don't add empty tags
+          if (!cleanText) return;
+          
+          // Check for duplicates
+          const existingTags = Array.from(tagsContainer.querySelectorAll('.tag'))
+                .map(tag => tag.textContent.toLowerCase());
+          
+          if (existingTags.includes(cleanText.toLowerCase())) {
+              // Optional: Highlight duplicate briefly
+              tagsInput.style.borderColor = 'red';
+              setTimeout(() => tagsInput.style.borderColor = '', 1000);
+              return;
+          }
+          
+          // Create the tag element
+          const tag = document.createElement('div');
+          tag.className = 'tag tag-clickable';
+          tag.textContent = cleanText;
+          
+          // Add click to remove functionality
+          tag.addEventListener('click', function() {
+              tag.remove();
+              updateHiddenTags();
+          });
+          
+          // Add to container
+          tagsContainer.appendChild(tag);
+          
+          // Update hidden tags input
+          updateHiddenTags();
+      }
+
+      function updateHiddenTags() {
+          const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
+                .map(tag => tag.textContent);
+          // If you have a hidden input for tags:
+          // document.getElementById('tags-data').value = tags.join(',');
+      }
+  });
+</script>
+
+</html>
