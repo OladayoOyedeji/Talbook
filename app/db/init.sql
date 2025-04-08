@@ -8,13 +8,19 @@ COLLATE utf8mb4_unicode_ci;
 use Talbook;
 
 --==============================================================
--- NO 1. Photo: photos for items or user profiles
+-- NO 1. Photo: pngs for items or posts
 --==============================================================
 CREATE TABLE Photo
 (
     id INT AUTO_INCREMENT PRIMARY KEY
-    -- x INT, -- width of image
-    -- y INT, -- height of image
+) ENGINE=InnoDB;
+
+--==============================================================
+-- Video: mp4s for items or posts
+--==============================================================
+CREATE TABLE Video
+(
+    id INT AUTO_INCREMENT PRIMARY KEY
 ) ENGINE=InnoDB;
 
 --==============================================================
@@ -201,3 +207,39 @@ CREATE TABLE Item_Location
     FOREIGN KEY(item_id) REFERENCES Item(id),
     FOREIGN KEY(location_id) REFERENCES Location(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--==============================================================
+-- Post: A post in the media tab of the user profile
+--==============================================================
+CREATE TABLE Post
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--==============================================================
+-- Post_Photo: Join table linking one post to many photos
+--==============================================================
+CREATE TABLE Post_Photo
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    media_id INT,
+    display_order INT,
+    foreign key media_id references Photo(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--==============================================================
+-- Post_Video: Join table linking one post to many videos
+--==============================================================
+CREATE TABLE Post_Video
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    media_id INT,
+    display_order INT,
+    foreign key media_id references Video(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
