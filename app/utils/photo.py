@@ -7,10 +7,10 @@ import os
 from werkzeug.utils import secure_filename
 
 from app.utils import mysql_util
-from app import app
+# from app import app
 
 UPLOAD_FOLDER = 'app/static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -88,6 +88,7 @@ def update_User_photo_id(photo_id, user_id):
     UPDATE User SET photo_id = %s WHERE user_id = %s
     '''
     mysql_util.execute(sql, (photo_id, user_id))
+
 if __name__ == '__main__':
     #upload_image('app/static/images/uploads/harp.webp')
     #upload_image('app/static/images/uploads/t1.png')

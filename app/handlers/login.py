@@ -1,6 +1,7 @@
 # File: login.py
-from flask import request, render_template, flash, redirect, url_for
+from flask import request, render_template, flash, redirect, url_for, session
 from app.utils.functions import is_valid_login
+from app.utils import mysql_util
 
 def handle_login():
     invalid_message = ''
