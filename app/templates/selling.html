@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sell on Talbook</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <link rel="stylesheet" href="/static/styles/selling.css">
     <link rel="stylesheet" href="/static/styles/tags.css">
     <!-- below adds camera icon -->
@@ -132,25 +133,12 @@
               </select>
             </div>
 
-            <!-- tags -->
+            <!-- Tags Field -->
             <div class="form-group">
               <label for="tags">Tags</label>
 
-              <!-- Tag input with datalist -->
-              <input type="text" id="tags" name="tags" list="tag-list" placeholder="Add tags to help buyers find your item (e.g. musical instrument, brass, trumpet)" autocomplete="off">
-
-              <datalist id="tag-list">
-                {% for tag, count in tag_count.items() %}
-                <option value="{{ tag }} ({{ count }})">
-                  {% endfor %}
-              </datalist>
-
-              <div class="tags" id="tags-container">
-                <!-- Selected tags will show here -->
-              </div>
-
-              <!-- Hidden input to send tags list -->
-              <input type="hidden" id="tags-data" name="tags-data">
+              <!-- Native Multiple Select -->
+              <select id="tags" name="tags" multiple></select>
             </div>
             
             <!-- Submit Button -->
@@ -158,6 +146,8 @@
         </form>
     </div>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
 <script>
   window.tag_count = JSON.parse('{{ tag_count|tojson|safe }}');
@@ -171,11 +161,8 @@
       const photoUploadArea = document.getElementById('photo-upload-area');
       const fileInput = document.getElementById('photos');
       const imagePreviews = document.getElementById('image-previews');
+      const maxPhotos = 14;
       
-      // Tag elements
-      const tagsInput = document.getElementById('tags');
-      const tagsContainer = document.getElementById('tags-container');
-
       // live description character count
       descriptionInput.addEventListener('input', function() {
           descriptionCount.textContent = `${descriptionInput.value.length} / 20000`;
@@ -208,193 +195,100 @@
               handleFileUpload(fileInput.files);
           }
       });
-      
-      // Handle file selection
-      fileInput.addEventListener('change', function() {
-          if (fileInput.files.length) {
-              handleFileUpload(fileInput.files);
-          }
-      });
-      
-      // Process uploaded files and create previews
-      // previews: https://stackoverflow.com/questions/5802580/html-input-type-file-get-the-image-before-submitting-the-form
-      function handleFileUpload(files) {
-          const existingImages = imagePreviews.querySelectorAll('.image-preview').length;
-          const maxPhotos = 14;
 
-          if (existingImages >= maxPhotos) {
-              alert('You can upload a maximum of 14 photos.');
-              return;
-          }
+          fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
+          
+          // Process uploaded files and create previews
+          // previews: https://stackoverflow.com/questions/5802580/html-input-type-file-get-the-image-before-submitting-the-form
+          function handleFileUpload(files) {
+              const existingImages = imagePreviews.querySelectorAll('.image-preview').length;
 
-          const availableSlots = maxPhotos - existingImages;
-          const filesToProcess = Array.from(files).slice(0, availableSlots);
-
-          filesToProcess.forEach(file => {
-              if (!file.type.match('image.*')) {
+              if (existingImages >= maxPhotos) {
+                  alert('You can upload a maximum of 14 photos.');
                   return;
               }
 
-              const reader = new FileReader();
+              const availableSlots = maxPhotos - existingImages;
+              const filesToProcess = Array.from(files).slice(0, availableSlots);
 
-              reader.onload = function(e) {
-                  const preview = document.createElement('div');
-                  preview.className = 'image-preview';
+              filesToProcess.forEach(file => {
+                  if (!file.type.match('image.*')) {
+                      return;
+                  }
 
-                  const img = document.createElement('img');
-                  img.src = e.target.result;
+                  const reader = new FileReader();
 
-                  const removeBtn = document.createElement('button');
-                  removeBtn.className = 'remove-image';
-                  removeBtn.innerHTML = '×';
-                  removeBtn.addEventListener('click', function() {
-                      preview.remove();
-                      updateFileInput();
-                  });
+                  reader.onload = function(e) {
+                      const preview = document.createElement('div');
+                      preview.className = 'image-preview';
 
-                  preview.appendChild(img);
-                  preview.appendChild(removeBtn);
-                  imagePreviews.appendChild(preview);
-              };
+                      const img = document.createElement('img');
+                      img.src = e.target.result;
 
-              reader.readAsDataURL(file);
-          });
-      }
+                      const removeBtn = document.createElement('button');
+                      removeBtn.className = 'remove-image';
+                      removeBtn.innerHTML = '×';
+                      removeBtn.addEventListener('click', function() {
+                          preview.remove();
+                          updateFileInput();
+                      });
+
+                      preview.appendChild(img);
+                      preview.appendChild(removeBtn);
+                      imagePreviews.appendChild(preview);
+                  };
+
+                  reader.readAsDataURL(file);
+              });
+          }
       
       // Update the file input when images are removed
       function updateFileInput() {
           // This would need more complex handling to actually remove files from the input
           // For a complete solution, you might want to use a hidden field or FormData
       }
-      
-      // Tag input handler
-      tagsInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ',') {
+
+      const tagSelect = document.getElementById('tags');
+
+      const choices = new Choices(tagSelect, {
+          removeItemButton: true,
+          placeholderValue: 'Add tags',
+          duplicateItemsAllowed: false,
+          addItems: true,  // User can type new tags
+          addItemFilter: function(value) {
+              return value.trim() !== '' && /^[a-zA-Z0-9\s\-_]+$/.test(value);
+          },
+          searchPlaceholderValue: 'Search or add tag...'
+      });
+
+      // Add this custom event handler to force adding typed text on Enter
+      tagSelect.closest('.choices').addEventListener('keydown', function(e) {
+          // Check if Enter was pressed in the search input
+          if (e.key === 'Enter' && 
+              e.target.classList.contains('choices__input') && 
+              e.target.value.trim() !== '') {
+              
+              // Prevent the default Choices.js behavior (selecting highlighted item)
               e.preventDefault();
-              const tagText = tagsInput.value.trim();
-              if (tagText) {
-                  addTag(tagText);
-                  tagsInput.value = '';
-              }
+              
+              // Add the typed value as a new item
+              choices._addItem({
+                  value: e.target.value,
+                  label: e.target.value,
+                  customProperties: {},
+                  placeholder: false
+              });
+              
+              // Clear the search input
+              e.target.value = '';
           }
       });
 
-      // Handle paste events for tags
-      tagsInput.addEventListener('paste', function(e) {
-          e.preventDefault();
-          const pastedText = e.clipboardData.getData('text');
-          pastedText.split(',').forEach(tag => {
-              const trimmedTag = tag.trim();
-              if (trimmedTag) {
-                  // Get count from tag_count if available, default to 0
-                  const count = tag_count[trimmedTag.toLowerCase()] || 0;
-                  addTag(trimmedTag, count);
-              }
-          });
-          tagsInput.value = '';
+          // preload suggested tags from server
+          {% for tag, count in tag_count.items() %}
+          choices.setChoices([{value: '{{ tag }}', label: '{{ tag }} ({{ count }})'}], 'value', 'label', false);
+          {% endfor %} 
       });
-
-      function addTag(text, count = 0) {
-          // Clean the tag text
-          const cleanText = text.replace(/,/g, '') 
-                .replace(/\(.*?\)/g, '')
-                .replace(/\d+/g, '')
-                .trim();
-
-          if (!cleanText) return;
-          
-          // Check tag_count dictionary first (case insensitive lookup)
-          const lowerText = cleanText.toLowerCase();
-          const tagCount = (window.tag_count && window.tag_count[lowerText]) || count;
-          
-          // Check for existing tag (case insensitive)
-          const existingTag = Array.from(tagsContainer.querySelectorAll('.tag'))
-                .find(tag => tag.dataset.tag.toLowerCase() === lowerText);
-          
-          if (existingTag) {
-              // If tag exists, just update its count
-              const countSpan = existingTag.querySelector('.tag-count');
-              countSpan.textContent = parseInt(countSpan.textContent);
-              return;
-          }
-          
-          // Create new tag element
-          const tag = document.createElement('div');
-          tag.className = 'tag tag-clickable';
-          tag.dataset.tag = cleanText;
-          
-          // Create tag text
-          const tagText = document.createElement('span');
-          tagText.textContent = cleanText;
-          tag.appendChild(tagText);
-          
-          // Create count span - use count from tag_count if available, otherwise use passed count
-          const countSpan = document.createElement('span');
-          countSpan.className = 'tag-count';
-          countSpan.textContent = tagCount;  // Use the determined count
-          tag.appendChild(countSpan);
-          
-          // Add click to remove functionality
-          tag.addEventListener('click', function() {
-              tag.remove();
-              updateHiddenTags();
-          });
-          
-          // Add to container
-          tagsContainer.appendChild(tag);
-          
-          // Update hidden tags input
-          updateHiddenTags();
-      }
-
-      tagsInput.addEventListener('change', function() {
-          const value = tagsInput.value;
-          // Remove count if user selected from datalist
-          const cleanValue = value.split(' (')[0];
-          tagsInput.value = cleanValue;
-      });
-
-      // Initialize existing tags from tag_count when page loads
-      document.addEventListener('DOMContentLoaded', function() {
-          // Assuming tag_count is available as a global variable
-          // or passed from your backend template
-          Object.entries(window.tag_counts).forEach(([tag, count]) => {
-              addTag(tag, count);
-          });
-
-          document.getElementById('selling-form').addEventListener('submit', function(e) {
-              e.preventDefault();
-
-              const formData = new FormData(this);
-
-              const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
-                    .map(tag => tag.dataset.tag);
-              formData.set('tags-data', JSON.stringify(tags));
-
-              fetch('/selling', {
-                  method: 'POST',
-                  body: formData
-              })
-                  .then(response => response.json())
-                  .then(data => {
-                      if (data.success) {
-                          window.location.href = data.redirect_url;
-                      } else {
-                          alert(data.message || 'Error submitting form');
-                      }
-                  })
-                  .catch(error => {
-                      console.error('Error:', error);
-                      alert('An error occurred while submitting the form');
-                  });
-          });
-          // Make sure updateHiddenTags() is properly updating the hidden input
-          function updateHiddenTags() {
-              const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
-                    .map(tag => tag.dataset.tag);
-              document.getElementById('tags-data').value = JSON.stringify(tags);
-          }
-      });
-  });
+  
 </script>
 </html>
