@@ -106,7 +106,13 @@ def get_image_link(username):
     print(type(photo_id), str(photo_id), os.path.join('/static/images','%s.jpg' % photo_id), '\n')
     return os.path.join('/static/images','%s.jpg' % photo_id)
 
-def get_skills(user_id):
+def get_skills():
+    sql = '''
+    SELECT skills, id FROM Service
+    '''
+    return execute_sql(sql)
+
+def get_services(user_id):
     sql = '''
     SELECT Service.skills FROM User_Service
     JOIN Service ON User_Service.service_id = Service.id
@@ -143,7 +149,6 @@ def update_username(profile, username):
         sql = '''
         UPDATE User SET username = %s WHERE id=%s
         '''
-        print("bad bitches")
         return execute_sql(sql, (username,profile['id']), True)
 
 def update_email(profile, email):
@@ -151,7 +156,6 @@ def update_email(profile, email):
         sql = '''
         UPDATE User SET email = %s WHERE id=%s
         '''
-        print("bad bitches")
         return execute_sql(sql, (email,profile['id']), True)
 
 def update_descrip(profile, descrip):
@@ -159,10 +163,35 @@ def update_descrip(profile, descrip):
         sql = '''
         UPDATE User SET descrip = %s WHERE id=%s
         '''
-        print("bad bitches")
         return execute_sql(sql, (descrip,profile['id']), True)
 
-
+def update_services(profile, add_skills, delete_skills):
+    print(add_skills)
+    sql = ""
+    if add_skills or delete_skills :
+        delim = ""
+        if add_skills:
+            sql = '''
+            INSERT INTO User_Service (user_id, service_id)
+            VALUES '''
+            
+            delim = "("
+            
+            for skill in add_skills:
+                sql += delim + str(profile['id']) + ',' + str(skill)
+                delim = '),\n('
+            sql += ');'
+        if delete_skills:
+            sql += '''
+            DELETE FROM User_Service WHERE '''
+            
+            for skill in delete_skills:
+                sql += delim + "service_id = %s" % skill
+                delim = "\nOR "
+                
+        print(sql)
+        
+        return execute_sql(sql, (), commit=True)
 ##==============================================================
 ## User Class
 ##==============================================================

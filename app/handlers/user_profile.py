@@ -4,7 +4,7 @@ from flask import request, render_template, flash, redirect, url_for, session, c
 from app.utils.functions import *
 from app.utils.User import *
 
-def handle_user_profile(username):
+def handle_user_profile(username, listings=True):
     
     profile = (get_data(username))[0]
     print(profile)
@@ -14,13 +14,13 @@ def handle_user_profile(username):
     id = profile['id']
 
     print("here")
-    profile['skills'] = get_skills(id)
+    profile['skills'] = get_services(id)
     print("or here?")
     if profile['skills'] == None:
         profile['skills'] = ['']
     
     profile['listings'] = get_listings(id)
     print()
-    print(profile['listings'])
-    return render_template('user_profile.html',profile=profile,
+    print(profile)
+    return render_template('user_profile.html',listings=listings,profile=profile,
                            editable=(session['username']==username))

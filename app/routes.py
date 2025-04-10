@@ -13,6 +13,7 @@ from app.handlers.bazaar import handle_bazaar
 from app.handlers.item_details import handle_item_details
 from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
+from app.handlers.media import handle_media
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -40,7 +41,11 @@ def home():
 
 @app.route('/user_profile/<username>')
 def user_profile(username):
-    return handle_user_profile(username)
+    return handle_user_profile(username)  
+
+@app.route('/user_profile/<username>/media')
+def media(username):
+    return handle_media(username)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
