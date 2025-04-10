@@ -95,7 +95,7 @@ def handle_selling():
         item_id = create_listing(tags, values, photo_names,
                                      city, state)
 
-        return redirect(url_for('item_details/%s' % item_id))
+        return redirect('item/%s' % item_id)
     
     else:
         # GET request handling

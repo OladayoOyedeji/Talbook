@@ -19,18 +19,20 @@
         </header>
 
         <main class="item-details">
+          {% if photos %}
           <section class="gallery-section">
             <h2 class="section-title">Photos</h2>
             <div class="photo-gallery">
               {% for photo in photos %}
               <div class="photo-item">
-                <a href="/static/images/uploads/{{ photo.photo_id }}.png" target="_blank" rel="noopener noreferrer">
-                  <img src="/static/images/uploads/{{ photo.photo_id }}.png" class="item-photo" alt="Item photo">
+                <a href="/static/images/store/{{ photo.photo_id }}.png" target="_blank" rel="noopener noreferrer">
+                  <img src="/static/images/store/{{ photo.photo_id }}.png" class="item-photo" alt="Item photo">
                 </a>
               </div>
               {% endfor %}
             </div>
           </section>
+          {% endif %}
 
             <section class="info-section">
                 <div class="info-card">

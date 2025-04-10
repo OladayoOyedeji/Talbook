@@ -38,7 +38,7 @@
     <div class="grid-container">
         {% for item in items %}
         <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
-            <img src="/static/images/uploads/{{ item[5] }}.png"
+            <img src="/static/images/store/{{ item[5] }}.png"
                  onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
                  class="item-image">
             <div class="item-title">{{ item[1] }}</div>

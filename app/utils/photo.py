@@ -65,14 +65,13 @@ def upload_image(file: str):
     photo_id = mysql_util.execute_sql(sql, commit=True, get_lastrowid=True)
     
     # save file as {photo_id}.png
-    filepath = ('app/static/images/uploads/%s.png' % photo_id)
-    if (original_path == filepath):
-        return photo_id
+    filepath = ('app/static/images/store/%s.png' % photo_id)
     with open(filepath, 'wb') as f:
         f.write(png_buffer.getvalue())
 
-    # delete original if different from original
-    os.remove(original_path)
+    # delete original
+    if filepath != original_path:
+        os.remove(original_path)
     
     return photo_id
 
@@ -90,15 +89,15 @@ def update_User_photo_id(photo_id, user_id):
     mysql_util.execute(sql, (photo_id, user_id))
 
 if __name__ == '__main__':
-    #upload_image('app/static/images/uploads/harp.webp')
-    #upload_image('app/static/images/uploads/t1.png')
-    #upload_image('app/static/images/uploads/t2.png')
-    #upload_image('app/static/images/uploads/g0.webp')
-    #upload_image('app/static/images/uploads/g1.webp')
-    #upload_image('app/static/images/uploads/g2.webp')
-    #upload_image('app/static/images/uploads/trumpet1.jpg')
-    #upload_image('app/static/images/uploads/trumpet2.jpg')
-    #upload_image('app/static/images/uploads/trumpet3.jpg')
+    upload_image('app/static/images/uploads/harp.webp')
+    upload_image('app/static/images/uploads/t1.png')
+    upload_image('app/static/images/uploads/t2.png')
+    upload_image('app/static/images/uploads/g0.webp')
+    upload_image('app/static/images/uploads/g1.webp')
+    upload_image('app/static/images/uploads/g2.webp')
+    upload_image('app/static/images/uploads/trumpet1.jpg')
+    upload_image('app/static/images/uploads/trumpet2.jpg')
+    upload_image('app/static/images/uploads/trumpet3.jpg')
     upload_image('app/static/images/uploads/m1.webp')
     upload_image('app/static/images/uploads/m2.webp')
     upload_image('app/static/images/uploads/m3.webp')
