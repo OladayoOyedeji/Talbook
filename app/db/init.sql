@@ -226,7 +226,7 @@ CREATE TABLE Post_Photo
     id INT AUTO_INCREMENT PRIMARY KEY,
     media_id INT,
     display_order INT,
-    foreign key media_id references Photo(id)
+    FOREIGN KEY(media_id) REFERENCES Photo(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
@@ -237,7 +237,7 @@ CREATE TABLE Post_Video
     id INT AUTO_INCREMENT PRIMARY KEY,
     media_id INT,
     display_order INT,
-    foreign key media_id references Video(id)
+    FOREIGN KEY(media_id) REFERENCES Photo(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

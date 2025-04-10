@@ -1,10 +1,16 @@
 # File: mysql_user.py
 import pymysql
+from flask import session
+
+from app.utils import photo
 
 DB_NAME = "Talbook"
 USE_DB = "USE %s;" % DB_NAME
 INIT_SQL_FILE = "app/db/init.sql"  # path to MySQL initialization script
 
+##==============================================================
+## Base Functions
+##==============================================================
 def get_db_connection(db=None):
     """
     Establishes a database connection.
@@ -66,8 +72,7 @@ def execute_many_sql(sql, param_list, commit=False):
         added = True
     except Exception as e:
         print("error in execute_many_sql():", e)
-        conn.rollback()
-        
+        conn.rollback()        
         
     cursor.close()
     conn.close()
@@ -115,4 +120,29 @@ def write_sql(filename: str, sql: str) -> None:
     '''Writes MySQL content to a file (overwrites)'''
     f = open(filename, 'w')
     f.write(sql + '\n')
-    f.close() 
+    f.close()
+
+##==============================================================
+## Helper Functions
+##==============================================================
+def get_all_distinct_cities(): # assumes more than one city exists
+    sql = '''
+    SELECT DISTINCT city
+    FROM Location;
+    '''
+    results = execute_sql(sql);    
+    return [city[0] for city in results]
+
+def get_all_tag_counts():
+    """
+    Returns a dictionary of all tags with their usage counts
+    Format: {'tag_name': count, ...}
+    """
+    sql = '''
+    SELECT T.name, COUNT(IT.item_id) AS tag_count
+    FROM Tag as T
+    JOIN Item_Tag AS IT ON T.id=IT.tag_id
+    GROUP BY T.name;
+    '''
+    results = execute_sql(sql, fetchdict=True)
+    return {item['name']: item['tag_count'] for item in results} if results else {}

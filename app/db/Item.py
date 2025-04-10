@@ -20,7 +20,7 @@ def insert_item(seller_username: str, tags: list, sql: str, values: tuple, photo
         mysql_util.execute_sql("INSERT INTO Item_Tag (item_id, tag_id) SELECT %s, id FROM Tag WHERE name=%s", (item_id, tag), commit=True)
 
     # upload and link photos
-    dir_path = 'app/static/images/uploads/'
+    dir_path = 'app/static/images/store/'
     for display_order, file in enumerate(photos):
         print("inserting photo %s" % (dir_path + file))
         photo_id = photo.upload_image(dir_path + file)

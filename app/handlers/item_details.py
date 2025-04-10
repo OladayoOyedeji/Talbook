@@ -46,10 +46,14 @@ def handle_item_details(item_id):
     location = execute_sql(sql4, (item_id,), fetchone=True, fetchdict=True)
     city = location["city"]
     state = location["state"]
-    
-    app.logger.debug("fetching values: %s" % values)
-    app.logger.debug("fetching photos: %s" % photos)
-    app.logger.debug("fetching tags: %s" % tags)
-    app.logger.debug("fetching location: %s" % location)
+
+    if values:
+        app.logger.debug("fetching values: %s" % values)
+    if photos:
+        app.logger.debug("fetching photos: %s" % photos)
+    if tags:
+        app.logger.debug("fetching tags: %s" % tags)
+    if location:
+        app.logger.debug("fetching location: %s" % location)
 
     return render_template("item_details.html", values=values, photos=photos, tags=tags, city=city, state=state)

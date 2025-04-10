@@ -54,7 +54,7 @@ def search():
 def inbox():
     return handle_inbox()
 
-@app.route('/selling')
+@app.route('/selling', methods=['GET', 'POST'])
 def selling():
     return handle_selling()
 
