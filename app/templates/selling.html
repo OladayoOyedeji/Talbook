@@ -13,7 +13,7 @@
     <div class="container">
         <h1>Sell an Item on Talbook</h1>
         
-        <form id="selling-form">
+        <form id="selling-form" method="POST" enctype="multipart/form-data">
             <!-- Title -->
             <div class="form-group">
                 <label for="title" class="required-field">Title</label>
@@ -25,7 +25,7 @@
                 <label for="photos">Photos</label>
                 <div class="photo-upload" id="photo-upload-area">
                     <i class="fas fa-camera"></i>
-                    <p>Click to add photos or drag and drop (up to 10)</p>
+                    <p>Click to add photos or drag and drop (up to 14)</p>
                     <input type="file" id="photos" name="photos" multiple accept="image/*" style="display: none;">
                 </div>
                 <div class="image-previews" id="image-previews"></div>
@@ -41,25 +41,37 @@
             <div class="form-group">
                 <label for="condition" class="required-field">Condition</label>
                 <select id="condition" name="condition" required>
-                    <option value="" disabled selected>Select condition</option>
+                    <option value="" disabled selected>Select Condition</option>
                     <option value="new">New</option>
-                    <option value="like_new">Like New</option>
+                    <option value="like new">Like New</option>3
+                    <option value="very good">Very Good</option>
                     <option value="good">Good</option>
-                    <option value="fair">Fair</option>
+                    <option value="acceptable">Acceptable</option>
                     <option value="poor">Poor</option>
                 </select>
             </div>
             
             <!-- Description -->
             <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" placeholder="Tell potential buyers more about what you're selling..."></textarea>
+              <label for="description">Description</label>
+              <textarea 
+                id="description" 
+                name="description" 
+                placeholder="Tell potential buyers more about what you're selling" 
+                maxlength="20000">
+              </textarea>
+              <div id="description-count">0 / 20000</div>
             </div>
             
             <!-- city and state -->
             <div class="form-group">
               <label for="city" class="required-field">City</label>
-              <input type="text" id="city" name="city" required>
+              <input type="text" id="city" name="city" list="city-list" required>
+              <datalist id="city-list">
+                {% for city in cities %}
+                <option value="{{ city }}">
+                  {% endfor %}
+              </datalist>
             </div>
 
             <div class="form-group">
@@ -119,14 +131,26 @@
                 <option value="WY">Wyoming</option>
               </select>
             </div>
-            
+
             <!-- tags -->
             <div class="form-group">
               <label for="tags">Tags</label>
-              <input type="text" id="tags" name="tags" placeholder="Add tags to help buyers find your item (e.g. musical instrument, brass, trumpet)">
+
+              <!-- Tag input with datalist -->
+              <input type="text" id="tags" name="tags" list="tag-list" placeholder="Add tags to help buyers find your item (e.g. musical instrument, brass, trumpet)" autocomplete="off">
+
+              <datalist id="tag-list">
+                {% for tag, count in tag_count.items() %}
+                <option value="{{ tag }} ({{ count }})">
+                  {% endfor %}
+              </datalist>
+
               <div class="tags" id="tags-container">
-                <!-- tag logic here -->
+                <!-- Selected tags will show here -->
               </div>
+
+              <!-- Hidden input to send tags list -->
+              <input type="hidden" id="tags-data" name="tags-data">
             </div>
             
             <!-- Submit Button -->
@@ -136,8 +160,13 @@
 </body>
 
 <script>
-  window.tag_counts = JSON.parse('{{ tag_count|tojson|safe }}');
+  window.tag_count = JSON.parse('{{ tag_count|tojson|safe }}');
   document.addEventListener('DOMContentLoaded', function() {
+
+      // live description character count elements
+      const descriptionInput = document.getElementById('description');
+      const descriptionCount = document.getElementById('description-count');
+      
       // Photo upload elements
       const photoUploadArea = document.getElementById('photo-upload-area');
       const fileInput = document.getElementById('photos');
@@ -146,6 +175,11 @@
       // Tag elements
       const tagsInput = document.getElementById('tags');
       const tagsContainer = document.getElementById('tags-container');
+
+      // live description character count
+      descriptionInput.addEventListener('input', function() {
+          descriptionCount.textContent = `${descriptionInput.value.length} / 20000`;
+      });
       
       // Handle photo upload click
       photoUploadArea.addEventListener('click', function() {
@@ -185,26 +219,31 @@
       // Process uploaded files and create previews
       // previews: https://stackoverflow.com/questions/5802580/html-input-type-file-get-the-image-before-submitting-the-form
       function handleFileUpload(files) {
-          // Clear existing previews if needed
-          // imagePreviews.innerHTML = '';
-          
-          // Limit to 10 files
-          const filesToProcess = Array.from(files).slice(0, 10);
-          
+          const existingImages = imagePreviews.querySelectorAll('.image-preview').length;
+          const maxPhotos = 14;
+
+          if (existingImages >= maxPhotos) {
+              alert('You can upload a maximum of 14 photos.');
+              return;
+          }
+
+          const availableSlots = maxPhotos - existingImages;
+          const filesToProcess = Array.from(files).slice(0, availableSlots);
+
           filesToProcess.forEach(file => {
               if (!file.type.match('image.*')) {
-                  return; // Skip non-image files
+                  return;
               }
-              
+
               const reader = new FileReader();
 
               reader.onload = function(e) {
                   const preview = document.createElement('div');
                   preview.className = 'image-preview';
-                  
+
                   const img = document.createElement('img');
                   img.src = e.target.result;
-                  
+
                   const removeBtn = document.createElement('button');
                   removeBtn.className = 'remove-image';
                   removeBtn.innerHTML = '×';
@@ -212,12 +251,12 @@
                       preview.remove();
                       updateFileInput();
                   });
-                  
+
                   preview.appendChild(img);
                   preview.appendChild(removeBtn);
                   imagePreviews.appendChild(preview);
               };
-              
+
               reader.readAsDataURL(file);
           });
       }
@@ -257,12 +296,16 @@
 
       function addTag(text, count = 0) {
           // Clean the tag text
-          const cleanText = text.replace(/,/g, '').trim();
+          const cleanText = text.replace(/,/g, '') 
+                .replace(/\(.*?\)/g, '')
+                .replace(/\d+/g, '')
+                .trim();
+
           if (!cleanText) return;
           
           // Check tag_count dictionary first (case insensitive lookup)
           const lowerText = cleanText.toLowerCase();
-          const tagCount = (window.tag_counts && window.tag_counts[lowerText]) || count;
+          const tagCount = (window.tag_count && window.tag_count[lowerText]) || count;
           
           // Check for existing tag (case insensitive)
           const existingTag = Array.from(tagsContainer.querySelectorAll('.tag'))
@@ -304,26 +347,54 @@
           updateHiddenTags();
       }
 
-      function updateHiddenTags() {
-          const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
-                .map(tag => ({
-                    name: tag.dataset.tag,
-                    count: parseInt(tag.querySelector('.tag-count').textContent)
-                }));
-          
-          // If you have a hidden input for tags:
-          // document.getElementById('tags-data').value = JSON.stringify(tags);
-      }
+      tagsInput.addEventListener('change', function() {
+          const value = tagsInput.value;
+          // Remove count if user selected from datalist
+          const cleanValue = value.split(' (')[0];
+          tagsInput.value = cleanValue;
+      });
 
       // Initialize existing tags from tag_count when page loads
       document.addEventListener('DOMContentLoaded', function() {
           // Assuming tag_count is available as a global variable
           // or passed from your backend template
-          Object.entries(tag_count).forEach(([tag, count]) => {
+          Object.entries(window.tag_counts).forEach(([tag, count]) => {
               addTag(tag, count);
           });
+
+          document.getElementById('selling-form').addEventListener('submit', function(e) {
+              e.preventDefault();
+
+              const formData = new FormData(this);
+
+              const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
+                    .map(tag => tag.dataset.tag);
+              formData.set('tags-data', JSON.stringify(tags));
+
+              fetch('/selling', {
+                  method: 'POST',
+                  body: formData
+              })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          window.location.href = data.redirect_url;
+                      } else {
+                          alert(data.message || 'Error submitting form');
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Error:', error);
+                      alert('An error occurred while submitting the form');
+                  });
+          });
+          // Make sure updateHiddenTags() is properly updating the hidden input
+          function updateHiddenTags() {
+              const tags = Array.from(tagsContainer.querySelectorAll('.tag'))
+                    .map(tag => tag.dataset.tag);
+              document.getElementById('tags-data').value = JSON.stringify(tags);
+          }
       });
   });
 </script>
-
 </html>

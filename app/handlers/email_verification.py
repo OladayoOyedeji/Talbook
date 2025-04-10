@@ -7,9 +7,8 @@ from app.utils.User import register_user
 def handle_email_verification():
     if request.method == 'POST':
         if is_valid_code(request.form.get('code')):
-            
+    
             if register_user(session['username'], session['email'], session['password']):
-                print('dude')
                 session['verified'] = True
                 flash("Registration successful! Please login.")
                 return redirect(url_for('login'))
