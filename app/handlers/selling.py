@@ -54,7 +54,7 @@ def create_listing(tags: list, values: tuple, photos: list, city: str, state: st
 
 def handle_selling():
     if request.method == 'POST':
-        print("FORM DATA: %s", request.form)
+        print("FORM DATA:", request.form)
         # values
         seller_id = session['user_id']
         title = request.form.get('title')
@@ -72,10 +72,10 @@ def handle_selling():
         print("state", state)
             
         # Get tags (from hidden input)
-        tags_data = request.form.get('tags-data')
-        tags = json.loads(tags_data) if tags_data else []
-        print("tags_data", tags_data)
-        # tags aren't sent???
+        tags_json = request.form.get('tags', '[]')
+        print("tags_json:", tags_json)
+        tags = tags_json.split(',')
+        print("tags:", tags)
             
         # Handle file uploads
         photos = request.files.getlist('photos')
@@ -99,6 +99,7 @@ def handle_selling():
     else:
         # GET request handling
         tag_count = mysql_util.get_all_tag_counts()
+        print("tag_count:", tag_count)
         tags = [f"{tag} ({count})" for tag, count in tag_count.items()]
         cities = mysql_util.get_all_distinct_cities()
         return render_template('selling.html', tag_count=tag_count, tags=tags, cities=cities)

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sell on Talbook</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/static/styles/selling.css">
     <link rel="stylesheet" href="/static/styles/tags.css">
     <!-- below adds camera icon -->
@@ -44,7 +44,7 @@
                 <select id="condition" name="condition" required>
                     <option value="" disabled selected>Select Condition</option>
                     <option value="new">New</option>
-                    <option value="like new">Like New</option>3
+                    <option value="like new">Like New</option>
                     <option value="very good">Very Good</option>
                     <option value="good">Good</option>
                     <option value="acceptable">Acceptable</option>
@@ -136,9 +136,7 @@
             <!-- Tags Field -->
             <div class="form-group">
               <label for="tags">Tags</label>
-
-              <!-- Native Multiple Select -->
-              <select id="tags" name="tags" multiple></select>
+              <input id="tags" name="tags" placeholder="Add tags" value="" multiple>
             </div>
             
             <!-- Submit Button -->
@@ -147,7 +145,8 @@
     </div>
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="https://unpkg.com/@yaireo/tagify"></script>
+<script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 
 <script>
   window.tag_count = JSON.parse('{{ tag_count|tojson|safe }}');
@@ -196,99 +195,122 @@
           }
       });
 
-          fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
-          
-          // Process uploaded files and create previews
-          // previews: https://stackoverflow.com/questions/5802580/html-input-type-file-get-the-image-before-submitting-the-form
-          function handleFileUpload(files) {
-              const existingImages = imagePreviews.querySelectorAll('.image-preview').length;
+      fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
+      
+      // Process uploaded files and create previews
+      function handleFileUpload(files) {
+          const existingImages = imagePreviews.querySelectorAll('.image-preview').length;
 
-              if (existingImages >= maxPhotos) {
-                  alert('You can upload a maximum of 14 photos.');
+          if (existingImages >= maxPhotos) {
+              alert('You can upload a maximum of 14 photos.');
+              return;
+          }
+
+          const availableSlots = maxPhotos - existingImages;
+          const filesToProcess = Array.from(files).slice(0, availableSlots);
+
+          filesToProcess.forEach(file => {
+              if (!file.type.match('image.*')) {
                   return;
               }
 
-              const availableSlots = maxPhotos - existingImages;
-              const filesToProcess = Array.from(files).slice(0, availableSlots);
+              const reader = new FileReader();
 
-              filesToProcess.forEach(file => {
-                  if (!file.type.match('image.*')) {
-                      return;
-                  }
+              reader.onload = function(e) {
+                  const preview = document.createElement('div');
+                  preview.className = 'image-preview';
 
-                  const reader = new FileReader();
+                  const img = document.createElement('img');
+                  img.src = e.target.result;
 
-                  reader.onload = function(e) {
-                      const preview = document.createElement('div');
-                      preview.className = 'image-preview';
+                  const removeBtn = document.createElement('button');
+                  removeBtn.className = 'remove-image';
+                  removeBtn.innerHTML = '×';
+                  removeBtn.addEventListener('click', function() {
+                      preview.remove();
+                      updateFileInput();
+                  });
 
-                      const img = document.createElement('img');
-                      img.src = e.target.result;
+                  preview.appendChild(img);
+                  preview.appendChild(removeBtn);
+                  imagePreviews.appendChild(preview);
+              };
 
-                      const removeBtn = document.createElement('button');
-                      removeBtn.className = 'remove-image';
-                      removeBtn.innerHTML = '×';
-                      removeBtn.addEventListener('click', function() {
-                          preview.remove();
-                          updateFileInput();
-                      });
-
-                      preview.appendChild(img);
-                      preview.appendChild(removeBtn);
-                      imagePreviews.appendChild(preview);
-                  };
-
-                  reader.readAsDataURL(file);
-              });
-          }
-      
+              reader.readAsDataURL(file);
+          });
+      }
+  
       // Update the file input when images are removed
       function updateFileInput() {
           // This would need more complex handling to actually remove files from the input
           // For a complete solution, you might want to use a hidden field or FormData
       }
 
-      const tagSelect = document.getElementById('tags');
+      // Initialize Tagify
+      const tagInput = document.getElementById('tags');
 
-      const choices = new Choices(tagSelect, {
-          removeItemButton: true,
-          placeholderValue: 'Add tags',
-          duplicateItemsAllowed: false,
-          addItems: true,  // User can type new tags
-          addItemFilter: function(value) {
-              return value.trim() !== '' && /^[a-zA-Z0-9\s\-_]+$/.test(value);
+      // Prepare whitelist from server data
+      const whitelist = [];
+      {% for tag, count in tag_count.items() %}
+      whitelist.push({
+          value: '{{ tag }}',
+          label: '{{ tag }} ({{ count }})'
+      });
+      {% endfor %}
+
+      // Initialize Tagify with a custom dropdown item template
+      const tagify = new Tagify(tagInput, {
+          whitelist: whitelist,
+          enforceWhitelist: false,  // Allow custom tags
+          dropdown: {
+              enabled: 1,            // Show suggestions after 1 character
+              maxItems: 10,
+              classname: "tags-dropdown",
+              highlightFirst: true
           },
-          searchPlaceholderValue: 'Search or add tag...'
+          editTags: false,
+          placeholder: "Add tags",
+          originalInputValueFormat: (valuesArr) => valuesArr.map(item => item.value).join(',')
       });
 
-      // Add this custom event handler to force adding typed text on Enter
-      tagSelect.closest('.choices').addEventListener('keydown', function(e) {
-          // Check if Enter was pressed in the search input
-          if (e.key === 'Enter' && 
-              e.target.classList.contains('choices__input') && 
-              e.target.value.trim() !== '') {
-              
-              // Prevent the default Choices.js behavior (selecting highlighted item)
-              e.preventDefault();
-              
-              // Add the typed value as a new item
-              choices._addItem({
-                  value: e.target.value,
-                  label: e.target.value,
-                  customProperties: {},
-                  placeholder: false
+      // Customize how items are displayed in the dropdown
+      tagify.settings.templates.dropdownItem = function(tagData) {
+          const count = tagData.label.match(/\((\d+)\)/)?.[1] || 0;
+          return `
+        <div class='tagify__dropdown__item' data-value="${tagData.value}">
+           <span>${tagData.value}</span>
+           <span class="tag-count">(${count})</span>
+        </div>
+    `;
+      };
+
+      // Listen to the 'add' event to handle when a tag is selected
+      tagify.on('add', (e) => {
+          console.log('Tag added:', e.detail.data);
+      });
+
+      document.getElementById('selling-form').addEventListener('submit', function (e) {
+          // e.preventDefault(); // Prevent the default form submission behavior
+          console.log('Form submitted!');
+          // tagify.update()
+          
+          // Perform validation or submit data via AJAX here
+          // Example: Fetch API to send form data
+          const formData = new FormData(this);
+          fetch('/selling', {
+              method: 'POST',
+              body: formData,
+          })
+              .then(response => response.json())
+              .then(data => {
+                  console.log('Success:', data);
+                  alert('Listing published successfully!');
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  alert('Something went wrong. Please try again.', error);
               });
-              
-              // Clear the search input
-              e.target.value = '';
-          }
       });
-
-          // preload suggested tags from server
-          {% for tag, count in tag_count.items() %}
-          choices.setChoices([{value: '{{ tag }}', label: '{{ tag }} ({{ count }})'}], 'value', 'label', false);
-          {% endfor %} 
-      });
-  
+  });
 </script>
 </html>
