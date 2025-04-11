@@ -7,10 +7,10 @@ import os
 from werkzeug.utils import secure_filename
 
 from app.utils import mysql_util
-from app import app
+# from app import app
 
 UPLOAD_FOLDER = 'app/static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 

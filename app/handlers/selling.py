@@ -2,6 +2,7 @@
 from flask import request, jsonify, render_template, session, redirect, url_for
 from werkzeug.utils import secure_filename
 import json
+import uuid
 
 from app.utils import mysql_util
 from app.utils import photo
@@ -53,21 +54,16 @@ def create_listing(tags: list, values: tuple, photos: list, city: str, state: st
 
 def handle_selling():
     if request.method == 'POST':
-        print("FORM DATA: %s", request.form)
+        print("FORM DATA:", request.form)
         # values
         seller_id = session['user_id']
-        print("seller_id", seller_id)
         title = request.form.get('title')
-        print("title", title)
         price = float(request.form.get('price'))
-        print("price", price)
         condition = request.form.get('condition')
-        print("condition", condition)
         description = request.form.get('description')
-        print("description", description)
 
         values = (seller_id, title, price, condition, description)
-        print(values)
+        print("values:", values)
 
         # location
         city = request.form.get('city')
@@ -76,8 +72,10 @@ def handle_selling():
         print("state", state)
             
         # Get tags (from hidden input)
-        tags_data = request.form.get('tags-data')
-        tags = json.loads(tags_data) if tags_data else []      
+        tags_json = request.form.get('tags', '[]')
+        print("tags_json:", tags_json)
+        tags = tags_json.split(',')
+        print("tags:", tags)
             
         # Handle file uploads
         photos = request.files.getlist('photos')
@@ -87,9 +85,10 @@ def handle_selling():
         dir_path = "app/static/images/uploads/"
         for p in photos:
             if p.filename:
-                filename = secure_filename(p.filename)
+                filename = str(uuid.uuid4())
                 filepath = dir_path + filename
                 p.save(filepath)
+                print("saving %s to %s" % (p.filename, filename))
                 photo_names.append(filename)
 
         item_id = create_listing(tags, values, photo_names,
@@ -100,6 +99,7 @@ def handle_selling():
     else:
         # GET request handling
         tag_count = mysql_util.get_all_tag_counts()
+        print("tag_count:", tag_count)
         tags = [f"{tag} ({count})" for tag, count in tag_count.items()]
         cities = mysql_util.get_all_distinct_cities()
         return render_template('selling.html', tag_count=tag_count, tags=tags, cities=cities)

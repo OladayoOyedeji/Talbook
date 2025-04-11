@@ -62,3 +62,8 @@
     font-size: 12px;
     font-weight: bold;
 }
+
+/* tagify for item_details */
+.tagify__dropdown__item {
+    pointer-events: all !important;
+}
