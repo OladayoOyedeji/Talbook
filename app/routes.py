@@ -14,6 +14,9 @@ from app.handlers.item_details import handle_item_details
 from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
 from app.handlers.media import handle_media
+from app.handlers.inbox import handle_inbox
+from app.handlers.chat import handle_chat
+from app.handlers.chat_details import handle_chat_details
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -70,6 +73,14 @@ def item_details(item_id):
 @app.route('/bazaar', methods=['GET', 'POST'])
 def bazaar():
     return handle_bazaar()
+
+@app.route("/chat")
+def chat():
+    return handle_chat()
+
+@app.route("/chat/<int:chat_id>")
+def chat_details(chat_id):
+    return handle_chat_details(chat_id)
 
 ##==============================================================
 ## Testing routes
