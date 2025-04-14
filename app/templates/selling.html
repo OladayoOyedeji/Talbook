@@ -239,11 +239,20 @@
               reader.readAsDataURL(file);
           });
       }
-  
-      // Update the file input when images are removed
+      
       function updateFileInput() {
-          // This would need more complex handling to actually remove files from the input
-          // For a complete solution, you might want to use a hidden field or FormData
+          const dt = new DataTransfer();
+          const fileInput = document.getElementById('photos');
+          const imagePreviews = document.getElementById('image-previews');
+          const previews = imagePreviews.querySelectorAll('.image-preview img');
+
+          for (let img of previews) {
+              const file = Array.from(fileInput.files).find(f => URL.createObjectURL(f) === img.src);
+              if (file) {
+                  dt.items.add(file);
+              }
+          }
+          fileInput.files = dt.files;
       }
 
       // Initialize Tagify
@@ -263,7 +272,7 @@
           whitelist: whitelist,
           enforceWhitelist: false,  // Allow custom tags
           dropdown: {
-              enabled: 1,            // Show suggestions after 1 character
+              enabled: 1,           // Show suggestions after 1 character
               maxItems: 10,
               classname: "tags-dropdown",
               highlightFirst: true
@@ -277,16 +286,24 @@
       tagify.settings.templates.dropdownItem = function(tagData) {
           const count = tagData.label.match(/\((\d+)\)/)?.[1] || 0;
           return `
-        <div class='tagify__dropdown__item' data-value="${tagData.value}">
-           <span>${tagData.value}</span>
-           <span class="tag-count">(${count})</span>
-        </div>
-    `;
+                <div class='tagify__dropdown__item' data-value="${tagData.value}">
+                    <span>${tagData.value}</span>
+                    <span class="tag-count">(${count})</span>
+                </div>
+            `;
       };
 
       // Listen to the 'add' event to handle when a tag is selected
       tagify.on('add', (e) => {
           console.log('Tag added:', e.detail.data);
+      });
+
+      // Add click event listener to dropdown items for autofill
+      tagify.on('dropdown:select', (e) => {
+          const selectedTag = e.detail.data.value;
+          tagify.addTags([selectedTag]); // Add the selected tag to the input
+          tagify.DOM.dropdown.classList.remove('tagify__dropdown--visible'); // close the dropdown
+          tagify.DOM.scope.focus(); // keep focus on the input to keep the dropdown closed.
       });
 
       document.getElementById('selling-form').addEventListener('submit', function (e) {

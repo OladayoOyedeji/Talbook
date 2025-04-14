@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talbook DM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles/chat.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="header__left">
+      <span class="material-symbols-outlined">menu</span>
+      <h1>Talbook</h1>
+    </div>
+
+    <div class="header__middle">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" placeholder="Search Messages">
+      <span class="material-symbols-outlined">arrow_drop_down</span>
+    </div>
+
+    <div class="header__right">
+      <span class="material-symbols-outlined">apps</span>
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="material-symbols-outlined">account_circle</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- chat list sidebar -->
+    <div class="sidebar">
+      {% for chat in chats %}
+      <a href="/chat/{{ chat['chat_id'] }}" class="chat-card">
+        <div class="chat-left">
+          <div class="mail-title">
+            <div class="chat-name">{{ chat["sender"] }}</div>
+            <span class="material-symbols-outlined">arrow_right</span>
+            <div class="chat-item">{{ chat["item_name"] }}</div>
+          </div>
+          <div class="chat-preview">{{ chat["preview"] }}</div>
+        </div>
+        <div class="chat-time">{{ chat["time"] }}</div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- main message area -->
+    <div class="content">
+      Select a chat to start messaging.
+    </div>
+  </div>
+
+</body>
+</html>
