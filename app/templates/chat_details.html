@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talbook DM</title>
+  <title>Talbook Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles/chat.css">
 </head>
@@ -33,10 +33,10 @@
     <!-- chat list sidebar -->
     <div class="sidebar">
       {% for chat in chats %}
-      <a href="/chat/{{ chat['chat_id'] }}" class="chat-card {% if current_chat_id == chat['chat_id'] %}active{% endif %}">
+      <a href="/chat/{{ chat['chat_id'] }}" class="chat-card {% if chat['chat_id'] == current_chat_id %}active{% endif %}">
         <div class="chat-left">
           <div class="mail-title">
-            <div class="chat-name">{{ chat["sender"] }}</div>
+            <div class="chat-name">{{ chat["other"] }}</div>
             <span class="material-symbols-outlined">arrow_right</span>
             <div class="chat-item">{{ chat["item_name"] }}</div>
           </div>
@@ -54,7 +54,7 @@
           <div class="message-header">
             <span class="material-symbols-outlined">account_circle</span>
             <div class="message-recipient">
-              <div class="recipient-name">{{ current_chat["sender"] }}</div>
+              <div class="recipient-name">{{ current_chat["other"] }}</div>
               <div class="recipient-item">{{ current_chat["item_name"] }}</div>
             </div>
           </div>
@@ -69,7 +69,7 @@
           </div>
           
           <div class="message-input">
-            <form action="/send_message" method="POST">
+            <form action="/chat/{{ current_chat_id }}" method="POST">
               <textarea 
                 name="message"
                 placeholder="Type a message..."
