@@ -1,53 +1,173 @@
-<html>
-  <!-- allows flash messages to work -->
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="flash-messages">
-      {% for message in messages %}
-      <p>{{ message }}</p>
-      {% endfor %}
-    </div>
-    {% endif %}
-  {% endwith %}
+<!-- <html> -->
+<!--   <\!-- allows flash messages to work -\-> -->
+<!--   {% with messages = get_flashed_messages() %} -->
+<!--     {% if messages %} -->
+<!--     <div class="flash-messages"> -->
+<!--       {% for message in messages %} -->
+<!--       <p>{{ message }}</p> -->
+<!--       {% endfor %} -->
+<!--     </div> -->
+<!--     {% endif %} -->
+<!--   {% endwith %} -->
   
-  <h1>SIGNUP</h1>
+<!--   <h1>SIGNUP</h1> -->
 
-  <form action='{{ url_for("signup") }}' method='POST'>  
-  <div class='form-group'>
-      <label for='email'> Email </label>
-      <input
-        type='email'
-        class='form-control'
-        name='email'
-        placeholder='Enter Email'/> <br>
-    </div>
+<!--   <form action='{{ url_for("signup") }}' method='POST'>   -->
+<!--   <div class='form-group'> -->
+<!--       <label for='email'> Email </label> -->
+<!--       <input -->
+<!--         type='email' -->
+<!--         class='form-control' -->
+<!--         name='email' -->
+<!--         placeholder='Enter Email'/> <br> -->
+<!--     </div> -->
 
-  <div class='form-group'>
-      <label for='username'>Username</label>
-      <input
-        type='text'
-        class='form-control'
-        name='username'
-        placeholder='Enter username'/> <br>
+<!--   <div class='form-group'> -->
+<!--       <label for='username'>Username</label> -->
+<!--       <input -->
+<!--         type='text' -->
+<!--         class='form-control' -->
+<!--         name='username' -->
+<!--         placeholder='Enter username'/> <br> -->
       
-      {% if not is_valid.username %}
-        <h3>{{ invalid_message.username }}</h3>
-      {% endif %}
-    </div>
+<!--       {% if not is_valid.username %} -->
+<!--         <h3>{{ invalid_message.username }}</h3> -->
+<!--       {% endif %} -->
+<!--     </div> -->
 
-    <div class='form-group'>
-      <label for='password'> Password </label>
-      <input
-        type='password'
-        class='form-control'
-        name='password'
-        placeholder='Enter Password'/> <br>
+<!--     <div class='form-group'> -->
+<!--       <label for='password'> Password </label> -->
+<!--       <input -->
+<!--         type='password' -->
+<!--         class='form-control' -->
+<!--         name='password' -->
+<!--         placeholder='Enter Password'/> <br> -->
       
-      {% if not is_valid.password %}
-        <h3>{{ invalid_message.password }}</h3>
-      {% endif %}
-    </div>
+<!--       {% if not is_valid.password %} -->
+<!--         <h3>{{ invalid_message.password }}</h3> -->
+<!--       {% endif %} -->
+<!--     </div> -->
     
-    <input type='submit' value='Go'/>
-  </form>
+<!--     <input type='submit' value='Go'/> -->
+<!--   </form> -->
+<!-- </html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .flash-messages p {
+      background-color: #ffe0e0;
+      color: #d8000c;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    input[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <h1>Signup</h1>
+
+    <form action="{{ url_for('signup') }}" method="POST">
+
+      <label for="email">Email</label>
+      <input type="email" name="email" placeholder="Enter Email" required/>
+
+      <label for="username">Username</label>
+      <input type="text" name="username" placeholder="Enter Username" required/>
+      {% if not is_valid.username %}
+        <div class="error-message">{{ invalid_message.username }}</div>
+      {% endif %}
+
+      <label for="password">Password</label>
+      <input type="password" name="password" placeholder="Enter Password" required/>
+      {% if not is_valid.password %}
+        <div class="error-message">{{ invalid_message.password }}</div>
+      {% endif %}
+
+      <input type="submit" value="Sign Up"/>
+    </form>
+  </div>
+
+</body>
 </html>

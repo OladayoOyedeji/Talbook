@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from app import app
 
 # import all route handlers from handlers/
+# from app.handlers import *
 from app.handlers.base import handle_base
 from app.handlers.signup import handle_signup
 from app.handlers.email_verification import handle_email_verification
@@ -13,8 +14,12 @@ from app.handlers.bazaar import handle_bazaar
 from app.handlers.item_details import handle_item_details
 from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
-from app.handlers.media import handle_media
 from app.handlers.search import handle_search
+from app.handlers.media import handle_media
+from app.handlers.inbox import handle_inbox
+from app.handlers.chat import handle_chat
+from app.handlers.chat_details import handle_chat_details
+
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
 ## handler files
@@ -51,7 +56,7 @@ def media(username):
 def edit_profile():
     return handle_edit_profile()
 
-@app.route('/search')
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     return handle_search()
 
@@ -70,6 +75,14 @@ def item_details(item_id):
 @app.route('/bazaar', methods=['GET', 'POST'])
 def bazaar():
     return handle_bazaar()
+
+@app.route("/chat")
+def chat():
+    return handle_chat()
+
+@app.route("/chat/<int:chat_id>", methods=['GET', 'POST'])
+def chat_details(chat_id):
+    return handle_chat_details(chat_id)
 
 ##==============================================================
 ## Testing routes

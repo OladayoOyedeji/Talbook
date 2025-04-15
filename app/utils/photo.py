@@ -8,15 +8,13 @@ from werkzeug.utils import secure_filename
 
 # from app import app
 from app.utils import mysql_util
-
-UPLOAD_FOLDER = 'app/static/images/uploads/'
+UPLOAD_FOLDER = 'app/static/uploads/'
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-     
 
 def get_image(request):
     if 'file' not in request.files:
@@ -42,41 +40,54 @@ def get_image(request):
         print("here?")
         return None
 
+def compress_image(input_path: str, output_path: str, quality: int = 30) -> None:
+    """
+    Compress an image and save it to a new location as a png
+    """
+    if not os.path.exists(input_path):
+        raise FileNotFoundError("Input file does not exist: %s" % input_path)
+
+    try:
+        img = Image.open(input_path)
+
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        img.save(output_path, format='PNG', optimize=True)
+
+        print("Compressed %s saved to: %s" % (input_path, output_path))
+
+    except Exception as e:
+        print("Error compressing image %s: %s" % (input_path, e))
+
 def upload_image(file: str):
     """
-    Converts an image file to a png with a name
-    matching its id in the database.
-
-    file: file path string
+    Converts an image file to a compressed png with a name
+    matching its id in the database
     """
     if isinstance(file, str):  # if it's a file path
         original_path = file
         if not os.path.exists(file):
-            # raise FileNotFoundError("Image not found: %s" % file)
-            print ("Image not found: %s" % file)
+            print("Image not found: %s" % file)
             return
+
         img = Image.open(file)
-    
-    # convert image to PNG
-    png_buffer = io.BytesIO()
-    img.save(png_buffer, format='PNG')
-    png_buffer.seek(0)
-    
+
     # save to database and get photo_id
     sql = '''
     INSERT INTO Photo () VALUES ()
-    ''' # empty insert
+    '''  # empty insert
     photo_id = mysql_util.execute_sql(sql, commit=True, get_lastrowid=True)
-    
+
     # save file as {photo_id}.png
     filepath = ('app/static/images/store/%s.png' % photo_id)
-    with open(filepath, 'wb') as f:
-        f.write(png_buffer.getvalue())
+
+    compress_image(original_path, filepath)
 
     # delete original
-    if filepath != original_path:
+    if original_path != filepath:
         os.remove(original_path)
-    
+
     return photo_id
 
 def link_item_photo(item_id: int, photo_id: int, display_order: int):

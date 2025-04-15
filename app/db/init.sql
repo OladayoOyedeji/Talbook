@@ -135,35 +135,6 @@ CREATE TABLE Purchase_History
 ) ENGINE=InnoDB;
 
 --==============================================================
--- NO 8. Chat: links buyers and sellers for a specific item
---==============================================================
-CREATE TABLE Chat
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    buyer_id INT NOT NULL,
-    seller_id INT NOT NULL,
-    item_id INT NOT NULL,
-    FOREIGN KEY (buyer_id) REFERENCES User(id),
-    FOREIGN KEY (seller_id) REFERENCES User(id),
-    FOREIGN KEY (item_id) REFERENCES Item(id),
-    UNIQUE (buyer_id, seller_id, item_id)
-) ENGINE=InnoDB;
-
---==============================================================
--- NO 9. Message: messages sent within a chat (one mess to many chat)
---==============================================================
-CREATE TABLE Message
-(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    chat_id INT NOT NULL,
-    sender_id INT NOT NULL,
-    content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY (chat_id) REFERENCES Chat(id),
-    FOREIGN KEY (sender_id) REFERENCES User(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---==============================================================
 -- NO 10. Rating: ratings and reviews given by users
 --==============================================================
 CREATE TABLE Rating
@@ -240,6 +211,36 @@ CREATE TABLE Post_Video
     FOREIGN KEY(media_id) REFERENCES Photo(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--==============================================================
+-- Chat: a chatroom for an item listing
+--==============================================================
+CREATE TABLE Chat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    buyer_id INT NOT NULL,
+    seller_id INT NOT NULL,
+    item_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (buyer_id) REFERENCES User(id),
+    FOREIGN KEY (seller_id) REFERENCES User(id),
+    FOREIGN KEY (item_id) REFERENCES Item(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--==============================================================
+-- Message: individual message within a chatroom
+--==============================================================
+CREATE TABLE Message (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    chat_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    photo_id INT DEFAULT NULL,
+    video_id INT DEFAULT NULL,
+    content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (chat_id) REFERENCES Chat(id) ON DELETE CASCADE,
+    FOREIGN KEY (sender_id) REFERENCES User(id),
+    FOREIGN KEY (photo_id) REFERENCES Photo(id),
+    FOREIGN KEY (video_id) REFERENCES Video(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
