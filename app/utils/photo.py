@@ -86,7 +86,7 @@ def upload_image(file: str):
     compress_image(original_path, filepath)
 
     # delete original
-    if original_path and os.path.exists(original_path):
+    if original_path != filepath:
         os.remove(original_path)
 
     return photo_id

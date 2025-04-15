@@ -78,7 +78,7 @@ def bazaar():
 def chat():
     return handle_chat()
 
-@app.route("/chat/<int:chat_id>")
+@app.route("/chat/<int:chat_id>", methods=['GET', 'POST'])
 def chat_details(chat_id):
     return handle_chat_details(chat_id)
 

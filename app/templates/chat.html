@@ -36,7 +36,7 @@
       <a href="/chat/{{ chat['chat_id'] }}" class="chat-card">
         <div class="chat-left">
           <div class="mail-title">
-            <div class="chat-name">{{ chat["sender"] }}</div>
+            <div class="chat-name">{{ chat["other"] }}</div>
             <span class="material-symbols-outlined">arrow_right</span>
             <div class="chat-item">{{ chat["item_name"] }}</div>
           </div>
@@ -49,7 +49,10 @@
 
     <!-- main message area -->
     <div class="content">
-      Select a chat to start messaging.
+      <div class="empty-state">
+        <span class="material-symbols-outlined">forum</span>
+        <p>Select a chat to start messaging</p>
+      </div>
     </div>
   </div>
 
