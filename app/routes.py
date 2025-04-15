@@ -14,7 +14,7 @@ from app.handlers.item_details import handle_item_details
 from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
 from app.handlers.media import handle_media
-
+from app.handlers.search import handle_search
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
 ## handler files

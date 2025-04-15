@@ -21,7 +21,8 @@ def get_db_connection(db=None):
     else:
         return pymysql.connect(user="root", password="root")
     
-def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=False, fetchdict=False):
+def execute_sql(sql, params=(), commit=False, get_lastrowid=False,
+                fetchone=False, fetchdict=False):
     """
     Executes a SQL statement and returns the results.
     - If `commit=True`, commits the transaction.
@@ -37,7 +38,10 @@ def execute_sql(sql, params=(), commit=False, get_lastrowid=False, fetchone=Fals
         cursor = conn.cursor()
 
     try:
-        cursor.execute(sql, params)
+        if params:
+            cursor.execute(sql, params)
+        else:
+            cursor.execute(sql)
         if commit:
             conn.commit() # commit changes
         if get_lastrowid:

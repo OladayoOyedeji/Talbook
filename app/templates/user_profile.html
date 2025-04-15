@@ -8,8 +8,17 @@
   </a>
 </header>
 <html>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
   <div class="pfp">
-    <img src="/static/images/uploads/{{ profile.photo_id }}.png"
+    <img src="/static/images/store/{{ profile.photo_id }}.png"
          onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
          class="item-image">
   </div>
@@ -44,7 +53,7 @@
   <div class="grid-container" id="Listings">
     {% for item in profile.listings %}
     <div class="item-card">
-      <img src="/static/images/uploads/{{ item[4] }}.png" 
+      <img src="/static/images/store/{{ item[4] }}.png" 
            onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
            class="item-image">
       <h3>{{ item[1] }}</h3>

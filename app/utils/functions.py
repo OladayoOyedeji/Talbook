@@ -57,7 +57,9 @@ def password_errors(password: str) -> list:
     capital_count = 0
     num_count = 0
     special_count = 0
+
     for c in password:
+        print(password)
         if (c.isupper()):
             capital_count += 1
         elif (c.isdigit()):
@@ -66,10 +68,13 @@ def password_errors(password: str) -> list:
             special_count += 1
 
     if capital_count < PASSWORD_RULES["min_capital_letters"]:
+        print("capital_count:", capital_count)
         errors.append("Password must contain at least %s capital letter(s)." % PASSWORD_RULES['min_capital_letters'])
     if num_count < PASSWORD_RULES["min_numbers"]:
+        print("num_count:", num_count)
         errors.append("Password must contain at least %s number(s)." % PASSWORD_RULES['min_numbers'])
     if special_count < PASSWORD_RULES["min_special_chars"]:
+        print("special_count", special_count)
         errors.append("Password must contain at least %s special character(s)." % PASSWORD_RULES['min_special_chars'])
 
     return errors
@@ -137,3 +142,38 @@ def is_valid_login(user_input: str, plain_password: str):
     else:
         app.logger.debug("user_input failed for user: %s" % user_input)
         return False
+
+def get_search_query(query):
+    sql = '''
+SELECT Item.id,
+    Item.item_name,
+    Item.price,
+    Item.condition,
+    User.username,
+    Item_Photo.photo_id,
+    count(Item.id) FROM Item_Tag
+JOIN Tag ON Item_Tag.tag_id = Tag.id
+JOIN Item ON Item_Tag.item_id = Item.id
+JOIN User ON Item.seller_id = User.id
+JOIN Item_Photo on Item.id = Item_Photo.item_id and Item_Photo.display_order = 0
+WHERE 
+'''
+    delim = ''
+    params = ()
+
+    query_list = query.split(' ')
+
+    for word in query_list:
+        if word not in ['', ' ']:
+            sql += delim + '''(Tag.name LIKE %s OR Item.descrip LIKE %s OR Item.item_name LIKE %s)'''
+            params += ("'%%%s%%'"%word,) * 3
+            delim = '\n OR '
+    sql += '''
+GROUP BY Item.id
+ORDER BY count(Item.id) DESC'''
+    print(sql % params)
+
+    print(sql,  params)
+    return execute_sql(sql % params)
+    
+

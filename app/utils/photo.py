@@ -6,11 +6,11 @@ import urllib.request
 import os
 from werkzeug.utils import secure_filename
 
+# from app import app
 from app.utils import mysql_util
-from app import app
 
-UPLOAD_FOLDER = 'app/static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+UPLOAD_FOLDER = 'app/static/images/uploads/'
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -32,11 +32,11 @@ def get_image(request):
     
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
         #print('upload_image filename: ' + filename)
         flash('Image successfully uploaded and displayed below')
-        print((os.path.join(app.config['UPLOAD_FOLDER'], filename)))
-        return (os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print((os.path.join(UPLOAD_FOLDER, filename)))
+        return (os.path.join(UPLOAD_FOLDER, filename))
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         print("here?")
@@ -88,9 +88,9 @@ def link_item_photo(item_id: int, photo_id: int, display_order: int):
 
 def update_User_photo_id(photo_id, user_id):
     sql = '''
-    UPDATE User SET photo_id = %s WHERE user_id = %s
+    UPDATE User SET photo_id = %s WHERE id = %s
     '''
-    mysql_util.execute(sql, (photo_id, user_id), True)
+    mysql_util.execute_sql(sql, (photo_id, user_id), True)
 
 if __name__ == '__main__':
     upload_image('app/static/images/uploads/harp.webp')

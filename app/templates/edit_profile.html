@@ -14,11 +14,20 @@
 <!--        class="item-image" /> -->
 <!-- </div> -->
 
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+  {% for message in messages %}
+  <p>{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 <!-- Form to upload photo -->
 <form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
   <div class="edit-photo">
     <label for="file" style="cursor: pointer;">
-      <img src="/static/images/uploads/{{ profile.photo_id }}.png"
+      <img src="/static/images/store/{{ profile.photo_id }}.png"
            onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
            class="item-image" />
     </label>
@@ -52,7 +61,7 @@
   
   <!-- skills -->
   <div class="form-group">
-    <label for="skills" class="required-field">Skills</label>
+    <label for="skills" class="">Skills</label>
     <select id="skills" name="skills" multiple>
       <!-- <option value="" disabled selected>Select skills</option> -->
       

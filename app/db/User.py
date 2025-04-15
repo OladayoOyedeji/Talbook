@@ -10,7 +10,7 @@ def insert():
         # ("oroyedeji1@cougars.ccis.edu", "Robiefresh", "24Mutlu^&"),
         # ("nalahaideb@cougars.ccis.edu", "nashydog", "i1uv1itt1egir1s!!"),
         # ("barack.obama@whitehouse.gov", "barack_obama", "!YesWeCan2008!"),
-        ("emutlu1@cougars.ccis.edu", "elif_cato", "catoMato0!")
+        ("emutlu1@cougars.ccis.edu", "elif_cato", "catoMato01!&")
     ]
 
     sql_statements = []

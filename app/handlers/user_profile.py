@@ -8,8 +8,6 @@ def handle_user_profile(username, listings=True):
     
     profile = (get_data(username))[0]
     print(profile)
-
-
     
     id = profile['id']
 

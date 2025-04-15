@@ -38,21 +38,22 @@ def handle_edit_profile():
                 # profile['services'] is the old list
                 # new list - old list are the things you wanna add
                 # old list - new list are the things you wanna delete
-            new_id = []
-            old_id = []
-            print(id, type(id))
+            new_id, old_id = ([],[])
+            
             for i in services:
-                print(d[i])
                 new_id.append(d[i])
+                
             for i, in profile['services']:
                 old_id.append(d[i])
-            print(id)
-            print(services, '\n', profile['services'])
+                
             add_skills = list(set(new_id) - set(old_id))
             delete_skills = list(set(old_id) - set(new_id))
+
+            print(add_skills, '\n\n', delete_skills, '\n')
             
             update_services(profile, add_skills, delete_skills)
             profile['services'] = get_services(profile['id'])
+            
             flash("info updated")
             # handle photo upload
             
