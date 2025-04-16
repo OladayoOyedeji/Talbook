@@ -1,0 +1,111 @@
+
+<link rel="stylesheet" href="/static/styles/home.css">
+<link rel="stylesheet" href="/static/styles/edit_profile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<header class="header">
+  <a href="{{ url_for('user_profile', username=profile.username) }}" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
+</header>
+<!-- <div class="edit-photo"> -->
+<!--   <img src="/static/images/uploads/{{ profile.photo_id }}.webp" -->
+<!--        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';" -->
+<!--        class="item-image" /> -->
+<!-- </div> -->
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+  {% for message in messages %}
+  <p>{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+<!-- Form to upload photo -->
+<form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
+  <div class="edit-photo">
+    <label for="file" style="cursor: pointer;">
+      <img src="/static/images/store/{{ profile.photo_id }}.webp"
+           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
+           class="item-image" />
+    </label>
+  </div>
+  <input type="file" name="file" id="file" style="display: none;" onchange="this.form.submit()" />
+  <!-- <input type="submit" name="submit_photo" value="Submit Photo" /><br> -->
+</form>
+
+<!-- Form to update user info -->
+<form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
+  <label for="username">Username:</label>
+  <input type="text"
+         class="form-control"
+         id="username"
+         name="username"
+         value="{{ profile.username }}"><br>
+
+  <label for="email">Email:</label>
+  <input type="text"
+         class="form-control"
+         id="email"
+         name="email"
+         value="{{ profile.email }}"><br>
+
+  <label for="pepBio">Description:</label>
+  <textarea class="form-control"
+            id="pepBio"
+            name="descrip"
+            placeholder="Enter description">{{ profile.descrip }}</textarea><br>
+  
+  <!-- skills -->
+  <div class="form-group">
+    <label for="skills" class="">Skills</label>
+    <select id="skills" name="skills" multiple>
+      <!-- <option value="" disabled selected>Select skills</option> -->
+      
+      {% for skill in skills %}
+      {% if (skill[0],)  in profile.services %}
+      <option value="{{ skill[0] }}" selected>{{ skill[0] }}</option>
+      {% endif %}
+      <option value="{{ skill[0] }}"> {{ skill[0] }} </option>
+      {% endfor %}
+    </select>
+  </div>
+  
+  <input type="submit" name="submit_info" value="Save Changes">
+
+  
+</form>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const skillSelect = document.getElementById('skills');
+    const choices = new Choices(skillSelect, {
+      removeItemButton: true,
+      placeholder: true,
+      placeholderValue: 'Type or select skills',
+      searchPlaceholderValue: 'Search or add skill...',
+      duplicateItemsAllowed: false,
+      addItems: true,
+      addItemFilter: value => value.trim() !== '',
+    });
+  });
+</script>
+<script>
+  const desc = document.getElementById('pepBio');
+  const counter = document.createElement('div');
+  counter.style.fontSize = '0.9rem';
+  counter.style.textAlign = 'right';
+  counter.style.marginTop = '-10px';
+  counter.style.marginBottom = '10px';
+  desc.parentNode.insertBefore(counter, desc.nextSibling);
+
+  function updateCounter() {
+    const length = desc.value.length;
+    counter.textContent = `${length}/300 characters`;
+  }
+
+  desc.addEventListener('input', updateCounter);
+  updateCounter();
+</script>
