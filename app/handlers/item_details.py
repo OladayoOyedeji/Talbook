@@ -1,6 +1,7 @@
 # File: item_details.py
 from app import app
-from flask import request, render_template
+from flask import request, render_template, session
+
 from app.utils.mysql_util import execute_sql
 
 def handle_item_details(item_id):
@@ -56,4 +57,4 @@ def handle_item_details(item_id):
     if location:
         app.logger.debug("fetching location: %s" % location)
 
-    return render_template("item_details.html", values=values, photos=photos, tags=tags, city=city, state=state)
+    return render_template("item_details.html", values=values, photos=photos, tags=tags, city=city, state=state, user_id=session['user_id'])
