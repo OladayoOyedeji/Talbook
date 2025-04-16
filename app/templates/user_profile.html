@@ -1,111 +1,174 @@
 
+<!------ Include the above in your HEAD tag ---------->
 <link rel="stylesheet" href="/static/styles/home.css">
-<link rel="stylesheet" href="/static/styles/edit_profile.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<link rel="stylesheet" href="/static/styles/user_profile.css">
 <header class="header">
-  <a href="{{ url_for('user_profile', username=profile.username) }}" class="back-button">
-    <i class="fas fa-arrow-left"></i> Back
+  <a href="{{ url_for('home') }}" class="back-button">
+    <i class="fas fa-arrow-left"></i> Back to Bazaar
   </a>
 </header>
-<!-- <div class="edit-photo"> -->
-<!--   <img src="/static/images/uploads/{{ profile.photo_id }}.webp" -->
-<!--        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';" -->
-<!--        class="item-image" /> -->
-<!-- </div> -->
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="flash-messages">
-  {% for message in messages %}
-  <p>{{ message }}</p>
-  {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
-<!-- Form to upload photo -->
-<form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
-  <div class="edit-photo">
-    <label for="file" style="cursor: pointer;">
-      <img src="/static/images/store/{{ profile.photo_id }}.webp"
-           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
-           class="item-image" />
-    </label>
+<html>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+  <div class="pfp">
+    <img src="/static/images/store/{{ profile.photo_id }}.webp"
+         onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+         class="item-image">
   </div>
-  <input type="file" name="file" id="file" style="display: none;" onchange="this.form.submit()" />
-  <!-- <input type="submit" name="submit_photo" value="Submit Photo" /><br> -->
-</form>
-
-<!-- Form to update user info -->
-<form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
-  <label for="username">Username:</label>
-  <input type="text"
-         class="form-control"
-         id="username"
-         name="username"
-         value="{{ profile.username }}"><br>
-
-  <label for="email">Email:</label>
-  <input type="text"
-         class="form-control"
-         id="email"
-         name="email"
-         value="{{ profile.email }}"><br>
-
-  <label for="pepBio">Description:</label>
-  <textarea class="form-control"
-            id="pepBio"
-            name="descrip"
-            placeholder="Enter description">{{ profile.descrip }}</textarea><br>
-  
-  <!-- skills -->
-  <div class="form-group">
-    <label for="skills" class="">Skills</label>
-    <select id="skills" name="skills" multiple>
-      <!-- <option value="" disabled selected>Select skills</option> -->
-      
-      {% for skill in skills %}
-      {% if (skill[0],)  in profile.services %}
-      <option value="{{ skill[0] }}" selected>{{ skill[0] }}</option>
-      {% endif %}
-      <option value="{{ skill[0] }}"> {{ skill[0] }} </option>
+  <div class="username">
+    <h3>{{ profile.username }}</h3>
+  </div>
+  {% if editable %}
+  <div class="edit-profile">
+    <a href="{{ url_for('edit_profile')}}">edit profile</a>
+  </div>
+  {% endif %}
+  <div class="description">
+    <p>DESCRIPTION</p>
+    {% if profile.descrip != None %}
+    <h4>{{ profile.descrip }}</h4>
+    {% endif %}
+  </div>
+  <div class="skills">
+    <p>SKILLS</p>
+    <ul>
+      {% for skill in profile.skills %}
+      <li>{{skill[0]}}</li>
       {% endfor %}
-    </select>
   </div>
-  
-  <input type="submit" name="submit_info" value="Save Changes">
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="/user_profile/{{profile.username}}#Listings">Listings</a></li>
+      <li><a href="/user_profile/{{profile.username}}/media#Media">Media</a></li>
+    </ul>
+  </nav>
+  {% if listings %}
+  <div class="grid-container" id="Listings">
+    {% for item in profile.listings %}
+    <div class="item-card">
+      <img src="/static/images/store/{{ item[4] }}.webp" 
+           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
+           class="item-image">
+      <h3>{{ item[1] }}</h3>
+      <p>Price: ${{ item[2] }}</p>
+      <p>Condition: {{ item[3] }}</p>
+      <a href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="media-section" id="Media">
+    <p>MEDIA</p>
+    <div class="media-grid">
+      {% for media in profile.media %}
+      <div class="media-item">
+        <img src="/static/media/{{ media }}" alt="User media"
+             onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';">
+      </div>
+      {% endfor %}
 
-  
-</form>
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const skillSelect = document.getElementById('skills');
-    const choices = new Choices(skillSelect, {
-      removeItemButton: true,
-      placeholder: true,
-      placeholderValue: 'Type or select skills',
-      searchPlaceholderValue: 'Search or add skill...',
-      duplicateItemsAllowed: false,
-      addItems: true,
-      addItemFilter: value => value.trim() !== '',
+      {% if editable %}
+      <div class="media-item add-media">
+        <a href="" class="add-media-button">
+          <i class="fas fa-plus"></i>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
     });
-  });
-</script>
-<script>
-  const desc = document.getElementById('pepBio');
-  const counter = document.createElement('div');
-  counter.style.fontSize = '0.9rem';
-  counter.style.textAlign = 'right';
-  counter.style.marginTop = '-10px';
-  counter.style.marginBottom = '10px';
-  desc.parentNode.insertBefore(counter, desc.nextSibling);
-
-  function updateCounter() {
-    const length = desc.value.length;
-    counter.textContent = `${length}/300 characters`;
-  }
-
-  desc.addEventListener('input', updateCounter);
-  updateCounter();
-</script>
+  </script>
+</html>
+<!-- <html lang="en"> -->
+<!--   <head> -->
+    <!--     <meta charset="UTF-8"> -->
+<!--     <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+<!--     <title>Profile</title> -->
+<!--     <link rel="stylesheet" href="/static/styles/user_profile.css"> -->
+<!--     <link rel="stylesheet" href="/static/styles/home.css"> -->
+<!--   </head> -->
+<!--   <body> -->
+<!--     <div class="container emp-profile"> -->
+<!--       <form method="post"> -->
+<!--         <div class="row"> -->
+<!--           <div class="col-md-4"> -->
+<!--             <div class="profile-img"> -->
+<!--               <img src="/static/Images/{{ profile.photo_id }}.webp" alt=""/> -->
+<!--               {% if edditable == True %} -->
+<!--               <div class="file btn btn-lg btn-primary"> -->
+<!--                 Change Photo -->
+<!--                 <input type="file" name="file"/> -->
+<!--                 {% endif %} -->
+<!--               </div> -->
+<!--             </div> -->
+<!--           </div> -->
+<!--           <div class="col-md-6"> -->
+<!--             <div class="profile-head"> -->
+<!--               <h5> -->
+<!--                 {{ profile.username }} -->
+<!--               </h5> -->
+<!--               <h6> -->
+<!--                 {{ profile.descrip }} -->
+<!--               </h6> -->
+<!--               <\!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -\-> -->
+<!--               <nav class="navbar"> -->
+<!--                 <ul class="nav nav-tabs" id="myTab" role="tablist"> -->
+<!--                   <li class="nav-item"> -->
+<!--                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Listings</a> -->
+<!--                   </li> -->
+<!--                   <li class="nav-item"> -->
+<!--                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Media</a> -->
+<!--                   </li> -->
+<!--                 </ul> -->
+<!--               </nav> -->
+<!--             </div> -->
+<!--           </div> -->
+<!--           {% if edditable == True %} -->
+<!--           <div class="col-md-2"> -->
+<!--             <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/> -->
+<!--           </div> -->
+<!--           {% endif %} -->
+<!--         </div> -->
+        
+<!--           <main> -->
+<!--           <div class="col-md-8"> -->
+<!--             <div class="tab-content profile-tab grid-container" id="myTabContent"> -->
+<!--               <div class="tab-pane fade show active" id="home" -->
+<!--                    role="tabpanel" aria-labelledby="home-tab"> -->
+<!--                 {% for item in profile.listings %} -->
+<!--                 <div class="item-card"> -->
+<!--                   <img src="/static/images/uploads/{{ item[5] }}.webp"  -->
+<!--                        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';" -->
+<!--                        class="item-image"> -->
+<!--                   <h3>{{ item[1] }}</h3> -->
+<!--                   <p>Price: ${{ item[2] }}</p> -->
+<!--                   <p>Condition: {{ item[3] }}</p> -->
+<!--                   <p>Seller: {{ item[4] }}</p> -->
+<!--                   <a href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a> -->
+<!--                 </div> -->
+<!--                 {% endfor %} -->
+<!--               </div> -->
+<!--             </div> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </form>            -->
+<!--     </div> -->
+<!--   </body> -->
+<!-- </html> -->

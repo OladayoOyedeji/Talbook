@@ -25,6 +25,10 @@ from app.handlers.start_chat import handle_start_chat
 ## Routes are defined here, but their logic is kept in separate
 ## handler files
 ##==============================================================
+
+def require_login():
+    pass
+
 @app.route('/')
 def base():
     return handle_base()
