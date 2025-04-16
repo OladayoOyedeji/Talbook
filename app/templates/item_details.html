@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,14 +26,22 @@
             <div class="photo-gallery">
               {% for photo in photos %}
               <div class="photo-item">
-                <a href="/static/images/store/{{ photo.photo_id }}.png" target="_blank" rel="noopener noreferrer">
-                  <img src="/static/images/store/{{ photo.photo_id }}.png" class="item-photo" alt="Item photo">
+                <a href="/static/images/store/{{ photo.photo_id }}.webp" target="_blank" rel="noopener noreferrer">
+                  <img src="/static/images/store/{{ photo.photo_id }}.webp" class="item-photo" alt="Item photo">
                 </a>
               </div>
               {% endfor %}
             </div>
           </section>
           {% endif %}
+
+          <div class="message-seller-card">
+            <h3 class="message-seller-title">Message Seller</h3>
+            <p class="message-seller-text">Contact the seller, {{ values["seller"] }}, to ask questions or arrange purchase.</p>
+            <form method="POST" action="/start_chat/{{ values['seller_id'] }}/{{ values['id'] }}">
+              <button type="submit" class="message-button">Send Message</button>
+            </form>
+          </div>
 
             <section class="info-section">
                 <div class="info-card">

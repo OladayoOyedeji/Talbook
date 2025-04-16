@@ -59,7 +59,7 @@ def insert():
         'very good',
         'Roosebeck 22-String Heather Harp w/ Full Chelby Levers. It is pre-owned so it does have wear, including nicks, scratches, and scuffs consistent with previous use; however, it still remains in lovely condition. Please view the photos carefully for details and feel free to ask questions. From a smoke-free environment.'
     )
-    harp_photos = ['1.png']
+    harp_photos = ['1.webp']
     harp_city = "Harrisburg"
     harp_state = "MO"
     insert_item(seller_username, harp_tags, harp_sql, harp_values, harp_photos, harp_city, harp_state)
@@ -106,7 +106,7 @@ Tracklist:
 19. Carrot & Stick
 20. Perfect Night'''
     )
-    cd_photos = ['2.png', '3.png']
+    cd_photos = ['2.webp', '3.webp']
     cd_city = "Columbia"
     cd_state = "MO"
     insert_item(seller_username, cd_tags, cd_sql, cd_values, cd_photos, cd_city, cd_state)
@@ -169,7 +169,7 @@ Case
 Case Type: Deluxe Rickenbacker Hardshell Case'''
     )
     
-    photos = ["4.png", "5.png", "6.png"]
+    photos = ["4.webp", "5.webp", "6.webp"]
     city = "Atlanta"
     state = "GA"
     insert_item(seller_username, tags, bass_sql, bass_values, photos, city, state)
@@ -207,7 +207,7 @@ Finish: Lacquer
 Includes: Case, mouthpiece, valve oil'''
     )
     
-    trumpet_photos = ["7.png", "8.png", "9.png"]
+    trumpet_photos = ["7.webp", "8.webp", "9.webp"]
     trumpet_city = "Intercourse"
     trumpet_state = "PA"
     
@@ -234,7 +234,7 @@ Japanese import from a US seller.
 
 Tracklist includes popular Vocaloid songs featuring Hatsune Miku.'''
     )
-    vocaloid_photos = ['10.png', '11.png', '12.png', '13.png']
+    vocaloid_photos = ['10.webp', '11.webp', '12.webp', '13.webp']
     vocaloid_city = "Yeehaw Junction"
     vocaloid_state = "FL"
     insert_item(seller_username, vocaloid_tags, vocaloid_sql, vocaloid_values, vocaloid_photos, vocaloid_city, vocaloid_state)

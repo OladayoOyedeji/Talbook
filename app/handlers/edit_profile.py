@@ -5,7 +5,7 @@ from app.utils.photo import *
 
 def handle_edit_profile():
     profile=get_data(session['username'])[0]
-    profile['photo_filename'] = '/static/Images/%s.png' % profile['photo_id']
+    profile['photo_filename'] = '/static/Images/%s.webp' % profile['photo_id']
     profile['services'] = get_services(profile['id'])
     skills = get_skills()
     

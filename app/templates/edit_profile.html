@@ -9,8 +9,8 @@
   </a>
 </header>
 <!-- <div class="edit-photo"> -->
-<!--   <img src="/static/images/uploads/{{ profile.photo_id }}.png" -->
-<!--        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';" -->
+<!--   <img src="/static/images/uploads/{{ profile.photo_id }}.webp" -->
+<!--        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';" -->
 <!--        class="item-image" /> -->
 <!-- </div> -->
 
@@ -18,8 +18,8 @@
 <form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
   <div class="edit-photo">
     <label for="file" style="cursor: pointer;">
-      <img src="/static/images/uploads/{{ profile.photo_id }}.png"
-           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+      <img src="/static/images/uploads/{{ profile.photo_id }}.webp"
+           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
            class="item-image" />
     </label>
   </div>

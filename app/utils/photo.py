@@ -1,4 +1,3 @@
-# File: photo.py
 from PIL import Image
 import io
 from flask import Flask, flash, request, redirect, url_for, render_template
@@ -43,7 +42,7 @@ def get_image(request):
 
 def compress_image(input_path: str, output_path: str, quality: int = 30) -> None:
     """
-    Compress an image and save it to a new location as a png
+    Compress an image and save it to a new location as a WebP
     """
     if not os.path.exists(input_path):
         raise FileNotFoundError("Input file does not exist: %s" % input_path)
@@ -54,25 +53,19 @@ def compress_image(input_path: str, output_path: str, quality: int = 30) -> None
         if img.mode in ("RGBA", "P"):
             img = img.convert("RGB")
 
-        img.save(output_path, format='PNG', optimize=True)
+        img.save(output_path, format='WEBP', optimize=True, quality=quality) # Changed format to 'WEBP'
 
         print("Compressed %s saved to: %s" % (input_path, output_path))
 
     except Exception as e:
         print("Error compressing image %s: %s" % (input_path, e))
 
-def upload_image(file: str):
+def upload_image(filepath: str):
     """
-    Converts an image file to a compressed png with a name
+    Converts an image file to a compressed webp with a name
     matching its id in the database
     """
-    if isinstance(file, str):  # if it's a file path
-        original_path = file
-        if not os.path.exists(file):
-            print("Image not found: %s" % file)
-            return
-
-        img = Image.open(file)
+    img = Image.open(filepath)
 
     # save to database and get photo_id
     sql = '''
@@ -80,14 +73,14 @@ def upload_image(file: str):
     '''  # empty insert
     photo_id = mysql_util.execute_sql(sql, commit=True, get_lastrowid=True)
 
-    # save file as {photo_id}.png
-    filepath = ('app/static/images/store/%s.png' % photo_id)
+    # save file as {photo_id}.webp
+    new_filepath = ('app/static/images/store/%s.webp' % photo_id) # Changed extension to .webp
 
-    compress_image(original_path, filepath)
+    compress_image(filepath, new_filepath)
 
     # delete original
-    if original_path != filepath:
-        os.remove(original_path)
+    if filepath != new_filepath:
+        os.remove(filepath)
 
     return photo_id
 

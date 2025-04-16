@@ -1,5 +1,5 @@
 # File: routes.py
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from app import app
 
 # import all route handlers from handlers/
@@ -17,6 +17,7 @@ from app.handlers.media import handle_media
 from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
+from app.handlers.start_chat import handle_start_chat
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -74,6 +75,13 @@ def item_details(item_id):
 def bazaar():
     return handle_bazaar()
 
+@app.route('/start_chat/<int:seller_id>/<int:item_id>', methods=['POST'])
+def start_chat(seller_id, item_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    else:
+        return handle_start_chat(seller_id, item_id)
+    
 @app.route("/chat")
 def chat():
     return handle_chat()
