@@ -17,6 +17,8 @@ init_sql i:
 	mysql --user=root --password=root < app/db/User.sql;
 	python -m app.db.Item;
 	python -m app.db.Chat;
+	python -m app.db.Service;
+	mysql --user=root --password=root < app/db/service.sql;
 
 git g:
 	git add .

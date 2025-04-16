@@ -1,5 +1,5 @@
 
-dataset = "service_data_set.txt"
+dataset = "app/db/service_data_set.txt"
 
 if __name__ == '__main__':
     
