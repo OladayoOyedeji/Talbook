@@ -2,6 +2,7 @@
 **/__pycache__/
 *.py[cod]
 *$py.class
+app/utils/__pycache__/
 
 # Ignore virtual environment directories
 /venv
