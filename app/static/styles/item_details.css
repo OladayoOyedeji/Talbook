@@ -301,3 +301,27 @@ body {
     background-color: #2563eb;
     border-color: #2563eb; 
 }
+
+/* remove button */
+.remove-listing-button {
+        background-color: #dc3545;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        width: 200px; /* Make the button wider */
+        text-align: center; /* Center the text */
+    }
+
+    .remove-listing-button:hover {
+        background-color: #c82333;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-start; /* Align buttons to the start */
+        margin-top: 20px; /* Add some space above the buttons */
+    }

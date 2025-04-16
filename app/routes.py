@@ -20,6 +20,7 @@ from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
 from app.handlers.start_chat import handle_start_chat
+from app.handlers.remove_item import handle_remove_item
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -95,6 +96,10 @@ def chat():
 @app.route("/chat/<int:chat_id>", methods=['GET', 'POST'])
 def chat_details(chat_id):
     return handle_chat_details(chat_id)
+
+@app.route("/remove_item/<int:item_id>", methods=['POST'])
+def remove_item(item_id):
+    return handle_remove_item(item_id)
 
 ##==============================================================
 ## Testing routes

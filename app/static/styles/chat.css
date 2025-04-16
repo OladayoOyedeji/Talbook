@@ -133,6 +133,13 @@ body {
     margin-left: 8px;
 }
 
+.sidebar .chat-card .chat-left .mail-title .chat-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px; /* Adjust this value as needed */
+}
+
 /* Main content area */
 .content {
     flex: 1;

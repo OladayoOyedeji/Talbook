@@ -72,6 +72,9 @@ def handle_chat_details(chat_id: int):
             fetchdict=True
         )
 
+        for chat in chats:
+          chat['time'] = chat['time'].strftime('%I:%M %p')
+          
         print("chats:", chats)
 
         # --- details of the currently selected chat ---

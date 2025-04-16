@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +19,13 @@
         </header>
 
         <main class="item-details">
+          {% if user_id == values['seller_id'] %}
+          <div class="form-actions" >
+            <form method="POST" action="/remove_item/{{ values['id'] }}" style="display: inline-block;">
+              <button type="submit" class="remove-listing-button">Remove Listing</button>
+            </form>
+          </div>
+          {% endif %}
           {% if photos %}
           <section class="gallery-section">
             <h2 class="section-title">Photos</h2>
