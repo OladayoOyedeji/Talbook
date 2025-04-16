@@ -59,6 +59,7 @@ def handle_chat():
     for chat in chats:
         chat['time'] = chat['time'].strftime('%I:%M %p')
         
+        
     print("chats:", chats)
     
     return render_template("chat.html", chats=chats)
