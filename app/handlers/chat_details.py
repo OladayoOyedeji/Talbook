@@ -22,9 +22,9 @@ def handle_chat_details(chat_id: int):
             VALUES
             (%s, %s, %s);
             '''
-            mysql_util.execute_sql(sql, (chat_id, user_id, message_content))
+            mysql_util.execute_sql(sql, (chat_id, user_id, message_content), commit=True)
 
-        return redirect(url_for("chat/%s" % chat_id))
+        return redirect("/chat/%s" % chat_id)
     
     elif request.method == "GET":
         # --- all user chats (all are displayed on sidebar) ---
@@ -79,8 +79,8 @@ def handle_chat_details(chat_id: int):
         SELECT
             m.content,
             m.created_at AS time,
-            m.sender_id = %s AS is_sender,
-            u.username AS sender_username -- Alias the sender's username
+            m.sender_id AS sender_id,
+            u.username AS sender_username
         FROM Message m
         JOIN User u ON m.sender_id = u.id
         WHERE m.chat_id = %s
@@ -89,9 +89,11 @@ def handle_chat_details(chat_id: int):
 
         current_chat_messages = mysql_util.execute_sql(
             current_chat_sql,
-            params=(user_id, chat_id),
+            params=(chat_id),
             fetchdict=True
         )
+
+        print("current_chat_messages:", current_chat_messages)
 
         # --- other user in the current chat ---
         other_user_info_sql = """
@@ -101,7 +103,7 @@ def handle_chat_details(chat_id: int):
                 ELSE buyer.username
             END AS other_username,
             i.item_name
-        FROM Chat c
+        FROM Chat AS c
         JOIN User buyer ON c.buyer_id = buyer.id
         JOIN User seller ON c.seller_id = seller.id
         JOIN Item i ON c.item_id = i.id
@@ -125,6 +127,7 @@ def handle_chat_details(chat_id: int):
             "chat_details.html",
             chats=chats,
             current_chat=current_chat_data,
-            current_chat_id=chat_id
+            current_chat_id=chat_id,
+            user_id=user_id
         )
 

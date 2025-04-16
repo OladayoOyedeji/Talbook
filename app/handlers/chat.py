@@ -44,7 +44,7 @@ def handle_chat():
     JOIN other_users AS ou ON c.id = ou.chat_id
     JOIN User AS u ON u.id = ou.other_user_id
     JOIN Item AS i ON c.item_id = i.id
-    JOIN latest_messages AS lm ON c.id = lm.chat_id
+    LEFT JOIN latest_messages AS lm ON c.id = lm.chat_id
     ORDER BY lm.created_at ASC;
     '''
     

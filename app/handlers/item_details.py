@@ -6,7 +6,7 @@ from app.utils.mysql_util import execute_sql
 def handle_item_details(item_id):
     sql1 = '''
     SELECT 
-        I.id, I.item_name, I.price, I.condition, I.descrip, U.username as seller, I.created_at
+        I.id, I.item_name, I.price, I.condition, I.descrip, U.username as seller, I.created_at, U.id as seller_id
     FROM Item as I
     JOIN User as U ON I.seller_id = U.id
     WHERE I.id = %s;
@@ -39,7 +39,7 @@ def handle_item_details(item_id):
 
     values = execute_sql(sql1, (item_id,), fetchone=True, fetchdict=True)
     if not values:
-        return "item not found", 404
+        return "item not found"
 
     photos = execute_sql(sql2, (item_id,), fetchdict=True)
     tags = execute_sql(sql3, (item_id,), fetchdict=True)
