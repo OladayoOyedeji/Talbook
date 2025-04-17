@@ -176,4 +176,22 @@ ORDER BY count(Item.id) DESC'''
     print(sql,  params)
     return execute_sql(sql % params)
     
+def get_photo_id(post_id):
+    sql = '''SELECT display_order, photo_id
+FROM Post_Photo
+WHERE post_id = %s'''
 
+    return execute_sql(sql, (post_id,))
+
+def get_video_id(post_id):
+    sql = '''SELECT display_order, video_id
+FROM Post_Video
+WHERE post_id = %s'''
+
+    return execute_sql(sql, (post_id,))
+
+def get_post_data(post_id):
+    sql = '''SELECT * FROM Post
+    WHERE post_id = %s'''
+
+    return execute_sql(sql, (post_id), fetchDict=True)

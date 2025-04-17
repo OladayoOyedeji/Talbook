@@ -185,8 +185,10 @@ CREATE TABLE Item_Location
 CREATE TABLE Post
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    FOREIGN KEY(user_id) REFERENCES User(id),
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
@@ -195,8 +197,10 @@ CREATE TABLE Post
 CREATE TABLE Post_Photo
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    media_id INT,
+    post_id INT,
+    photo_id INT,
     display_order INT,
+    FOREIGN KEY(post_id) REFERENCES Post(id),
     FOREIGN KEY(media_id) REFERENCES Photo(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -206,8 +210,10 @@ CREATE TABLE Post_Photo
 CREATE TABLE Post_Video
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    media_id INT,
+    post_id INT,
+    video_id INT,
     display_order INT,
+    FOREIGN KEY(post_id) REFERENCES Post(id),
     FOREIGN KEY(media_id) REFERENCES Photo(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

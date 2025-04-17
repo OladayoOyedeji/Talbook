@@ -79,6 +79,7 @@ def handle_selling():
             
         # Handle file uploads
         photos = request.files.getlist('photos')
+        print(photos)
         photo_names = []
             
         # Save each photo

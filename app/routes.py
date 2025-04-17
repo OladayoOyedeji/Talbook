@@ -19,6 +19,7 @@ from app.handlers.media import handle_media
 from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
+from app.handlers.post import *
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
@@ -84,6 +85,13 @@ def chat():
 def chat_details(chat_id):
     return handle_chat_details(chat_id)
 
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    return handle_post(post_id)
+
+@app.route("/add_post", methods=['GET', 'POST'])
+def add_post():
+    return handle_add_post()
 ##==============================================================
 ## Testing routes
 ##==============================================================

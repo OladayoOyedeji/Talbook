@@ -1,0 +1,241 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1c1e21;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.required-field::after {
+    content: " *";
+    color: #ff4d4f;
+}
+
+/* /\* Photo Upload *\/ */
+/* .photo-upload { */
+/*     border: 2px dashed #dddfe2; */
+/*     border-radius: 6px; */
+/*     padding: 20px; */
+/*     text-align: center; */
+/*     cursor: pointer; */
+/*     transition: border-color 0.2s; */
+/*     margin-bottom: 15px; */
+/* } */
+
+/* .photo-upload:hover { */
+/*     border-color: #3b82f6; /\* hololive blue *\/ */
+/* } */
+
+/* .photo-upload i { */
+/*     font-size: 48px; */
+/*     color: #1877f2; */
+/*     margin-bottom: 10px; */
+/* } */
+
+/* .photo-upload p { */
+/*     margin: 0; */
+/*     color: #65676b; */
+/* } */
+
+/* /\* Image Previews *\/ */
+/* .image-previews { */
+/*     display: flex; */
+/*     flex-wrap: wrap; */
+/*     gap: 10px; */
+/*     margin-top: 15px; */
+/* } */
+
+/* .image-preview { */
+/*     position: relative; */
+/*     width: 100px; */
+/*     height: 100px; */
+/*     border-radius: 6px; */
+/*     overflow: hidden; */
+/*     box-shadow: 0 1px 3px rgba(0,0,0,0.1); */
+/*     border: 1px solid transparent; */
+/*     transition: all 0.2s ease; */
+/* } */
+
+/* .image-preview:hover { */
+/*     border-color: #3b82f6; /\* hololive blue *\/ */
+/*     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); */
+/* } */
+
+/* .image-preview img { */
+/*     width: 100%; */
+/*     height: 100%; */
+/*     object-fit: cover; */
+/* } */
+
+/* .remove-image { */
+/*     position: absolute; */
+/*     top: 5px; */
+/*     right: 5px; */
+/*     background-color: rgba(0,0,0,0.5); */
+/*     color: white; */
+/*     border: none; */
+/*     border-radius: 50%; */
+/*     width: 20px; */
+/*     height: 20px; */
+/*     display: flex; */
+/*     align-items: center; */
+/*     justify-content: center; */
+/*     cursor: pointer; */
+/*     font-size: 12px; */
+/* } */
+
+/* .remove-image:hover { */
+/*     background-color: rgba(0,0,0,0.8); */
+/* } */
+
+/* Change photo-upload → media-upload */
+.media-upload {
+    border: 2px dashed #dddfe2;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    margin-bottom: 15px;
+}
+
+.media-upload:hover {
+    border-color: #3b82f6;
+}
+
+.media-upload i {
+    font-size: 48px;
+    color: #1877f2;
+    margin-bottom: 10px;
+}
+
+.media-upload p {
+    margin: 0;
+    color: #65676b;
+}
+
+/* media preview container */
+.media-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.media-preview {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.media-preview:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.media-preview img,
+.media-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-media {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.remove-media:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+/* Submit Button */
+.submit-btn {
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #166fe5;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 0;
+        border-radius: 0;
+    }
+}
+
+.suggestions {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background: white;
+    position: absolute;
+    z-index: 1000;
+}
+
+.suggestion-item {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #eee;
+}
+

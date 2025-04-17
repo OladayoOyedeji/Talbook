@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell on Talbook</title>
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/static/styles/add_post.css">
+    <!-- below adds camera icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sell an Item on Talbook</h1>
+        
+        <form id="selling-form" method="POST" enctype="multipart/form-data">
+            
+            <!-- <\!-- Photos -\-> -->
+            <!-- <div class="form-group"> -->
+            <!--     <label for="photos">Photos</label> -->
+            <!--     <div class="photo-upload" id="photo-upload-area"> -->
+            <!--         <i class="fas fa-camera"></i> -->
+            <!--         <p>Click to add photos or drag and drop (up to 14)</p> -->
+            <!--         <input type="file" id="photos" name="photos" multiple accept="image/*" style="display: none;"> -->
+            <!--     </div> -->
+            <!--     <div class="image-previews" id="image-previews"></div> -->
+            <!-- </div> -->
+
+            <!-- Media -->
+            <div class="form-group">
+              <label for="media">Media</label>
+              <div class="media-upload" id="media-upload-area">
+                <i class="fas fa-camera"></i>
+                <p>Click to add media or drag and drop (up to 14)</p>
+                <input type="file" id="media" name="media" multiple accept="image/*,video/*" style="display: none;">
+              </div>
+              <div class="media-previews" id="media-previews"></div>
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea 
+                id="description" 
+                name="description" 
+                placeholder="Tell potential buyers more about what you're selling" 
+                maxlength="20000">
+              </textarea>
+              <div id="description-count">0 / 20000</div>
+            </div>
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Add Post</button>
+        </form>
+    </div>
+</body>
+
+<script src="https://unpkg.com/@yaireo/tagify"></script>
+<script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+    const descriptionInput = document.getElementById('description');
+    const descriptionCount = document.getElementById('description-count');
+
+    const mediaUploadArea = document.getElementById('media-upload-area');
+    const fileInput = document.getElementById('media');
+    const mediaPreviews = document.getElementById('media-previews');
+    const maxMedia = 14;
+
+    // Live description character count
+    descriptionInput.addEventListener('input', function() {
+        descriptionCount.textContent = `${descriptionInput.value.length} / 20000`;
+    });
+
+    // Click to upload
+    mediaUploadArea.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    // Drag over
+    mediaUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        mediaUploadArea.style.borderColor = '#1877f2';
+        mediaUploadArea.style.backgroundColor = '#f0f8ff';
+    });
+
+    // Drag leave
+    mediaUploadArea.addEventListener('dragleave', function() {
+        mediaUploadArea.style.borderColor = '#dddfe2';
+        mediaUploadArea.style.backgroundColor = 'transparent';
+    });
+
+    // Drop media files
+    mediaUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        mediaUploadArea.style.borderColor = '#dddfe2';
+        mediaUploadArea.style.backgroundColor = 'transparent';
+
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            handleFileUpload(fileInput.files);
+        }
+    });
+
+    fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
+
+    // Handle uploading and preview
+    function handleFileUpload(files) {
+        const existingMedia = mediaPreviews.querySelectorAll('.media-preview').length;
+
+        if (existingMedia >= maxMedia) {
+            alert('You can upload a maximum of 14 media files.');
+            return;
+        }
+
+        const availableSlots = maxMedia - existingMedia;
+        const filesToProcess = Array.from(files).slice(0, availableSlots);
+
+        filesToProcess.forEach(file => {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const preview = document.createElement('div');
+                preview.className = 'media-preview';
+
+                let mediaElement;
+                if (file.type.startsWith('image/')) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = e.target.result;
+                } else if (file.type.startsWith('video/')) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = e.target.result;
+                    mediaElement.controls = true;
+                    mediaElement.style.width = '100%';
+                    mediaElement.style.height = '100%';
+                } else {
+                    return;
+                }
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-media';
+                removeBtn.innerHTML = '×';
+                removeBtn.addEventListener('click', function() {
+                    preview.remove();
+                    updateFileInput();
+                });
+
+                preview.appendChild(mediaElement);
+                preview.appendChild(removeBtn);
+                mediaPreviews.appendChild(preview);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function updateFileInput() {
+        const dt = new DataTransfer();
+        const mediaPreviews = document.getElementById('media-previews');
+        const previews = mediaPreviews.querySelectorAll('img, video');
+        const originalFiles = Array.from(fileInput.files);
+
+        previews.forEach(preview => {
+            const matchedFile = originalFiles.find(file => {
+                const url = URL.createObjectURL(file);
+                const matches = url === preview.src;
+                URL.revokeObjectURL(url);
+                return matches;
+            });
+            if (matchedFile) dt.items.add(matchedFile);
+        });
+
+        fileInput.files = dt.files;
+    }
+
+    document.getElementById('selling-form').addEventListener('submit', function (e) {
+        console.log('Form submitted!');
+        const formData = new FormData(this);
+        fetch('/selling', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Listing published successfully!');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong. Please try again.');
+        });
+    });
+});
+</script>
+</html>

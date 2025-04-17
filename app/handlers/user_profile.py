@@ -12,13 +12,17 @@ def handle_user_profile(username, listings=True):
     id = profile['id']
 
     print("here")
-    profile['skills'] = get_services(id)
-    print("or here?")
-    if profile['skills'] == None:
-        profile['skills'] = ['']
+    if listings:
+        profile['skills'] = get_services(id)
+        print("or here?")
+        if profile['skills'] == None:
+            profile['skills'] = ['']
     
-    profile['listings'] = get_listings(id)
-    print()
-    print(profile)
+        profile['listings'] = get_listings(id)
+        print()
+        print(profile)
+    # else:
+    #     # get_from_post: post_id, list of pictures, list of videos, descrip, time
+        
     return render_template('user_profile.html',listings=listings,profile=profile,
                            editable=(session['username']==username))
