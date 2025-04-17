@@ -199,14 +199,17 @@ def get_post_data(post_id):
 def get_bookmarked_items(user_id):
     sql = '''
     SELECT 
-        Item.id,
-        Item.title,
-        Item.price,
-        Item.condition,
-        Item.image_id
-    FROM Bookmark
-    JOIN Item ON Bookmark.item_id = Item.id
-    WHERE Bookmark.user_id = %s;
+        I.id,
+        I.item_name,
+        I.price,
+        I.condition,
+        U.username,
+        IP.photo_id
+    FROM Bookmark AS B
+    JOIN Item AS I ON B.item_id = I.id
+    JOIN User AS U ON I.seller_id = U.id
+    JOIN Item_Photo AS IP ON I.id = IP.item_id AND IP.display_order = 0
+    WHERE B.user_id = %s AND I.is_available = True;
     '''
     
-    return execute_sql(sql, (user_id,), fetchdict=True)
+    return execute_sql(sql, (user_id,))
