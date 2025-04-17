@@ -23,7 +23,7 @@
         <ul class="nav-links">
             <li><a href="/home">Home</a></li>
             <li><a href="/search">Search</a></li>
-            <li><a href="/inbox">Inbox</a></li>
+            <li><a href="/chat">Chat</a></li>
             <li><a href="/selling">Selling</a></li>
             <li><a href="/user_profile/{{ user.username }}">Profile</a></li>
         </ul>
@@ -38,8 +38,8 @@
     <div class="grid-container">
         {% for item in items %}
         <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
-            <img src="/static/images/store/{{ item[5] }}.png"
-                 onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+            <img src="/static/images/store/{{ item[5] }}.webp"
+                 onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
                  class="item-image">
             <div class="item-title">{{ item[1] }}</div>
             <div class="item-price">${{ item[2] }}</div>

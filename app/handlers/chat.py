@@ -6,7 +6,7 @@ from app.utils import photo
 
 def handle_chat():
     if "user_id" not in session:
-        return redirect(url_for("login"))
+      return redirect(url_for("login"))
 
     user_id = session["user_id"]
 
@@ -44,8 +44,8 @@ def handle_chat():
     JOIN other_users AS ou ON c.id = ou.chat_id
     JOIN User AS u ON u.id = ou.other_user_id
     JOIN Item AS i ON c.item_id = i.id
-    JOIN latest_messages AS lm ON c.id = lm.chat_id
-    ORDER BY lm.created_at ASC;
+    LEFT JOIN latest_messages AS lm ON c.id = lm.chat_id
+    ORDER BY lm.created_at DESC;
     '''
     
     chats = mysql_util.execute_sql(
@@ -53,12 +53,13 @@ def handle_chat():
         params=(user_id, user_id, user_id),
         fetchdict=True
     )
+    
     if not chats:
-        chats = []
+      chats = []
 
     for chat in chats:
-        chat['time'] = chat['time'].strftime('%I:%M %p')
-        
+      chat['time'] = chat['time'].strftime('%I:%M %p')
+      
     print("chats:", chats)
     
     return render_template("chat.html", chats=chats)

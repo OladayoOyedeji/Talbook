@@ -1,5 +1,5 @@
 # File: routes.py
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from app import app
 
 # import all route handlers from handlers/
@@ -19,12 +19,17 @@ from app.handlers.media import handle_media
 from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
-from app.handlers.post import *
+from app.handlers.start_chat import handle_start_chat
+from app.handlers.remove_item import handle_remove_item
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate
 ## handler files
 ##==============================================================
+
+def require_login():
+    pass
+
 @app.route('/')
 def base():
     return handle_base()
@@ -77,6 +82,13 @@ def item_details(item_id):
 def bazaar():
     return handle_bazaar()
 
+@app.route('/start_chat/<int:seller_id>/<int:item_id>', methods=['POST'])
+def start_chat(seller_id, item_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    else:
+        return handle_start_chat(seller_id, item_id)
+    
 @app.route("/chat")
 def chat():
     return handle_chat()
@@ -85,6 +97,7 @@ def chat():
 def chat_details(chat_id):
     return handle_chat_details(chat_id)
 
+<<<<<<< HEAD
 @app.route("/post/<int:post_id>")
 def post(post_id):
     return handle_post(post_id)
@@ -92,6 +105,12 @@ def post(post_id):
 @app.route("/add_post", methods=['GET', 'POST'])
 def add_post():
     return handle_add_post()
+=======
+@app.route("/remove_item/<int:item_id>", methods=['POST'])
+def remove_item(item_id):
+    return handle_remove_item(item_id)
+
+>>>>>>> bc9d8bd2a5de7e8de7cb1ebd0f89daa4d6c43a20
 ##==============================================================
 ## Testing routes
 ##==============================================================

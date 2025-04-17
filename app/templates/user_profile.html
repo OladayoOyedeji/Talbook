@@ -18,8 +18,8 @@
     {% endif %}
     {% endwith %}
   <div class="pfp">
-    <img src="/static/images/store/{{ profile.photo_id }}.png"
-         onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+    <img src="/static/images/store/{{ profile.photo_id }}.webp"
+         onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
          class="item-image">
   </div>
   <div class="username">
@@ -53,8 +53,8 @@
   <div class="grid-container" id="Listings">
     {% for item in profile.listings %}
     <div class="item-card">
-      <img src="/static/images/store/{{ item[4] }}.png" 
-           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+      <img src="/static/images/store/{{ item[4] }}.webp" 
+           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
            class="item-image">
       <h3>{{ item[1] }}</h3>
       <p>Price: ${{ item[2] }}</p>
@@ -70,7 +70,7 @@
       {% for media in profile.media %}
       <div class="media-item">
         <img src="/static/media/{{ media }}" alt="User media"
-             onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';">
+             onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';">
       </div>
       {% endfor %}
 
@@ -110,7 +110,7 @@
 <!--         <div class="row"> -->
 <!--           <div class="col-md-4"> -->
 <!--             <div class="profile-img"> -->
-<!--               <img src="/static/Images/{{ profile.photo_id }}.png" alt=""/> -->
+<!--               <img src="/static/Images/{{ profile.photo_id }}.webp" alt=""/> -->
 <!--               {% if edditable == True %} -->
 <!--               <div class="file btn btn-lg btn-primary"> -->
 <!--                 Change Photo -->
@@ -154,8 +154,8 @@
 <!--                    role="tabpanel" aria-labelledby="home-tab"> -->
 <!--                 {% for item in profile.listings %} -->
 <!--                 <div class="item-card"> -->
-<!--                   <img src="/static/images/uploads/{{ item[5] }}.png"  -->
-<!--                        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';" -->
+<!--                   <img src="/static/images/uploads/{{ item[5] }}.webp"  -->
+<!--                        onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';" -->
 <!--                        class="item-image"> -->
 <!--                   <h3>{{ item[1] }}</h3> -->
 <!--                   <p>Price: ${{ item[2] }}</p> -->

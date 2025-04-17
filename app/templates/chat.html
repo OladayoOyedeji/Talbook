@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talbook DM</title>
+  <title>Talbook Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
   <link rel="stylesheet" href="/static/styles/chat.css">
 </head>
@@ -12,7 +12,9 @@
 
   <div class="header">
     <div class="header__left">
-      <span class="material-symbols-outlined">menu</span>
+      <a href="/home" style="text-decoration: none; color: inherit;">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
       <h1>Talbook</h1>
     </div>
 
@@ -40,9 +42,13 @@
             <span class="material-symbols-outlined">arrow_right</span>
             <div class="chat-item">{{ chat["item_name"] }}</div>
           </div>
+          {% if chat["preview"] %}
           <div class="chat-preview">{{ chat["preview"] }}</div>
+          {% endif %}
         </div>
+        {% if chat["time"] %}
         <div class="chat-time">{{ chat["time"] }}</div>
+        {% endif %}
       </a>
       {% endfor %}
     </div>

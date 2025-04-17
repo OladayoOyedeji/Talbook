@@ -15,7 +15,8 @@ def handle_home():
             IP.photo_id
         FROM Item as I
         JOIN User as U ON I.seller_id=U.id
-        JOIN Item_Photo as IP ON I.id=IP.item_id and IP.display_order=0;
+        JOIN Item_Photo as IP ON I.id=IP.item_id and IP.display_order=0
+        WHERE is_available=True;
         '''
         items = mysql_util.execute_sql(sql)
         return render_template("homepage.html", items=items, user={'username': username})

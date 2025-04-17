@@ -5,13 +5,15 @@ def get_user_id(username: str) -> int:
     result = mysql_util.execute_sql("SELECT id FROM User WHERE username=%s", (username,))
     if not result:
         raise ValueError(f"User '{username}' not found")
-    return result[0]
+    print("%s id: %s" % (username, result[0][0]))
+    return result[0][0]
 
 def get_item_id(item_name: str) -> int:
     result = mysql_util.execute_sql("SELECT id FROM Item WHERE item_name=%s", (item_name,))
     if not result:
         raise ValueError(f"Item '{item_name}' not found")
-    return result[0]
+    print("%s id: %s" % (item_name, result[0][0]))
+    return result[0][0]
 
 def insert_chat(buyer_id: int, seller_id: int, item_id: int) -> int:
     chat_sql = '''

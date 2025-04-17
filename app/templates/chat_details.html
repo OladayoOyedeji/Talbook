@@ -12,7 +12,9 @@
 
   <div class="header">
     <div class="header__left">
-      <span class="material-symbols-outlined">menu</span>
+      <a href="/home" style="text-decoration: none; color: inherit;">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
       <h1>Talbook</h1>
     </div>
 
@@ -59,9 +61,9 @@
             </div>
           </div>
           
-          <div class="message-display">
+          <div class="message-display" id="messageContainer">
             {% for message in current_chat["messages"] %}
-            <div class="message {% if message['is_sender'] %}sent{% else %}received{% endif %}">
+            <div class="message {% if message['sender_id'] == user_id  %}sent{% else %}received{% endif %}">
               <div class="message-content">{{ message["content"] }}</div>
               <div class="message-time">{{ message["time"] }}</div>
             </div>
@@ -93,3 +95,11 @@
 
 </body>
 </html>
+
+<script>
+  // scroll to bottom when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('messageContainer');
+    container.scrollTop = container.scrollHeight;
+  });
+</script>

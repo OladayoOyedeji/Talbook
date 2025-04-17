@@ -27,8 +27,8 @@
 <form method="post" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
   <div class="edit-photo">
     <label for="file" style="cursor: pointer;">
-      <img src="/static/images/store/{{ profile.photo_id }}.png"
-           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+      <img src="/static/images/store/{{ profile.photo_id }}.webp"
+           onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
            class="item-image" />
     </label>
   </div>

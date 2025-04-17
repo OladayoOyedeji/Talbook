@@ -10,7 +10,8 @@ def insert():
         ("oroyedeji1@cougars.ccis.edu", "Robiefresh", "24Mutlu^&"),
         ("nalahaideb@cougars.ccis.edu", "nashydog", "i1uv1itt1egir1s!!"),
         ("barack_obama@whitehouse.gov", "barack_obama", "!Trump2024!"),
-        ("emutlu1@cougars.ccis.edu", "elif_cato", "catoMato01!&")]
+        ("emutlu1@cougars.ccis.edu", "elif_cato", "catoMato01!&")
+    ]
 
     sql_statements = []
     for email, username, password in users:
