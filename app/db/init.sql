@@ -188,7 +188,7 @@ CREATE TABLE Post
     user_id INT,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY(user_id) REFERENCES User(id),
+    FOREIGN KEY(user_id) REFERENCES User(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
@@ -201,7 +201,7 @@ CREATE TABLE Post_Photo
     photo_id INT,
     display_order INT,
     FOREIGN KEY(post_id) REFERENCES Post(id),
-    FOREIGN KEY(media_id) REFERENCES Photo(id)
+    FOREIGN KEY(photo_id) REFERENCES Photo(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
@@ -214,7 +214,7 @@ CREATE TABLE Post_Video
     video_id INT,
     display_order INT,
     FOREIGN KEY(post_id) REFERENCES Post(id),
-    FOREIGN KEY(media_id) REFERENCES Photo(id)
+    FOREIGN KEY(video_id) REFERENCES Video(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================

@@ -97,7 +97,6 @@ def chat():
 def chat_details(chat_id):
     return handle_chat_details(chat_id)
 
-<<<<<<< HEAD
 @app.route("/post/<int:post_id>")
 def post(post_id):
     return handle_post(post_id)
@@ -105,12 +104,11 @@ def post(post_id):
 @app.route("/add_post", methods=['GET', 'POST'])
 def add_post():
     return handle_add_post()
-=======
+
 @app.route("/remove_item/<int:item_id>", methods=['POST'])
 def remove_item(item_id):
     return handle_remove_item(item_id)
 
->>>>>>> bc9d8bd2a5de7e8de7cb1ebd0f89daa4d6c43a20
 ##==============================================================
 ## Testing routes
 ##==============================================================
