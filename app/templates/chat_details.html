@@ -41,6 +41,9 @@
             <div class="chat-name">{{ chat["other"] }}</div>
             <span class="material-symbols-outlined">arrow_right</span>
             <div class="chat-item">{{ chat["item_name"] }}</div>
+            {% if chat["unread_count"] > 0 %}
+            <div class="unread-count">{{ chat["unread_count"] }}</div>
+            {% endif %}
           </div>
           <div class="chat-preview">{{ chat["preview"] }}</div>
         </div>
