@@ -75,9 +75,9 @@ CREATE TABLE Item
     seller_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     `condition` ENUM('new', 'like new', 'very good', 'good', 'acceptable', 'poor') DEFAULT NULL,
-    -- quantity INT DEFAULT 1,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    is_available BOOLEAN DEFAULT True, 
     FOREIGN KEY (seller_id) REFERENCES User(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
