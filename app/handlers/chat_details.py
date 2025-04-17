@@ -27,48 +27,95 @@ def handle_chat_details(chat_id: int):
         return redirect("/chat/%s" % chat_id)
     
     elif request.method == "GET":
-        # --- all user chats (all are displayed on sidebar) ---
-        sidebarsql = """
-        WITH user_chats AS (
-            SELECT * FROM Chat
-            WHERE buyer_id = %s OR seller_id = %s
-        ),
-        other_users AS (
-            SELECT
-                c.id AS chat_id,
-                CASE
-                    WHEN c.buyer_id = %s THEN c.seller_id
-                    ELSE c.buyer_id
-                END AS other_user_id
-            FROM user_chats c
-        ),
-        latest_messages AS (
-            SELECT m.chat_id, m.content, m.created_at
-            FROM Message m
-            JOIN (
-                SELECT chat_id, MAX(created_at) AS max_time
-                FROM Message
-                GROUP BY chat_id
-            ) AS latest ON m.chat_id = latest.chat_id AND m.created_at = latest.max_time
-        GROUP BY chat_id
-        )
+        # --- other user in the current chat ---
+        other_user_info_sql = """
         SELECT
-            c.id AS chat_id,
-            u.username AS other,
-            i.item_name AS item_name,
-            lm.content AS preview,
-            lm.created_at AS time
-        FROM user_chats AS c
-        JOIN other_users AS ou ON c.id = ou.chat_id
-        JOIN User AS u ON u.id = ou.other_user_id
-        JOIN Item AS i ON c.item_id = i.id
-        JOIN latest_messages AS lm ON c.id = lm.chat_id
-        ORDER BY lm.created_at DESC;
+            CASE
+                WHEN c.buyer_id = %s THEN seller.username
+                ELSE buyer.username
+            END AS other_username,
+            CASE
+                WHEN c.buyer_id = %s THEN c.seller_id
+                ELSE c.buyer_id
+            END AS other_user_id,
+            i.item_name
+        FROM Chat AS c
+        JOIN User buyer ON c.buyer_id = buyer.id
+        JOIN User seller ON c.seller_id = seller.id
+        JOIN Item i ON c.item_id = i.id
+        WHERE c.id = %s;
         """
 
+        other_user_info = mysql_util.execute_sql(
+            other_user_info_sql,
+            params=(user_id, user_id, chat_id),
+            fetchdict=True,
+            fetchone=True
+        )
+        
+        # mark messages as read
+        updatesql = '''
+        UPDATE Message SET is_read = True
+        WHERE chat_id = %s AND sender_id = %s;
+        '''
+        mysql_util.execute_sql(updatesql,
+                           (chat_id, other_user_info["other_user_id"]),
+                            commit=True)
+        
+        # --- all user chats (all are displayed on sidebar) ---
+        sidebarsql = '''
+    WITH user_chats AS (
+        SELECT * FROM Chat
+        WHERE buyer_id = %s OR seller_id = %s
+    ),
+    other_users AS (
+        SELECT
+            c.id AS chat_id,
+            CASE
+                WHEN c.buyer_id = %s THEN c.seller_id
+                ELSE c.buyer_id
+            END AS other_user_id
+        FROM user_chats c
+    ),
+    latest_messages AS (
+        SELECT m.chat_id, m.content, m.created_at
+        FROM Message AS m
+        JOIN (
+            SELECT chat_id, MAX(created_at) AS max_time
+            FROM Message
+            GROUP BY chat_id
+        ) AS latest ON m.chat_id = latest.chat_id AND m.created_at = latest.max_time
+    GROUP BY chat_id
+    ),
+    unread_counts AS (
+    SELECT
+        chat_id,
+        COUNT(*) AS unread_count
+    FROM Message
+    WHERE chat_id IN (SELECT id FROM user_chats)
+      AND sender_id != %s
+      AND is_read = False
+    GROUP BY chat_id
+    )
+    SELECT
+        c.id AS chat_id,
+        u.username AS other,
+        i.item_name AS item_name,
+        lm.content AS preview,
+        lm.created_at AS time,
+        COALESCE(uc.unread_count, 0) AS unread_count
+    FROM user_chats AS c
+    JOIN other_users AS ou ON c.id = ou.chat_id
+    JOIN User AS u ON u.id = ou.other_user_id
+    JOIN Item AS i ON c.item_id = i.id
+    JOIN latest_messages AS lm ON c.id = lm.chat_id
+    LEFT JOIN unread_counts AS uc ON c.id = uc.chat_id
+    ORDER BY lm.created_at DESC;
+    '''
+        
         chats = mysql_util.execute_sql(
             sidebarsql,
-            params=(user_id, user_id, user_id),
+            params=(user_id, user_id, user_id, user_id),
             fetchdict=True
         )
 
@@ -97,28 +144,6 @@ def handle_chat_details(chat_id: int):
         )
 
         print("current_chat_messages:", current_chat_messages)
-
-        # --- other user in the current chat ---
-        other_user_info_sql = """
-        SELECT
-            CASE
-                WHEN c.buyer_id = %s THEN seller.username
-                ELSE buyer.username
-            END AS other_username,
-            i.item_name
-        FROM Chat AS c
-        JOIN User buyer ON c.buyer_id = buyer.id
-        JOIN User seller ON c.seller_id = seller.id
-        JOIN Item i ON c.item_id = i.id
-        WHERE c.id = %s;
-        """
-
-        other_user_info = mysql_util.execute_sql(
-            other_user_info_sql,
-            params=(user_id, chat_id),
-            fetchdict=True,
-            fetchone=True
-        )
 
         current_chat_data = {}
         if other_user_info:
