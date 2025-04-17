@@ -194,4 +194,19 @@ def get_post_data(post_id):
     sql = '''SELECT * FROM Post
     WHERE post_id = %s'''
 
-    return execute_sql(sql, (post_id), fetchDict=True)
+    return execute_sql(sql, (post_id), fetchdict=True)
+
+def get_bookmarked_items(user_id):
+    sql = '''
+    SELECT 
+        Item.id,
+        Item.title,
+        Item.price,
+        Item.condition,
+        Item.image_id
+    FROM Bookmark
+    JOIN Item ON Bookmark.item_id = Item.id
+    WHERE Bookmark.user_id = %s;
+    '''
+    
+    return execute_sql(sql, (user_id,), fetchdict=True)

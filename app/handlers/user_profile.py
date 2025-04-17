@@ -23,6 +23,8 @@ def handle_user_profile(username, listings=True):
         print(profile)
     # else:
     #     # get_from_post: post_id, list of pictures, list of videos, descrip, time
-        
-    return render_template('user_profile.html',listings=listings,profile=profile,
-                           editable=(session['username']==username))
+
+    profile['bookmarks'] = get_bookmarked_items(id)
+    
+    return render_template('user_profile.html', listings=listings, profile=profile,
+                           editable=(session['username'] == username))

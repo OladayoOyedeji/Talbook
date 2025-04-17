@@ -47,6 +47,7 @@
     <ul class="nav-links">
       <li><a href="/user_profile/{{profile.username}}#Listings">Listings</a></li>
       <li><a href="/user_profile/{{profile.username}}/media#Media">Media</a></li>
+      <li><a href="/user_profile/{{profile.username}}#Bookmarks">Bookmarks</a></li>
     </ul>
   </nav>
   {% if listings %}
@@ -84,6 +85,25 @@
     </div>
   </div>
   {% endif %}
+
+  
+  {% if editable and profile.bookmarks %}
+  <div class="grid-container" id="Bookmarks">
+    <p>BOOKMARKS</p>
+    {% for item in profile.bookmarks %}
+    <div class="item-card">
+      <img src="/static/images/store/{{ item[4] }}.webp" 
+           onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
+           class="item-image">
+      <h3>{{ item[1] }}</h3>
+      <p>Price: ${{ item[2] }}</p>
+      <p>Condition: {{ item[3] }}</p>
+      <a href="{{ url_for('item_details', item_id=item[0]) }}">View Details</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  
   <script>
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
