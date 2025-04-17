@@ -122,16 +122,19 @@ def get_services(user_id):
     return execute_sql(sql, (user_id))
 
 def get_listings(user_id):
-    
-    sql = '''SELECT
+
+    sql = '''
+       SELECT 
             I.id,
             I.item_name,
             I.price,
             I.condition,
+            U.username,
             IP.photo_id
-    FROM Item as I
-    JOIN Item_Photo as IP on I.id=IP.item_id and IP.display_order=0
-    WHERE seller_id = %s AND I.is_available=True
+        FROM Item as I
+        JOIN User as U ON I.seller_id=U.id
+        JOIN Item_Photo as IP ON I.id=IP.item_id and IP.display_order=0
+        WHERE I.seller_id = %s AND is_available=True;
     '''
 
     return execute_sql(sql, (user_id))

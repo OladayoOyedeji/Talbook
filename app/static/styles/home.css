@@ -124,3 +124,12 @@ h1, h2 {
 .item-card:hover .item-title {
     text-decoration: underline;
 }
+
+/* bookmarks */
+.grid-container#Bookmarks {
+    padding-top: 10px;
+}
+
+.grid-container#Bookmarks > p {
+    margin-bottom: 5px;
+}
