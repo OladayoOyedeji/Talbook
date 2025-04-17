@@ -3,6 +3,8 @@
 *.py[cod]
 *$py.class
 app/utils/__pycache__/
+
+**/User.sql
 **.webp
 
 # Ignore virtual environment directories
