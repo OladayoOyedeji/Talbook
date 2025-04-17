@@ -11,7 +11,7 @@ from app.handlers.login import handle_login
 from app.handlers.home import handle_home
 from app.handlers.user_profile import handle_user_profile
 from app.handlers.bazaar import handle_bazaar
-from app.handlers.item_details import handle_item_details
+from app.handlers.item_details import handle_item_details, handle_bookmark_item
 from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
 from app.handlers.search import handle_search
@@ -79,6 +79,10 @@ def selling():
 @app.route("/item/<int:item_id>")
 def item_details(item_id):
     return handle_item_details(item_id)
+
+@app.route("/bookmark_item/<int:item_id>", methods=["POST"])
+def bookmark_item(item_id):
+    return handle_bookmark_item(item_id)
     
 @app.route('/bazaar', methods=['GET', 'POST'])
 def bazaar():
