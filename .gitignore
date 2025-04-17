@@ -3,7 +3,6 @@
 *.py[cod]
 *$py.class
 app/utils/__pycache__/
-**.webp
 
 # Ignore virtual environment directories
 /venv
