@@ -131,7 +131,7 @@ def get_listings(user_id):
             IP.photo_id
     FROM Item as I
     JOIN Item_Photo as IP on I.id=IP.item_id and IP.display_order=0
-    WHERE seller_id = %s
+    WHERE seller_id = %s AND I.is_available=True
     '''
 
     return execute_sql(sql, (user_id))
