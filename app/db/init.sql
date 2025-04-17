@@ -185,7 +185,7 @@ CREATE TABLE Item_Location
 CREATE TABLE Post
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT NOT NULL,
     descrip TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
     FOREIGN KEY(user_id) REFERENCES User(id) ON DELETE CASCADE
@@ -197,9 +197,9 @@ CREATE TABLE Post
 CREATE TABLE Post_Photo
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT,
-    photo_id INT,
-    display_order INT,
+    post_id INT NOT NULL,
+    photo_id INT NOT NULL,
+    display_order INT NOT NULL,
     FOREIGN KEY(post_id) REFERENCES Post(id),
     FOREIGN KEY(photo_id) REFERENCES Photo(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -210,9 +210,9 @@ CREATE TABLE Post_Photo
 CREATE TABLE Post_Video
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    post_id INT,
-    video_id INT,
-    display_order INT,
+    post_id INT NOT NULL,
+    video_id INT NOT NULL,
+    display_order INT NOT NULL,
     FOREIGN KEY(post_id) REFERENCES Post(id),
     FOREIGN KEY(video_id) REFERENCES Video(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

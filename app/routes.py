@@ -21,6 +21,8 @@ from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
 from app.handlers.start_chat import handle_start_chat
 from app.handlers.remove_item import handle_remove_item
+from app.handlers.post import handle_post
+from app.handlers.post import handle_add_post
 
 ##==============================================================
 ## Routes are defined here, but their logic is kept in separate

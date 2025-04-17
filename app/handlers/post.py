@@ -5,8 +5,8 @@ import json
 import uuid
 from app.utils.functions import *
 from app.utils.User import *
-from app.utils import photo
-from app.utils import video
+from app.utils.photo import *
+from app.utils.video import *
 
 def handle_post(post_id):
     # get post informations
@@ -29,10 +29,10 @@ def handle_add_post():
         list_media = request.files.getlist('media')
         descrip = request.form.get('descrip')
 
-        sql = '''INSERT INTO Post (descrip)
-VALUE ('%s')'''
+        sql = '''INSERT INTO Post (user_id, descrip)
+VALUE (%s, '%s')'''
 
-        post_id = execute_sql(sql, (descrip), commit=True, get_lastrowid=True)
+        post_id = execute_sql(sql, (session['user_id'],descrip,), commit=True, get_lastrowid=True)
         dir_path_photo = "app/static/images/uploads/"
         dir_path_video = "app/static/videos/uploads/"
         photo_names = []
@@ -45,47 +45,50 @@ VALUE ('%s')'''
         print(request.files)
 
         photo_sql = '''
-        INSERT INTO Post_Photo (post_id, photo_id, ordering_order)
+        INSERT INTO Post_Photo (post_id, photo_id, display_order)
         VALUE '''
 
         video_sql = '''
-        INSERT INTO Post_Photo (post_id, photo_id, ordering_order)
+        INSERT INTO Post_Video (post_id, video_id, display_order)
         VALUE '''
         photo_params = ()
         video_params = ()
 
         ordering = 0
-        
+
+        delim_photo, delim_video = '', ''
         for media in list_media:
-            if photo.allowed_file(media.filename):
+            if photo_allowed_file(media.filename):
                 filename = str(uuid.uuid4())
                 filepath = dir_path_photo + filename
                 media.save(filepath)
                 print("saving %s to %s" % (media.filename, filename))
 
-                photo_id = photo.upload_video(filepath)
+                photo_id = upload_image(filepath)
 
-                photo_sql += "(%s, %s, %s)"
+                photo_sql += delim_photo + "(%s, %s, %s)"
                 photo_params += (post_id, photo_id, ordering)
-                
-            elif video.allowed_file(media.filename):
+                delim_photo = ',\n'
+            elif video_allowed_file(media.filename):
                 filename = str(uuid.uuid4())
                 filepath = dir_path_video + filename
                 media.save(filepath)
                 print("saving %s to %s" % (media.filename, filename))
 
-                video_id = video.upload_video(filepath)
+                video_id = upload_video(filepath)
 
-                video_sql += "(%s, %s, %s)"
+                video_sql += delim_video + "(%s, %s, %s)"
                 video_params += (post_id, video_id, ordering)
-
+                delim_video = ',\n'
             else:
                 print()
                 flash('media not supported')
+                ordering -= 1
             ordering += 1
+        print(photo_sql, video_sql)
         execute_sql(photo_sql, photo_params, commit=True)
         execute_sql(video_sql, video_params, commit=True)
-        # return redirect(url_for('post', post_id=post_id))
+        return redirect(url_for('post', post_id=post_id))
          
     return render_template('add_post.html')
                 

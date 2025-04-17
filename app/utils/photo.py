@@ -12,7 +12,7 @@ UPLOAD_FOLDER = 'app/static/images/uploads/'
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'webp'])
 
-def allowed_file(filename):
+def photo_allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def get_image(request):
@@ -27,7 +27,7 @@ def get_image(request):
         print('No image selected for uploading')
         return None
     
-    if file and allowed_file(file.filename):
+    if file and photo_allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         #print('upload_image filename: ' + filename)
