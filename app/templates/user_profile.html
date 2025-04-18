@@ -25,9 +25,24 @@
   <div class="username">
     <h3>{{ profile.username }}</h3>
   </div>
+  <div class="user-meta">
+  <div class="follow-stats">
+    <span><strong>{{ profile.followers_count }}</strong> Followers</span>
+    <span><strong>{{ profile.following_count }}</strong> Following</span>
+  </div>
   {% if editable %}
   <div class="edit-profile">
     <a href="{{ url_for('edit_profile')}}">edit profile</a>
+  </div>
+  {% else %}
+  <div class="follow-button">
+    <form action="" method="POST">
+      {% if profile.is_following %}
+        <button type="submit" class="btn-unfollow">Unfollow</button>
+      {% else %}
+        <button type="submit" class="btn-follow">Follow</button>
+      {% endif %}
+    </form>
   </div>
   {% endif %}
   <div class="description">
@@ -68,10 +83,21 @@
     <p>MEDIA</p>
     <div class="media-grid">
       {% for media in profile.media %}
+      {% if media[2] == 'photo' %}
       <div class="media-item">
-        <img src="/static/media/{{ media }}" alt="User media"
-             onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';">
+        <a href="{{ url_for('post', post_id=media[3]) }}">
+          <img src="/static/images/store/{{ media[1] }}.webp" alt="User media"
+               onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';">
+        </a>
       </div>
+      {% elif media[2] == 'video' %}
+      <div class="media-item">
+      <a href="{{ url_for('post', post_id=media[3]) }}">
+        <img src="" alt="User media"
+               onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';">
+      </a>
+      </div>
+      {% endif %}
       {% endfor %}
 
       {% if editable %}

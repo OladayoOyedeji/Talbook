@@ -1,87 +1,239 @@
+<!-- <!DOCTYPE html> -->
+<!-- <html lang="en"> -->
+<!-- <head> -->
+<!--   <meta charset="UTF-8" /> -->
+<!--   <meta name="viewport" content="width=device-width, initial-scale=1.0"/> -->
+<!--   <title>Media Page</title> -->
+<!--   <style> -->
+<!--     body { -->
+<!--       font-family: Arial, sans-serif; -->
+<!--       background-color: #f5f6f7; -->
+<!--       margin: 0; -->
+<!--       padding: 20px; -->
+<!--     } -->
+
+<!--     .media-container { -->
+<!--       max-width: 900px; -->
+<!--       margin: auto; -->
+<!--     } -->
+
+<!--     h1 { -->
+<!--       text-align: center; -->
+<!--       margin-bottom: 30px; -->
+<!--     } -->
+
+<!--     .media-item { -->
+<!--       background-color: #fff; -->
+<!--       border-radius: 8px; -->
+<!--       box-shadow: 0 2px 6px rgba(0,0,0,0.1); -->
+<!--       margin-bottom: 20px; -->
+<!--       padding: 15px; -->
+<!--     } -->
+
+<!--     .media-id { -->
+<!--       font-weight: bold; -->
+<!--       margin-bottom: 8px; -->
+<!--       color: #333; -->
+<!--     } -->
+
+<!--     .media-preview { -->
+<!--       max-width: 100%; -->
+<!--       height: auto; -->
+<!--       border-radius: 6px; -->
+<!--       margin-bottom: 10px; -->
+<!--     } -->
+
+<!--     .media-description { -->
+<!--       margin: 8px 0; -->
+<!--       color: #555; -->
+<!--     } -->
+
+<!--     .media-timestamp { -->
+<!--       font-size: 0.9em; -->
+<!--       color: #999; -->
+<!--     } -->
+
+<!--     video.media-preview { -->
+<!--       background-color: #000; -->
+<!--     } -->
+<!--   </style> -->
+<!-- </head> -->
+<!-- <body> -->
+<!--   <div class="media-container"> -->
+<!--     <h1>Uploaded Media</h1> -->
+
+<!--     <\!-- Media Item 1 (Image) -\-> -->
+<!--     {% for media in post.media %} -->
+<!--     <div class="media-item"> -->
+<!--       <div class="media-id">ID: {{ media[0] }}</div> -->
+<!--       {% if media[2] == 'photo'%} -->
+<!--       <img class="media-preview" src="/static/images/store/{{ media[1] }}.webp" alt="Image preview"> -->
+<!--       {% elif media[2] == 'video'%} -->
+<!--       <video id="myVideo" width="640" height="360" controls autoplay muted> -->
+<!--         <source src="/static/videos/store/{{ media[1] }}.mp4" type="video/mp4" /> -->
+<!--       </video> -->
+      
+<!--       {% endif %} -->
+<!--     </div> -->
+
+<!--     <\!-- Add more media items dynamically as needed -\-> -->
+<!--   </div> -->
+  
+<!--   {% endfor %} -->
+<!--   <div class="media-description">{{ post.descrp }}</div> -->
+<!--   <div class="media-timestamp">Uploaded: {{ post.created_at }}</div> -->
+
+<!--   <script> -->
+<!--     const video = document.getElementById('myVideo'); -->
+<!--     // Optional: Play programmatically -->
+<!--     video.play().catch((error) => { -->
+<!--       console.log("Autoplay blocked:", error); -->
+<!--     }); -->
+<!--   </script> -->
+<!-- </body> -->
+<!-- </html> -->
+
+
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Media Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f6f7;
-      margin: 0;
-      padding: 20px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Media Carousel</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f5f6f7;
+          margin: 0;
+          padding: 20px;
+      }
 
-    .media-container {
-      max-width: 900px;
-      margin: auto;
-    }
+      .media-container {
+          max-width: 700px;
+          margin: auto;
+          text-align: center;
+      }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+      h1 {
+          margin-bottom: 30px;
+      }
 
-    .media-item {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      padding: 15px;
-    }
+      .media-item {
+          display: none;
+      }
 
-    .media-id {
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #333;
-    }
+      .media-preview {
+          width: 100%;
+          max-width: 640px;
+          height: 360px;
+          object-fit: cover; /* Ensures media fills the box without distortion */
+          border-radius: 8px;
+          background-color: #000; /* Useful for videos or if images are still loading */
+      }
 
-    .media-preview {
-      max-width: 100%;
-      height: auto;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
+      .media-controls {
+          margin-top: 20px;
+      }
 
-    .media-description {
-      margin: 8px 0;
-      color: #555;
-    }
+      button {
+          padding: 10px 20px;
+          margin: 0 10px;
+          font-size: 16px;
+          cursor: pointer;
+          border: none;
+          border-radius: 5px;
+          background-color: #007bff;
+          color: white;
+      }
 
-    .media-timestamp {
-      font-size: 0.9em;
-      color: #999;
-    }
+      button:disabled {
+          background-color: #aaa;
+          cursor: not-allowed;
+      }
 
-    video.media-preview {
-      background-color: #000;
-    }
-  </style>
-</head>
-<body>
-  <div class="media-container">
-    <h1>Uploaded Media</h1>
+      .media-description {
+          margin-top: 20px;
+          color: #555;
+      }
 
-    <!-- Media Item 1 (Image) -->
-    <div class="media-item">
-      <div class="media-id">ID: media_001</div>
-      <img class="media-preview" src="/media/image1.jpg" alt="Image preview">
-      <div class="media-description">A sunset over the ocean with beautiful orange and purple skies.</div>
-      <div class="media-timestamp">Uploaded: 2025-04-10 14:32</div>
+      .media-timestamp {
+          margin-top: 5px;
+          font-size: 0.9em;
+          color: #999;
+      }
+
+      video.media-preview {
+          background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="media-container">
+      <h1>Uploaded Media</h1>
+
+      <!-- Media Carousel -->
+      {% for media in post.media %}
+      <div class="media-item" id="media-{{ loop.index0 }}">
+        <div class="media-id">ID: {{ media[0] }}</div>
+        {% if media[2] == 'photo' %}
+        <img class="media-preview" src="/static/images/store/{{ media[1] }}.webp" alt="Image preview">
+        {% elif media[2] == 'video' %}
+        <video class="media-preview" controls muted>
+          <source src="/static/videos/store/{{ media[1] }}.mp4" type="video/mp4" />
+        </video>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <div class="media-controls">
+        <button id="prevBtn">Previous</button>
+        <button id="nextBtn">Next</button>
+      </div>
+
+      <div class="media-description">{{ post.descrip }}</div>
+      <div class="media-timestamp">Uploaded: {{ post.created_at }}</div>
     </div>
 
-    <!-- Media Item 2 (Video) -->
-    <div class="media-item">
-      <div class="media-id">ID: media_002</div>
-      <video class="media-preview" controls>
-        <source src="/media/video1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <div class="media-description">Short clip of waves crashing on the beach with ambient sound.</div>
-      <div class="media-timestamp">Uploaded: 2025-04-09 10:21</div>
-    </div>
+    <script>
+      const mediaItems = document.querySelectorAll('.media-item');
+      let currentIndex = 0;
 
-    <!-- Add more media items dynamically as needed -->
-  </div>
-</body>
+      function showMedia(index) {
+          mediaItems.forEach((item, i) => {
+              item.style.display = i === index ? 'block' : 'none';
+              // Pause all videos when switching
+              const video = item.querySelector('video');
+              if (video) video.pause();
+          });
+
+          document.getElementById('prevBtn').disabled = index === 0;
+          document.getElementById('nextBtn').disabled = index === mediaItems.length - 1;
+
+          // Auto play if it's a video
+          const currentMedia = mediaItems[index];
+          const currentVideo = currentMedia.querySelector('video');
+          if (currentVideo) {
+              currentVideo.play().catch(() => {});
+          }
+      }
+
+      document.getElementById('prevBtn').addEventListener('click', () => {
+          if (currentIndex > 0) {
+              currentIndex--;
+              showMedia(currentIndex);
+          }
+      });
+
+      document.getElementById('nextBtn').addEventListener('click', () => {
+          if (currentIndex < mediaItems.length - 1) {
+              currentIndex++;
+              showMedia(currentIndex);
+          }
+      });
+
+      // Show first media on load
+      showMedia(currentIndex);
+    </script>
+  </body>
 </html>

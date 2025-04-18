@@ -52,7 +52,7 @@ def login():
 def home():
     return handle_home()
 
-@app.route('/user_profile/<username>')
+@app.route('/user_profile/<username>', methods=['GET', 'POST'])
 def user_profile(username):
     return handle_user_profile(username)  
 

@@ -68,10 +68,24 @@ def get_transaction_history(user_id):
     '''
     return execute_sql(sql, (user_id,))
 
+def follow(follower_id, followed_id):
+    sql = '''
+    INSERT INTO Follow (follower_id, followed_id)
+    VALUE (%s, %s)'''
+
+    return execute_sql(sql, (follower_id, followed_id), commit=True)
+    
+def unfollow(follower_id, followed_id):
+    sql = '''
+    DELETE FROM Follow 
+    WHERE follower_id = %s AND followed_id = %s'''
+
+    return execute_sql(sql, (follower_id, followed_id), commit=True)
+
 def get_follower_list(user_id):
     sql = '''
     SELECT follower_id FROM Follow
-    WHERE followed_id = %s
+    WHERE follower_id = %s
     '''
     return execute_sql(sql, (user_id,))
 
@@ -81,6 +95,12 @@ def get_followed_list(user_id):
     WHERE followed_id = %s
     '''
     return execute_sql(sql, (user_id,))
+
+def is_following(follower_id, followed_id):
+    sql = '''
+    SELECT * FROM Follow WHERE follower_id = %s AND followed_id = %s'''
+    
+    return execute_sql(sql, (follower_id, followed_id))
 
 def get_listed_items(user_id):
     sql = '''

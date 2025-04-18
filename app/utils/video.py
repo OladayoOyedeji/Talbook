@@ -40,28 +40,59 @@ def get_video(request):
         print("here?")
         return None
 
-def compress_video(input_path: str, output_path: str, bitrate: int = "500k") -> None:
-    """
-    Compress an image and save it to a new location as a png
-    """
-    if not os.path.exists(input_path):
-        raise FileNotFoundError("Input file does not exist: %s" % input_path)
+# def compress_video(input_path: str, output_path: str, bitrate: int = "500k") -> None:
+#     """
+#     Compress an image and save it to a new location as a png
+#     """
+#     if not os.path.exists(input_path):
+#         raise FileNotFoundError("Input file does not exist: %s" % input_path)
 
+#     try:
+#         video_clip = VideoFileClip(input_path)
+#         video_clip.write_videofile(output_path, bitrate=bitrate)
+#         video_clip.close()
+#         # img = Image.open(input_path)
+
+#         # if img.mode in ("RGBA", "P"):
+#         #     img = img.convert("RGB")
+
+#         # img.save(output_path, format='PNG', optimize=True)
+
+#         # print("Compressed %s saved to: %s" % (input_path, output_path))
+
+#     except Exception as e:
+#         print("Error compressing video %s: %s" % (input_path, e))
+
+import ffmpeg
+
+def compress_video(input_path, output_path, target_size_kb=1000):
     try:
-        video_clip = VideoFileClip(input_path)
-        video_clip.write_videofile(output_path, bitrate=bitrate)
-        video_clip.close()
-        # img = Image.open(input_path)
-
-        # if img.mode in ("RGBA", "P"):
-        #     img = img.convert("RGB")
-
-        # img.save(output_path, format='PNG', optimize=True)
-
-        # print("Compressed %s saved to: %s" % (input_path, output_path))
-
+        probe = ffmpeg.probe(input_path)
+        duration = float(probe['format']['duration'])
+        total_bitrate = int(probe['format']['bit_rate'])
+        
+        # Calculate target video bitrate based on desired file size
+        target_video_bitrate = (target_size_kb * 8 * 1024) / duration
+        
+        # Ensure the target bitrate is not too low
+        min_bitrate = 100000  # Minimum acceptable bitrate in bps
+        if target_video_bitrate < min_bitrate:
+            target_video_bitrate = min_bitrate
+        
+        # FFmpeg command for compression
+        ffmpeg.input(input_path) \
+            .output(output_path, 
+                    vcodec='libx264',  # Use H.264 codec for speed and compatibility
+                    video_bitrate=target_video_bitrate,
+                    maxrate=target_video_bitrate * 1.2,  # Limit max bitrate
+                    bufsize=target_video_bitrate * 2,    # Set buffer size
+                    vf='scale=1280:720',                 # Optionally reduce resolution
+                    acodec='aac',                       # Audio codec
+                    audio_bitrate='128k') \
+            .run(capture_stdout=True, capture_stderr=True)
+        print(f"Video compressed successfully to {output_path}")
     except Exception as e:
-        print("Error compressing video %s: %s" % (input_path, e))
+        print(f"An error occurred during compression: ")
 
 def upload_video(file: str):
     """

@@ -10,29 +10,29 @@ from app.utils.video import *
 
 def handle_post(post_id):
     # get post informations
-    list_of_photo = get_photo_id(post_id)
-    list_of_video = get_video_id(post_id)
+    list_of_photo = [ x + ('photo',) for x in get_photo_id(post_id)]
+    list_of_video = [ x + ('video',) for x in get_video_id(post_id)]
 
     list_of_media = list_of_photo + list_of_video
 
     list_of_media.sort()
 
-    post = get_post_data(post_id)
+    post = get_post_data(post_id)[0]
+    
     post['media'] = list_of_media
-
+    print(post)
     return render_template('post.html', post=post)
-
     
 def handle_add_post():
     # create_a_post_id
     if request.method=='POST':
         list_media = request.files.getlist('media')
-        descrip = request.form.get('descrip')
+        descrip = request.form.get('description')
 
         sql = '''INSERT INTO Post (user_id, descrip)
-VALUE (%s, '%s')'''
-
-        post_id = execute_sql(sql, (session['user_id'],descrip,), commit=True, get_lastrowid=True)
+VALUES (%s, "%s")'''
+        print(sql % (session['user_id'],descrip))
+        post_id = execute_sql(sql, (session['user_id'],descrip), commit=True, get_lastrowid=True)
         dir_path_photo = "app/static/images/uploads/"
         dir_path_video = "app/static/videos/uploads/"
         photo_names = []
@@ -42,6 +42,7 @@ VALUE (%s, '%s')'''
 
 
         print('\n', list_media)
+        print(descrip)
         print(request.files)
 
         photo_sql = '''

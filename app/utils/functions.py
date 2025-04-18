@@ -192,6 +192,22 @@ WHERE post_id = %s'''
 
 def get_post_data(post_id):
     sql = '''SELECT * FROM Post
-    WHERE post_id = %s'''
+    WHERE id = %s'''
 
-    return execute_sql(sql, (post_id), fetchDict=True)
+    return execute_sql(sql, (post_id, ), fetchdict=True)
+
+
+def get_posts(user_id):
+    sql = ''' SELECT Post.created_at, Post_Photo.photo_id as media, 'photo', Post.id FROM Post
+JOIN Post_Photo on Post_Photo.post_id = Post.id
+WHERE Post.user_id = %s
+AND Post_Photo.display_order = 0
+
+UNION
+
+SELECT Post.created_at, Post_Video.video_id as media, 'video', Post.id FROM Post
+JOIN Post_Video on Post_Video.post_id = Post.id
+WHERE Post.user_id = %s
+AND Post_Video.display_order = 0'''# get_from_post: post_id, list of pictures, list of videos, descrip, time
+
+    return execute_sql(sql, (user_id, user_id))
