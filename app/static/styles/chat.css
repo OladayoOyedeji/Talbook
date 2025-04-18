@@ -392,3 +392,11 @@ body {
   color: #888;
 }
 
+.search-result-card .chat-preview {
+  font-size: 14px;
+  color: #5f6368;
+  max-width: 100%;
+  white-space: nowrap;    
+  overflow: hidden;           
+  text-overflow: ellipsis; 
+}
