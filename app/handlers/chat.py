@@ -10,7 +10,8 @@ def handle_chat():
 
     user_id = session["user_id"]
 
-    sql = '''
+    # data for chats and chat list
+    chatsql = '''
     WITH user_chats AS (
         SELECT * FROM Chat
         WHERE buyer_id = %s OR seller_id = %s
@@ -61,7 +62,7 @@ def handle_chat():
     '''
     
     chats = mysql_util.execute_sql(
-        sql, 
+        chatsql, 
         params=(user_id, user_id, user_id, user_id),
         fetchdict=True
     )
@@ -71,7 +72,13 @@ def handle_chat():
 
     for chat in chats:
       chat['time'] = chat['time'].strftime('%I:%M %p')
-      
+
     print("chats:", chats)
+
+    # data for user (used to display pfp)
+    usersql = '''
+    SELECT username, photo_id FROM User where id = %s;
+    '''
+    user = mysql_util.execute_sql(usersql, (user_id,), fetchdict=True, fetchone=True)
     
-    return render_template("chat.html", chats=chats)
+    return render_template("chat.html", chats=chats, user=user)

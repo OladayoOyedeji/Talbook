@@ -37,16 +37,16 @@
     
     <!-- item listings -->
     <div class="grid-container">
-        {% for item in items %}
-        <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
-            <img src="/static/images/store/{{ item[5] }}.webp"
-                 onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
-                 class="item-image">
-            <div class="item-title">{{ item[1] }}</div>
-            <div class="item-price">${{ item[2] }}</div>
-            <div class="item-seller">@{{ item[4] }}</div><!-- add hyperlink to user profile -->
-        </a>
-        {% endfor %}
-    </div>
+      {% for item in items %}
+      <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
+        <img src="/static/images/store/{{ item[5] }}.webp"
+             onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
+             class="item-image">
+        <div class="item-title">{{ item[1] }}</div>
+        <div class="item-price">${{ item[2] }}</div>
+        <div class="item-seller">@{{ item[4] }}</div><!-- add hyperlink to user profile -->
+      </a>
+      {% endfor %}
+</div>
 </body>
 </html>
