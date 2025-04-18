@@ -1,69 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talbook Chat</title>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-  <link rel="stylesheet" href="/static/styles/chat.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talbook Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/chat.css">
+  </head>
+  <body>
 
-  <div class="header">
-    <div class="header__left">
-      <a href="/home" style="text-decoration: none; color: inherit;">
-        <span class="material-symbols-outlined">arrow_back</span>
-    </a>
-      <h1>Talbook</h1>
+    <div class="header">
+      <div class="header__left">
+        <a href="/home" style="text-decoration: none; color: inherit;">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1>Talbook</h1>
+      </div>
+
+      <div class="header__middle">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" placeholder="Search Messages" id="message-search-input">
+        <span class="material-symbols-outlined">arrow_drop_down</span>
+      </div>
+
+      <div class="header__right">
+        <a href="/user_profile/{{ user['username'] }}">
+          <img src="/static/images/store/{{ pfp_id }}.webp"
+               onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+               class="header__profile-icon">
+        </a>
+      </div>
     </div>
 
-    <div class="header__middle">
-      <span class="material-symbols-outlined">search</span>
-      <input type="text" placeholder="Search Messages">
-      <span class="material-symbols-outlined">arrow_drop_down</span>
-    </div>
+    <!-- for search bar -->
+    <ul id="results" class="search-results"></ul>
 
-    <div class="header__right">
-      <span class="material-symbols-outlined">apps</span>
-      <span class="material-symbols-outlined">notifications</span>
-      <span class="material-symbols-outlined">account_circle</span>
-    </div>
-  </div>
-
-  <div class="main">
-    <!-- chat list sidebar -->
-    <div class="sidebar">
-      {% for chat in chats %}
-      <a href="/chat/{{ chat['chat_id'] }}" class="chat-card {% if chat['chat_id'] == current_chat_id %}active{% endif %}">
-        <div class="chat-left">
-          <div class="mail-title">
-            <div class="chat-name">{{ chat["other"] }}</div>
-            <span class="material-symbols-outlined">arrow_right</span>
-            <div class="chat-item">{{ chat["item_name"] }}</div>
-            {% if chat["unread_count"] > 0 %}
-            <div class="unread-count">{{ chat["unread_count"] }}</div>
-            {% endif %}
+    <div class="main">
+      <!-- chat list sidebar -->
+      <div class="sidebar">
+        {% for chat in chats %}
+        <a href="/chat/{{ chat['chat_id'] }}" class="chat-card {% if chat['chat_id'] == current_chat_id %}active{% endif %}">
+          <div class="chat-left">
+            <div class="mail-title">
+              <div class="chat-name">{{ chat["other"] }}</div>
+              <span class="material-symbols-outlined">arrow_right</span>
+              <div class="chat-item">{{ chat["item_name"] }}</div>
+              {% if chat["unread_count"] > 0 %}
+              <div class="unread-count">{{ chat["unread_count"] }}</div>
+              {% endif %}
+            </div>
+            <div class="chat-preview">{{ chat["preview"] }}</div>
           </div>
-          <div class="chat-preview">{{ chat["preview"] }}</div>
-        </div>
-        <div class="chat-time">{{ chat["time"] }}</div>
-      </a>
-      {% endfor %}
-    </div>
+          <div class="chat-time">{{ chat["time"] }}</div>
+        </a>
+        {% endfor %}
+      </div>
 
-    <!-- main message area -->
-    <div class="content">
-      {% if current_chat %}
+      <!-- main message area -->
+      <div class="content">
+        {% if current_chat %}
         <div class="message-area">
           <div class="message-header">
-            <span class="material-symbols-outlined">account_circle</span>
+            <img src="/static/images/store/{{ current_chat['other_user_photo_id'] }}.webp"
+                 onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+                 class="chat-header__profile-icon">
             <div class="message-recipient">
-              <div class="recipient-name">{{ current_chat["other"] }}</div>
+              <div class="recipient-name">{{ current_chat["other_username"] }}</div>
               <div class="recipient-item">{{ current_chat["item_name"] }}</div>
             </div>
           </div>
-          
+
           <div class="message-display" id="messageContainer">
             {% for message in current_chat["messages"] %}
             <div class="message {% if message['sender_id'] == user_id  %}sent{% else %}received{% endif %}">
@@ -72,37 +79,94 @@
             </div>
             {% endfor %}
           </div>
-          
+
           <div class="message-input">
             <form action="/chat/{{ current_chat_id }}" method="POST">
-              <textarea 
+              <textarea
                 name="message"
                 placeholder="Type a message..."
                 rows="3"
                 required
-              ></textarea>
+                ></textarea>
               <button type="submit" class="send-button">
                 <span class="material-symbols-outlined">send</span>
               </button>
             </form>
           </div>
         </div>
-      {% else %}
+        {% else %}
         <div class="empty-state">
           <span class="material-symbols-outlined">forum</span>
           <p>Select a chat to start messaging</p>
         </div>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
-  </div>
-
-</body>
+  </body>
 </html>
-
 <script>
   // scroll to bottom when page loads
   document.addEventListener('DOMContentLoaded', function() {
-    const container = document.getElementById('messageContainer');
-    container.scrollTop = container.scrollHeight;
+      const container = document.getElementById('messageContainer');
+      if (container) {
+          container.scrollTop = container.scrollHeight;
+      }
+
+      const searchInput = document.getElementById('message-search-input');
+      const resultsContainer = document.getElementById('results');
+
+      if (searchInput && resultsContainer) {
+          searchInput.addEventListener('input', liveSearch);
+      }
   });
-</script>
+  
+  async function liveSearch(event) {
+      const query = event.target.value.trim();
+      const resultsContainer = document.getElementById('results');
+
+      if (!query) {
+          resultsContainer.innerHTML = '';
+          resultsContainer.style.display = 'none';
+          return;
+      }
+
+      try {
+          const res = await fetch(`/search_messages?query=${encodeURIComponent(query)}`, {
+              headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          });
+
+          const data = await res.json();
+
+          resultsContainer.style.display = 'block';
+          resultsContainer.innerHTML = data.length
+              ? data.map(row => `
+            <a href="/chat/${row.chat_id}" class="search-result-card">
+              <div class="chat-left">
+                <div class="chat-name">Chat #${row.chat_id}</div>
+                <div class="chat-preview">${row.content}</div>
+              </div>
+            </a>
+          `).join('')
+              : `<li class="no-results">No results</li>`;
+
+      } catch (error) {
+          console.error('Search error:', error);
+          resultsContainer.style.display = 'block';
+          resultsContainer.innerHTML = `<li class="no-results">Error fetching results</li>`;
+      }
+  }
+
+  const searchInput = document.getElementById('message-search-input');
+
+  if (searchInput) {
+      searchInput.addEventListener('input', liveSearch);
+  }
+
+  // close search results on outside click
+  document.addEventListener('click', (e) => {
+      const inSearch = document.querySelector('.header__middle').contains(e.target);
+      if (!inSearch) {
+          document.getElementById('results').style.display = 'none';
+      }
+  });
+  </script>

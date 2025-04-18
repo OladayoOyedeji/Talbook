@@ -21,6 +21,7 @@ from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
 from app.handlers.start_chat import handle_start_chat
+from app.handlers.search_messages import handle_search_messages
 from app.handlers.remove_item import handle_remove_item
 from app.handlers.post import handle_post
 from app.handlers.post import handle_add_post
@@ -103,6 +104,10 @@ def start_chat(seller_id, item_id):
 @app.route("/chat")
 def chat():
     return handle_chat()
+
+@app.route('/search_messages')
+def search_messages():
+    return handle_search_messages()
 
 @app.route("/chat/<int:chat_id>", methods=['GET', 'POST'])
 def chat_details(chat_id):
