@@ -92,15 +92,20 @@
       resultsContainer.style.display = 'block';
       resultsContainer.innerHTML = data.length
         ? data.map(row => `
-            <a href="/chat/${row.chat_id}" class="search-result-card">
-              <div class="chat-left">
-                <div class="chat-name">Chat #${row.chat_id}</div>
-                <div class="chat-preview">${row.content}</div>
-              </div>
-            </a>
-          `).join('')
-        : `<li class="no-results">No results</li>`;
-
+      <a href="/chat/${row.chat_id}" class="search-result-card">
+        <div class="chat-left">
+          <div class="mail-title">
+            <div class="chat-name">${row.other}</div>
+            <span class="material-symbols-outlined">arrow_right</span>
+            <div class="chat-item">${row.item_name}</div>
+            ${row.unread_count > 0 ? `<div class="unread-count">${row.unread_count}</div>` : ''}
+          </div>
+          <div class="chat-preview">${row.preview}</div>
+        </div>
+        <div class="chat-time">${row.time}</div>
+      </a>
+    `).join('')
+        : `<li class="no-results">No results</li>`;   
     } catch (error) {
       console.error('Search error:', error);
       resultsContainer.style.display = 'block';
