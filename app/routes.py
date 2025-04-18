@@ -16,10 +16,12 @@ from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
 from app.handlers.search import handle_search
 from app.handlers.media import handle_media
+from app.handlers.bookmark import handle_bookmarks
 from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
 from app.handlers.start_chat import handle_start_chat
+from app.handlers.search_messages import handle_search_messages
 from app.handlers.remove_item import handle_remove_item
 from app.handlers.post import handle_post
 from app.handlers.post import handle_add_post
@@ -60,6 +62,10 @@ def user_profile(username):
 def media(username):
     return handle_media(username)
 
+@app.route('/user_profile/<username>/bookmarks')
+def bookmarks(username):
+    return handle_bookmarks(username)
+
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     return handle_edit_profile()
@@ -98,6 +104,10 @@ def start_chat(seller_id, item_id):
 @app.route("/chat")
 def chat():
     return handle_chat()
+
+@app.route('/search_messages')
+def search_messages():
+    return handle_search_messages()
 
 @app.route("/chat/<int:chat_id>", methods=['GET', 'POST'])
 def chat_details(chat_id):

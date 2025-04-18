@@ -4,7 +4,6 @@ from app.utils.User import *
 from app.utils.photo import *
 from app.handlers.user_profile import handle_user_profile
 
-def handle_media(username):
-    
-    return handle_user_profile(username, 1)
-    
+def handle_bookmarks(username):
+
+    return handle_user_profile(username, 2)

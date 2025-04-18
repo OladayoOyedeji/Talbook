@@ -4,7 +4,7 @@ from flask import request, render_template, flash, redirect, url_for, session, c
 from app.utils.functions import *
 from app.utils.User import *
 
-def handle_user_profile(username, listings=True):
+def handle_user_profile(username, tab_id=0):
     
     profile = (get_data(username))[0]
     print(profile)
@@ -17,7 +17,7 @@ def handle_user_profile(username, listings=True):
     profile['followers_count'] = len(profile['followers_list'])
     print(profile['following_count'], profile['followers_count'])
     print("here")
-    if listings:
+    if tab_id == 0:
         profile['skills'] = get_services(id)
         print("or here?")
         if profile['skills'] == None:
@@ -27,13 +27,16 @@ def handle_user_profile(username, listings=True):
         print()
         print(profile)
         
-    else:
+    elif tab_id == 1:
         profile['media'] = get_posts(id)
         if not profile['media']:
             profile['media'] = []
         profile['media'].sort(reverse=True)
 
         print(profile['media'])
+
+    elif tab_id == 2:
+        profile['bookmarks'] = get_bookmarked_items(id)
 
     if (session['username']!=username):
         profile['is_following'] = is_following(session['user_id'], profile['id'])
@@ -47,9 +50,6 @@ def handle_user_profile(username, listings=True):
                 follow(session['user_id'], profile['id'])
                 profile['followers_count'] += 1
                 profile['is_following'] = True
-    
 
-    profile['bookmarks'] = get_bookmarked_items(id)
-
-    return render_template('user_profile.html', listings=listings, profile=profile,
+    return render_template('user_profile.html', tab_id=tab_id, profile=profile,
                            editable=(session['username'] == username))

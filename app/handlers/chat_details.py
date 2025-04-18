@@ -38,17 +38,21 @@ def handle_chat_details(chat_id: int):
                 WHEN c.buyer_id = %s THEN c.seller_id
                 ELSE c.buyer_id
             END AS other_user_id,
+            CASE
+                WHEN c.buyer_id = %s THEN seller.photo_id
+                ELSE buyer.photo_id
+            END AS other_user_photo_id,
             i.item_name
         FROM Chat AS c
-        JOIN User buyer ON c.buyer_id = buyer.id
-        JOIN User seller ON c.seller_id = seller.id
+        JOIN User AS buyer ON c.buyer_id = buyer.id
+        JOIN User AS seller ON c.seller_id = seller.id
         JOIN Item i ON c.item_id = i.id
         WHERE c.id = %s;
         """
 
         other_user_info = mysql_util.execute_sql(
             other_user_info_sql,
-            params=(user_id, user_id, chat_id),
+            params=(user_id, user_id, user_id, chat_id),
             fetchdict=True,
             fetchone=True
         )
@@ -150,12 +154,21 @@ def handle_chat_details(chat_id: int):
             current_chat_data['other'] = other_user_info['other_username']
             current_chat_data['item_name'] = other_user_info['item_name']
             current_chat_data['messages'] = current_chat_messages
+            current_chat_data['other_user_photo_id'] = other_user_info['other_user_photo_id']
 
+        # data for user (used to display pfp)
+        usersql = '''
+        SELECT username, photo_id FROM User where id = %s;
+        '''
+        user = mysql_util.execute_sql(usersql, (user_id,), fetchdict=True, fetchone=True)
+    
+            
         return render_template(
             "chat_details.html",
             chats=chats,
             current_chat=current_chat_data,
             current_chat_id=chat_id,
-            user_id=user_id
+            user_id=user_id,
+            user=user
         )
 
