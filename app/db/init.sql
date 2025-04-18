@@ -1,6 +1,9 @@
 -- File: init.sql
 -- Description: Creates tables for the Talbook database
 
+-- NEED TO FIGURE OUT WHAT SHOULD DELETE ON CASCADE
+-- ALSO NEED TO MAKE SURE ITEMS THAT ARENT AVAIL ARE
+-- NOT SHOWN IN BOOKMARKS
 drop database if exists Talbook;
 create database Talbook
 CHARACTER SET utf8mb4
@@ -249,4 +252,14 @@ CREATE TABLE Message (
     FOREIGN KEY (video_id) REFERENCES Video(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+--==============================================================
+-- Bookmark: join table between User and Item that shows if a
+-- user bookmarked the item listing
+--==============================================================
+CREATE TABLE Bookmark (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    item_id INT,
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (item_id) REFERENCES Item(id)
+) ENGINE=InnoDB;

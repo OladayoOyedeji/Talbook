@@ -201,6 +201,9 @@ li {
   background-color: #dc2626;
 }
 
+.nav-links a.active {
+    font-weight: bold;
+}
 
 
 /* .back-button { */

@@ -211,3 +211,21 @@ WHERE Post.user_id = %s
 AND Post_Video.display_order = 0'''# get_from_post: post_id, list of pictures, list of videos, descrip, time
 
     return execute_sql(sql, (user_id, user_id))
+
+def get_bookmarked_items(user_id):
+    sql = '''
+    SELECT 
+        I.id,
+        I.item_name,
+        I.price,
+        I.condition,
+        U.username,
+        IP.photo_id
+    FROM Bookmark AS B
+    JOIN Item AS I ON B.item_id = I.id
+    JOIN User AS U ON I.seller_id = U.id
+    JOIN Item_Photo AS IP ON I.id = IP.item_id AND IP.display_order = 0
+    WHERE B.user_id = %s AND I.is_available = True;
+    '''
+    
+    return execute_sql(sql, (user_id,))

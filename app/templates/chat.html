@@ -25,9 +25,12 @@
     </div>
 
     <div class="header__right">
-      <span class="material-symbols-outlined">apps</span>
-      <span class="material-symbols-outlined">notifications</span>
-      <span class="material-symbols-outlined">account_circle</span>
+      <a href="/user_profile/{{ user['username'] }}">
+        <span class="material-symbols-outlined">notifications</span>
+        <img src="/static/images/store/{{ pfp_id }}.webp"
+             onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+             class="header__profile-icon">
+      </a>
     </div>
   </div>
 
@@ -41,6 +44,9 @@
             <div class="chat-name">{{ chat["other"] }}</div>
             <span class="material-symbols-outlined">arrow_right</span>
             <div class="chat-item">{{ chat["item_name"] }}</div>
+            {% if chat["unread_count"] > 0 %}
+            <div class="unread-count">{{ chat["unread_count"] }}</div>
+            {% endif %}
           </div>
           {% if chat["preview"] %}
           <div class="chat-preview">{{ chat["preview"] }}</div>

@@ -113,6 +113,7 @@ h1, h2 {
     padding: 3px 3px;
     border-radius: 12px;
     font-weight: 500;
+    text-decoration: none;
 }
 
 /* hover effects */
@@ -123,4 +124,13 @@ h1, h2 {
 
 .item-card:hover .item-title {
     text-decoration: underline;
+}
+
+/* bookmarks */
+.grid-container#Bookmarks {
+    padding-top: 10px;
+}
+
+.grid-container#Bookmarks > p {
+    margin-bottom: 5px;
 }

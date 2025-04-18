@@ -304,24 +304,74 @@ body {
 
 /* remove button */
 .remove-listing-button {
-        background-color: #dc3545;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background-color 0.3s ease;
-        width: 200px; /* Make the button wider */
-        text-align: center; /* Center the text */
-    }
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    width: auto; /* Adjust width to fit content */
+    text-align: center;
+    display: flex; /* Align icon and text */
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between icon and text */
+    margin-bottom: 30px;
+}
 
-    .remove-listing-button:hover {
-        background-color: #c82333;
-    }
+.remove-listing-button:hover {
+    background-color: #c82333;
+}
 
-    .form-actions {
-        display: flex;
-        justify-content: flex-start; /* Align buttons to the start */
-        margin-top: 20px; /* Add some space above the buttons */
-    }
+.remove-listing-button i {
+    font-size: 1.2rem; /* Adjust icon size if needed */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-start; /* Align buttons to the start */
+    margin-top: 20px; /* Add some space above the buttons */
+}
+
+/* bookmark button */
+.message-actions {
+    display: flex;
+    gap: 10px; /* Adjust spacing between buttons */
+    margin-top: 10px; /* Add some space below the text */
+    align-items: center; /* Vertically align the button and form */
+    justify-content: flex-start; /* Align items to the left, allowing space to the right */
+}
+
+.bookmark-button {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #555;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.bookmark-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+    border-color: #bbb;
+}
+
+.bookmark-button i {
+    font-size: 1.2em;
+}
+
+.bookmark-button .fa-bookmark {
+    color: #007bff; /* Example color for bookmarked state */
+}
+
+.bookmark-button .far.fa-bookmark {
+    color: #555; /* Color for the unbookmarked state */
+}

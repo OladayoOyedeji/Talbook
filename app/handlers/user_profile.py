@@ -25,6 +25,7 @@ def handle_user_profile(username, listings=True):
         profile['listings'] = get_listings(id)
         print()
         print(profile)
+        
     else:
         profile['media'] = get_posts(id)
         if not profile['media']:
@@ -45,5 +46,9 @@ def handle_user_profile(username, listings=True):
                 follow(session['user_id'], profile['id'])
                 profile['followers_count'] += 1
                 profile['is_following'] = True
-    return render_template('user_profile.html',listings=listings,profile=profile,
-                           editable=(session['username']==username))
+    
+
+    profile['bookmarks'] = get_bookmarked_items(id)
+
+    return render_template('user_profile.html', listings=listings, profile=profile,
+                           editable=(session['username'] == username))
