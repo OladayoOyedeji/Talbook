@@ -62,9 +62,10 @@
         {% if current_chat %}
         <div class="message-area">
           <div class="message-header">
+            <a href="/user_profile/{{ user['username'] }}">
             <img src="/static/images/store/{{ current_chat['other_user_photo_id'] }}.webp"
                  onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
-                 class="chat-header__profile-icon">
+                 class="chat-header__profile-icon"></a>
             <div class="message-recipient">
               <div class="recipient-name">{{ current_chat["other_username"] }}</div>
               <div class="recipient-item">{{ current_chat["item_name"] }}</div>

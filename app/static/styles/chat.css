@@ -330,6 +330,7 @@ body {
     margin-left: 10px;
     cursor: pointer;
     text-decoration: none;
+    border: 2px solid black;
 }
 
 .message-header .chat-header__profile-icon {
@@ -339,6 +340,7 @@ body {
     object-fit: cover;
     flex-shrink: 0;
     text-decoration: none;
+    border: 2px solid black;
 }
 
 /* search results */
