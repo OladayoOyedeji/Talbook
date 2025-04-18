@@ -16,6 +16,7 @@ from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
 from app.handlers.search import handle_search
 from app.handlers.media import handle_media
+from app.handlers.bookmark import handle_bookmarks
 from app.handlers.inbox import handle_inbox
 from app.handlers.chat import handle_chat
 from app.handlers.chat_details import handle_chat_details
@@ -59,6 +60,10 @@ def user_profile(username):
 @app.route('/user_profile/<username>/media')
 def media(username):
     return handle_media(username)
+
+@app.route('/user_profile/<username>/bookmarks')
+def bookmarks(username):
+    return handle_bookmarks(username)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
