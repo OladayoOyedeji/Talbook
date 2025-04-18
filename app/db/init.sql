@@ -195,6 +195,20 @@ CREATE TABLE Post
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --==============================================================
+-- Comment: A comment on the user post
+--==============================================================
+CREATE TABLE Comment
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    commenter_id INT NOT NULL,
+    post_id INT NOT NULL,
+    comment VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    FOREIGN KEY(commenter_id) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY(post_id) REFERENCES Post(id) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--==============================================================
 -- Post_Photo: Join table linking one post to many photos
 --==============================================================
 CREATE TABLE Post_Photo

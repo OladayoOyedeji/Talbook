@@ -15,6 +15,7 @@ def handle_user_profile(username, listings=True):
 
     profile['following_count'] = len(profile['following_list'])
     profile['followers_count'] = len(profile['followers_list'])
+    print(profile['following_count'], profile['followers_count'])
     print("here")
     if listings:
         profile['skills'] = get_services(id)

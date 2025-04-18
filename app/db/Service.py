@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     sql ='''
     use Talbook;
-    insert Service (skills)
+    insert into Service (skills)
     values '''
     
     delim = '("'

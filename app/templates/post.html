@@ -101,72 +101,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Media Carousel</title>
-    <style>
-      body {
-          font-family: Arial, sans-serif;
-          background-color: #f5f6f7;
-          margin: 0;
-          padding: 20px;
-      }
-
-      .media-container {
-          max-width: 700px;
-          margin: auto;
-          text-align: center;
-      }
-
-      h1 {
-          margin-bottom: 30px;
-      }
-
-      .media-item {
-          display: none;
-      }
-
-      .media-preview {
-          width: 100%;
-          max-width: 640px;
-          height: 360px;
-          object-fit: cover; /* Ensures media fills the box without distortion */
-          border-radius: 8px;
-          background-color: #000; /* Useful for videos or if images are still loading */
-      }
-
-      .media-controls {
-          margin-top: 20px;
-      }
-
-      button {
-          padding: 10px 20px;
-          margin: 0 10px;
-          font-size: 16px;
-          cursor: pointer;
-          border: none;
-          border-radius: 5px;
-          background-color: #007bff;
-          color: white;
-      }
-
-      button:disabled {
-          background-color: #aaa;
-          cursor: not-allowed;
-      }
-
-      .media-description {
-          margin-top: 20px;
-          color: #555;
-      }
-
-      .media-timestamp {
-          margin-top: 5px;
-          font-size: 0.9em;
-          color: #999;
-      }
-
-      video.media-preview {
-          background-color: #000;
-      }
-    </style>
+    <link rel="stylesheet" href="/static/styles/post.css">
   </head>
   <body>
     <div class="media-container">
@@ -195,6 +130,31 @@
       <div class="media-timestamp">Uploaded: {{ post.created_at }}</div>
     </div>
 
+    <!-- Comment Section -->
+    <div class="comment-section">
+      <h2>Comments</h2>
+
+      <!-- Existing Comments -->
+      {% if post.comments %}
+      <div class="comments-list">
+        {% for comment in post.comments %}
+        <div class="comment">
+          <strong>{{ comment.username }}</strong>
+          <p>{{ comment.content }}</p>
+          <small>{{ comment.timestamp }}</small>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No comments yet. Be the first!</p>
+      {% endif %}
+
+      <!-- Add New Comment -->
+      <form class="comment-form" method="POST" action="">
+        <textarea name="content" rows="3" placeholder="Write a comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
     <script>
       const mediaItems = document.querySelectorAll('.media-item');
       let currentIndex = 0;

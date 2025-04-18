@@ -103,7 +103,7 @@ def chat():
 def chat_details(chat_id):
     return handle_chat_details(chat_id)
 
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def post(post_id):
     return handle_post(post_id)
 

@@ -229,3 +229,20 @@ def get_bookmarked_items(user_id):
     '''
     
     return execute_sql(sql, (user_id,))
+
+def get_comments(post_id):
+    sql = '''SELECT User.username username,
+    Comment.comment as content,
+    Comment.created_at as timestamp
+    FROM Comment
+    JOIN User ON User.id = Comment.commenter_id
+    WHERE post_id = %s
+    ORDER BY created_at DESC'''
+
+    return execute_sql(sql, (post_id,), fetchdict=True)
+
+def add_comment(user_id, post_id, comment):
+    sql = '''INSERT INTO Comment (commenter_id, post_id, comment)
+    VALUE (%s, %s, %s)'''
+
+    return execute_sql(sql, (user_id, post_id, comment), commit=True)

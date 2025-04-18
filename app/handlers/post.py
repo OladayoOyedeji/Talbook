@@ -8,18 +8,32 @@ from app.utils.User import *
 from app.utils.photo import *
 from app.utils.video import *
 
+def delete_post(post_id):
+    sql = '''DELETE FROM Post WHERE id %s'''
+
+    return execute_sql(sql, (post_id,), commit=True)
+
 def handle_post(post_id):
     # get post informations
     list_of_photo = [ x + ('photo',) for x in get_photo_id(post_id)]
     list_of_video = [ x + ('video',) for x in get_video_id(post_id)]
+    
 
     list_of_media = list_of_photo + list_of_video
 
     list_of_media.sort()
 
     post = get_post_data(post_id)[0]
-    
+    print(post)
     post['media'] = list_of_media
+    post['comments'] = get_comments(post_id)
+    
+    if request.method == 'POST':
+        new_comment = request.form.get('content')
+
+        if new_comment:
+            add_comment(session['user_id'], post_id, new_comment)
+            post['comments'] = get_comments(post_id)
     print(post)
     return render_template('post.html', post=post)
     
@@ -28,7 +42,7 @@ def handle_add_post():
     if request.method=='POST':
         list_media = request.files.getlist('media')
         descrip = request.form.get('description')
-
+        
         sql = '''INSERT INTO Post (user_id, descrip)
 VALUES (%s, "%s")'''
         print(sql % (session['user_id'],descrip))

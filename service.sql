@@ -1,6 +1,6 @@
 
     use Talbook;
-    insert Service (skills)
+    insert into Service (skills)
     values ("Sight-reading"),
 ("Ear training"),
 ("Improvisation"),
