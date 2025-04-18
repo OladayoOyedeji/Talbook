@@ -329,4 +329,64 @@ body {
     object-fit: cover;
     margin-left: 10px;
     cursor: pointer;
+    text-decoration: none;
 }
+
+.message-header .chat-header__profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+/* search results */
+.search-results {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 999;
+  max-height: 300px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Individual result */
+.search-result-card {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #202124;
+  border-bottom: 1px solid #eee;
+}
+
+.search-result-card:hover {
+  background-color: #f1f3f4;
+}
+
+.search-result-card .chat-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #1a73e8;
+}
+
+.search-result-card .chat-preview {
+  font-size: 14px;
+  color: #5f6368;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.no-results {
+  padding: 12px 20px;
+  color: #888;
+}
+
