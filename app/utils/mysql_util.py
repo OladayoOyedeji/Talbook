@@ -4,6 +4,9 @@ from flask import session
 
 from app.utils import photo
 
+HOST = ""
+USER = ""
+PASSWORD = ""
 DB_NAME = "Talbook"
 USE_DB = "USE %s;" % DB_NAME
 INIT_SQL_FILE = "app/db/init.sql"  # path to MySQL initialization script
@@ -17,9 +20,16 @@ def get_db_connection(db=None):
     If `db` is None, connects without specifying a database (for initial setup).
     """
     if db:
-        return pymysql.connect(user="root", password="root", database=db)
+        return pymysql.connect(
+            host=HOST,
+            user=USER,
+            password=PASSWORD,
+            database=DB_NAME)
     else:
-        return pymysql.connect(user="root", password="root")
+        return pymysql.connect(
+            host=host,
+            user=user,
+            password=password)
     
 def execute_sql(sql, params=(), commit=False, get_lastrowid=False,
                 fetchone=False, fetchdict=False):

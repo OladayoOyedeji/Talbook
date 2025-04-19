@@ -100,13 +100,9 @@ Percussive playing
 (General) Transposition
 (String) Bowing techniques (e.g., spiccato, legato, staccato)
 (String) Finger positioning
-
 (String) Vibrato
-
 (String) Shifting between positions
-
 (String) Double stops
-
 (String) Harmonics
 
 (String) Pizzicato
