@@ -1,21 +1,29 @@
 <link rel="stylesheet" href="/static/styles/home.css">
 <link rel="stylesheet" href="/static/styles/user_profile.css">
-<header class="header">
-  <a href="{{ url_for('home') }}" class="back-button">
-    <i class="fas fa-arrow-left"></i> Back to Bazaar
-  </a>
-</header>
+<link rel="stylesheet" href="/static/styles/navbar.css">
 <html>
   {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="flash-messages">
-        {% for message in messages %}
-        <p>{{ message }}</p>
-        {% endfor %}
-    </div>
-    
-    {% endif %}
-    {% endwith %}
+  {% if messages %}
+  <div class="flash-messages">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+  
+  <nav class="navbar">
+    <div class="nav-title">Talbook</div>
+    <ul class="nav-links">
+      <li><a href="/home">Home</a></li>
+      <li><a href="/search">Search</a></li>
+      <li><a href="/chat">Chat</a></li>
+      <li><a href="/selling">Selling</a></li>
+      <li><a href="/add_post">Add Post</a></li>
+      <li><a href="/user_profile/{{ user.username }}">Profile</a></li>
+    </ul>
+  </nav>
+  
   <div class="pfp">
     <img src="/static/images/store/{{ profile.photo_id }}.webp"
          onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
