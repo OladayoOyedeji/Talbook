@@ -39,7 +39,7 @@ def get_image(request):
         print("here?")
         return None
 
-def compress_image(input_path: str, output_path: str, quality: int = 30) -> None:
+def compress_image(input_path: str, output_path: str, quality: int = 80) -> None:
     """
     Compress an image and save it to a new location as a WebP
     """
