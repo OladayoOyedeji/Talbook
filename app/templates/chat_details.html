@@ -7,15 +7,34 @@
     <title>Talbook Chat</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/chat.css">
+    <link rel="stylesheet" href="/static/styles/navbar.css">
   </head>
   <body>
 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+      <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    
+    <nav class="navbar">
+      <div class="nav-title">Talbook</div>
+      <ul class="nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/search">Search</a></li>
+        <li><a href="/chat">Chat</a></li>
+        <li><a href="/selling">Selling</a></li>
+        <li><a href="/add_post">Add Post</a></li>
+        <li><a href="/user_profile/{{ user.username }}">Profile</a></li>
+      </ul>
+    </nav>
+
     <div class="header">
       <div class="header__left">
-        <a href="/home" style="text-decoration: none; color: inherit;">
-          <span class="material-symbols-outlined">arrow_back</span>
-        </a>
-        <h1>Talbook</h1>
       </div>
 
       <div class="header__middle">
@@ -62,9 +81,10 @@
         {% if current_chat %}
         <div class="message-area">
           <div class="message-header">
-            <img src="/static/images/store/{{ current_chat['other_user_photo_id'] }}.webp"
-                 onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
-                 class="chat-header__profile-icon">
+            <a href="/user_profile/{{ user['username'] }}">
+              <img src="/static/images/store/{{ current_chat['other_user_photo_id'] }}.webp"
+                   onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+                   class="chat-header__profile-icon"></a>
             <div class="message-recipient">
               <div class="recipient-name">{{ current_chat["other_username"] }}</div>
               <div class="recipient-item">{{ current_chat["item_name"] }}</div>
@@ -124,49 +144,54 @@
       const query = event.target.value.trim();
       const resultsContainer = document.getElementById('results');
 
-      if (!query) {
-          resultsContainer.innerHTML = '';
-          resultsContainer.style.display = 'none';
-          return;
-      }
-
-      try {
-          const res = await fetch(`/search_messages?query=${encodeURIComponent(query)}`, {
-              headers: { 'X-Requested-With': 'XMLHttpRequest' }
-          });
-
-          const data = await res.json();
-
-          resultsContainer.style.display = 'block';
-          resultsContainer.innerHTML = data.length
-              ? data.map(row => `
-            <a href="/chat/${row.chat_id}" class="search-result-card">
-              <div class="chat-left">
-                <div class="chat-name">Chat #${row.chat_id}</div>
-                <div class="chat-preview">${row.content}</div>
-              </div>
-            </a>
-          `).join('')
-              : `<li class="no-results">No results</li>`;
-
-      } catch (error) {
-          console.error('Search error:', error);
-          resultsContainer.style.display = 'block';
-          resultsContainer.innerHTML = `<li class="no-results">Error fetching results</li>`;
-      }
+  if (!query) {
+  resultsContainer.innerHTML = '';
+  resultsContainer.style.display = 'none';
+  return;
   }
 
-  const searchInput = document.getElementById('message-search-input');
-
-  if (searchInput) {
-      searchInput.addEventListener('input', liveSearch);
-  }
-
-  // close search results on outside click
-  document.addEventListener('click', (e) => {
-      const inSearch = document.querySelector('.header__middle').contains(e.target);
-      if (!inSearch) {
-          document.getElementById('results').style.display = 'none';
-      }
+  try {
+  const res = await fetch(`/search_messages?query=${encodeURIComponent(query)}`, {
+  headers: { 'X-Requested-With': 'XMLHttpRequest' }
   });
-  </script>
+
+  const data = await res.json();
+
+  resultsContainer.style.display = 'block';
+  resultsContainer.innerHTML = data.length
+  ? data.map(row => `
+    <a href="/chat/${row.chat_id}" class="search-result-card">
+      <div class="chat-left">
+        <div class="mail-title">
+          <div class="chat-name">${row.other}</div>
+          <span class="material-symbols-outlined">arrow_right</span>
+          <div class="chat-item">${row.item_name}</div>
+          ${row.unread_count > 0 ? `<div class="unread-count">${row.unread_count}</div>` : ''}
+        </div>
+        <div class="chat-preview">${row.preview}</div>
+      </div>
+      <div class="chat-time">${row.time}</div>
+    </a>
+    `).join('')
+    : `<li class="no-results">No results</li>`;
+    } catch (error) {
+    console.error('Search error:', error);
+    resultsContainer.style.display = 'block';
+    resultsContainer.innerHTML = `<li class="no-results">Error fetching results</li>`;
+    }
+    }
+
+    const searchInput = document.getElementById('message-search-input');
+
+    if (searchInput) {
+    searchInput.addEventListener('input', liveSearch);
+    }
+
+    // close search results on outside click
+    document.addEventListener('click', (e) => {
+    const inSearch = document.querySelector('.header__middle').contains(e.target);
+    if (!inSearch) {
+    document.getElementById('results').style.display = 'none';
+    }
+    });
+</script>

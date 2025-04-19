@@ -4,330 +4,287 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sell on Talbook</title>
-    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/selling.css">
     <link rel="stylesheet" href="/static/styles/tags.css">
-    <!-- below adds camera icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Sell an Item on Talbook</h1>
-        
-        <form id="selling-form" method="POST" enctype="multipart/form-data">
-            <!-- Title -->
-            <div class="form-group">
-                <label for="title" class="required-field">Title</label>
-                <input type="text" id="title" name="title" placeholder="What are you selling?" required>
-            </div>
-            
-            <!-- Photos -->
-            <div class="form-group">
-                <label for="photos">Photos</label>
-                <div class="photo-upload" id="photo-upload-area">
-                    <i class="fas fa-camera"></i>
-                    <p>Click to add photos or drag and drop (up to 14)</p>
-                    <input type="file" id="photos" name="photos" multiple accept="image/*" style="display: none;">
-                </div>
-                <div class="image-previews" id="image-previews"></div>
-            </div>
-            
-            <!-- Price -->
-            <div class="form-group">
-                <label for="price" class="required-field">Price ($)</label>
-                <input type="number" id="price" name="price" min="0" step="0.01" placeholder="0.00" required>
-            </div>
-            
-            <!-- Condition -->
-            <div class="form-group">
-                <label for="condition" class="required-field">Condition</label>
-                <select id="condition" name="condition" required>
-                    <option value="" disabled selected>Select Condition</option>
-                    <option value="new">New</option>
-                    <option value="like new">Like New</option>
-                    <option value="very good">Very Good</option>
-                    <option value="good">Good</option>
-                    <option value="acceptable">Acceptable</option>
-                    <option value="poor">Poor</option>
-                </select>
-            </div>
-            
-            <!-- Description -->
-            <div class="form-group">
-              <label for="description">Description</label>
-              <textarea 
-                id="description" 
-                name="description" 
-                placeholder="Tell potential buyers more about what you're selling" 
-                maxlength="20000">
-              </textarea>
-              <div id="description-count">0 / 20000</div>
-            </div>
-            
-            <!-- city and state -->
-            <div class="form-group">
-              <label for="city" class="required-field">City</label>
-              <input type="text" id="city" name="city" list="city-list" required>
-              <datalist id="city-list">
-                {% for city in cities %}
-                <option value="{{ city }}">
-                  {% endfor %}
-              </datalist>
-            </div>
+  <div class="container">
+    <h1>Sell an Item on Talbook</h1>
+    <form id="selling-form" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title" class="required-field">Title</label>
+        <input type="text" id="title" name="title" placeholder="What are you selling?" required>
+      </div>
 
-            <div class="form-group">
-              <label for="state" class="required-field">State or Territory</label>
-              <select id="state" name="state" required>
-                <option value="" disabled selected>Select state</option>
-                <option value="AL">Alabama</option>
-                <option value="AK">Alaska</option>
-                <option value="AZ">Arizona</option>
-                <option value="AR">Arkansas</option>
-                <option value="CA">California</option>
-                <option value="CO">Colorado</option>
-                <option value="CT">Connecticut</option>
-                <option value="DE">Delaware</option>
-                <option value="FL">Florida</option>
-                <option value="GA">Georgia</option>
-                <option value="HI">Hawaii</option>
-                <option value="ID">Idaho</option>
-                <option value="IL">Illinois</option>
-                <option value="IN">Indiana</option>
-                <option value="IA">Iowa</option>
-                <option value="KS">Kansas</option>
-                <option value="KY">Kentucky</option>
-                <option value="LA">Louisiana</option>
-                <option value="ME">Maine</option>
-                <option value="MD">Maryland</option>
-                <option value="MA">Massachusetts</option>
-                <option value="MI">Michigan</option>
-                <option value="MN">Minnesota</option>
-                <option value="MS">Mississippi</option>
-                <option value="MO">Missouri</option>
-                <option value="MT">Montana</option>
-                <option value="NE">Nebraska</option>
-                <option value="NV">Nevada</option>
-                <option value="NH">New Hampshire</option>
-                <option value="NJ">New Jersey</option>
-                <option value="NM">New Mexico</option>
-                <option value="NY">New York</option>
-                <option value="NC">North Carolina</option>
-                <option value="ND">North Dakota</option>
-                <option value="OH">Ohio</option>
-                <option value="OK">Oklahoma</option>
-                <option value="OR">Oregon</option>
-                <option value="PA">Pennsylvania</option>
-                <option value="PR">Puerto Rico</option>
-                <option value="RI">Rhode Island</option>
-                <option value="SC">South Carolina</option>
-                <option value="SD">South Dakota</option>
-                <option value="TN">Tennessee</option>
-                <option value="TX">Texas</option>
-                <option value="UT">Utah</option>
-                <option value="VT">Vermont</option>
-                <option value="VA">Virginia</option>
-                <option value="WA">Washington</option>
-                <option value="WV">West Virginia</option>
-                <option value="WI">Wisconsin</option>
-                <option value="WY">Wyoming</option>
-              </select>
-            </div>
+      <div class="form-group">
+        <label>Photos</label>
+        <div class="photo-upload" id="photo-upload-area">
+          <i class="fas fa-camera"></i>
+          <p>Click to add photos or drag and drop (up to 14)</p>
+          <input type="file" id="photos" name="photos" multiple accept="image/*" style="display: none;">
+        </div>
+        <div class="image-previews" id="image-previews"></div>
+      </div>
 
-            <!-- Tags Field -->
-            <div class="form-group">
-              <label for="tags">Tags</label>
-              <input id="tags" name="tags" placeholder="Add tags" value="" multiple>
-            </div>
-            
-            <!-- Submit Button -->
-            <button type="submit" class="submit-btn">Publish Listing</button>
-        </form>
-    </div>
-</body>
+      <div class="form-group">
+        <label for="price" class="required-field">Price ($)</label>
+        <input type="number" id="price" name="price" min="0" step="0.01" placeholder="0.00" required>
+      </div>
 
-<script src="https://unpkg.com/@yaireo/tagify"></script>
-<script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+      <div class="form-group">
+        <label for="condition" class="required-field">Condition</label>
+        <select id="condition" name="condition" required>
+          <option value="" disabled selected>Select Condition</option>
+          <option value="new">New</option>
+          <option value="like new">Like New</option>
+          <option value="very good">Very Good</option>
+          <option value="good">Good</option>
+          <option value="acceptable">Acceptable</option>
+          <option value="poor">Poor</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Tell potential buyers more about what you're selling" maxlength="20000"></textarea>
+        <div id="description-count">0 / 20000</div>
+      </div>
+
+      <div class="form-group">
+        <label for="state" class="required-field">State or Territory</label>
+        <select id="state" name="state" required>
+          <option value="" disabled selected>Select state</option>
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option>
+          <option value="CA">California</option>
+          <option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option>
+          <option value="DE">Delaware</option>
+          <option value="FL">Florida</option>
+          <option value="GA">Georgia</option>
+          <option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option>
+          <option value="IL">Illinois</option>
+          <option value="IN">Indiana</option>
+          <option value="IA">Iowa</option>
+          <option value="KS">Kansas</option>
+          <option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option>
+          <option value="ME">Maine</option>
+          <option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option>
+          <option value="MI">Michigan</option>
+          <option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option>
+          <option value="MO">Missouri</option>
+          <option value="MT">Montana</option>
+          <option value="NE">Nebraska</option>
+          <option value="NV">Nevada</option>
+          <option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option>
+          <option value="NM">New Mexico</option>
+          <option value="NY">New York</option>
+          <option value="NC">North Carolina</option>
+          <option value="ND">North Dakota</option>
+          <option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option>
+          <option value="OR">Oregon</option>
+          <option value="PA">Pennsylvania</option>
+          <option value="PR">Puerto Rico</option>
+          <option value="RI">Rhode Island</option>
+          <option value="SC">South Carolina</option>
+          <option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option>
+          <option value="TX">Texas</option>
+          <option value="UT">Utah</option>
+          <option value="VT">Vermont</option>
+          <option value="VA">Virginia</option>
+          <option value="WA">Washington</option>
+          <option value="WV">West Virginia</option>
+          <option value="WI">Wisconsin</option>
+          <option value="WY">Wyoming</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="city" class="required-field">City</label>
+        <input type="text" id="city" name="city" list="city-list" required>
+        <datalist id="city-list">
+          <!-- Server-rendered cities -->
+          <!-- {% for city in cities %}<option value="{{ city }}">{% endfor %} -->
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label for="tags">Tags</label>
+        <input id="tags" name="tags" placeholder="Add tags">
+      </div>
+
+      <button type="submit" class="submit-btn">Publish Listing</button>
+    </form>
+  </div>
 
 <script>
-  window.tag_count = JSON.parse('{{ tag_count|tojson|safe }}');
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM fully loaded and parsed');
+    
+    const maxPhotos = 14;
+    const photoUploadArea = document.getElementById('photo-upload-area');
+    const fileInput = document.getElementById('photos');
+    const imagePreviews = document.getElementById('image-previews');
+    const tagInput = document.getElementById('tags');
+    const tagify = new Tagify(tagInput, { maxTags: 30 });
+    let photoFiles = [];
+    const maxPrice = 99999999.99;
 
-      // live description character count elements
-      const descriptionInput = document.getElementById('description');
-      const descriptionCount = document.getElementById('description-count');
-      
-      // Photo upload elements
-      const photoUploadArea = document.getElementById('photo-upload-area');
-      const fileInput = document.getElementById('photos');
-      const imagePreviews = document.getElementById('image-previews');
-      const maxPhotos = 14;
-      
-      // live description character count
-      descriptionInput.addEventListener('input', function() {
-          descriptionCount.textContent = `${descriptionInput.value.length} / 20000`;
-      });
-      
-      // Handle photo upload click
-      photoUploadArea.addEventListener('click', function() {
-          fileInput.click();
-      });
-      
-      // Handle drag and drop for photos
-      photoUploadArea.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          photoUploadArea.style.borderColor = '#1877f2';
-          photoUploadArea.style.backgroundColor = '#f0f8ff';
-      });
-      
-      photoUploadArea.addEventListener('dragleave', function() {
-          photoUploadArea.style.borderColor = '#dddfe2';
-          photoUploadArea.style.backgroundColor = 'transparent';
-      });
-      
-      photoUploadArea.addEventListener('drop', function(e) {
-          e.preventDefault();
-          photoUploadArea.style.borderColor = '#dddfe2';
-          photoUploadArea.style.backgroundColor = 'transparent';
-          
-          if (e.dataTransfer.files.length) {
-              fileInput.files = e.dataTransfer.files;
-              handleFileUpload(fileInput.files);
-          }
-      });
+    document.getElementById('description').addEventListener('input', function () {
+        document.getElementById('description-count').textContent =
+            `${this.value.length} / 20000`;
+    });
 
-      fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
-      
-      // Process uploaded files and create previews
-      function handleFileUpload(files) {
-          const existingImages = imagePreviews.querySelectorAll('.image-preview').length;
+    photoUploadArea.addEventListener('click', () => fileInput.click());
 
-          if (existingImages >= maxPhotos) {
-              alert('You can upload a maximum of 14 photos.');
-              return;
-          }
+    photoUploadArea.addEventListener('dragover', e => {
+        e.preventDefault();
+        photoUploadArea.classList.add('dragover');
+    });
 
-          const availableSlots = maxPhotos - existingImages;
-          const filesToProcess = Array.from(files).slice(0, availableSlots);
+    photoUploadArea.addEventListener('dragleave', () => {
+        photoUploadArea.classList.remove('dragover');
+    });
 
-          filesToProcess.forEach(file => {
-              if (!file.type.match('image.*')) {
-                  return;
-              }
+    photoUploadArea.addEventListener('drop', e => {
+        e.preventDefault();
+        photoUploadArea.classList.remove('dragover');
+        handleFileUpload(e.dataTransfer.files);
+    });
 
-              const reader = new FileReader();
+    fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
 
-              reader.onload = function(e) {
-                  const preview = document.createElement('div');
-                  preview.className = 'image-preview';
+    function handleFileUpload(files) {
+        console.log('Handling file upload:', files);
+        // Overwrite previous files and previews
+        imagePreviews.innerHTML = '';
+        photoFiles = [];
 
-                  const img = document.createElement('img');
-                  img.src = e.target.result;
+        const newFiles = Array.from(files)
+            .filter(file => file.type.startsWith('image/'))
+            .slice(0, maxPhotos);
 
-                  const removeBtn = document.createElement('button');
-                  removeBtn.className = 'remove-image';
-                  removeBtn.innerHTML = '×';
-                  removeBtn.addEventListener('click', function() {
-                      preview.remove();
-                      updateFileInput();
-                  });
+        console.log('Filtered files to upload:', newFiles);
 
-                  preview.appendChild(img);
-                  preview.appendChild(removeBtn);
-                  imagePreviews.appendChild(preview);
-              };
+        newFiles.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const preview = document.createElement('div');
+                preview.className = 'image-preview';
 
-              reader.readAsDataURL(file);
-          });
-      }
-      
-      function updateFileInput() {
-          const dt = new DataTransfer();
-          const fileInput = document.getElementById('photos');
-          const imagePreviews = document.getElementById('image-previews');
-          const previews = imagePreviews.querySelectorAll('.image-preview img');
+                const img = document.createElement('img');
+                img.src = e.target.result;
 
-          for (let img of previews) {
-              const file = Array.from(fileInput.files).find(f => URL.createObjectURL(f) === img.src);
-              if (file) {
-                  dt.items.add(file);
-              }
-          }
-          fileInput.files = dt.files;
-      }
+                preview.appendChild(img);
+                imagePreviews.appendChild(preview);
 
-      // Initialize Tagify
-      const tagInput = document.getElementById('tags');
+                photoFiles.push(file);
+                console.log('Added file to preview:', file.name);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
 
-      // Prepare whitelist from server data
-      const whitelist = [];
-      {% for tag, count in tag_count.items() %}
-      whitelist.push({
-          value: '{{ tag }}',
-          label: '{{ tag }} ({{ count }})'
-      });
-      {% endfor %}
+    document.getElementById('selling-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        console.log('Form submission initiated');
+        
+        // Log form values before submission
+        const formData = new FormData(this);
+        const title = formData.get('title');
+        const price = formData.get('price');
+        const description = formData.get('description');
+        const condition = formData.get('condition');
+        
+        console.log('Form values:', {
+            title,
+            price,
+            description,
+            condition,
+            photoCount: photoFiles.length
+        });
 
-      // Initialize Tagify with a custom dropdown item template
-      const tagify = new Tagify(tagInput, {
-          whitelist: whitelist,
-          enforceWhitelist: false,  // Allow custom tags
-          dropdown: {
-              enabled: 1,           // Show suggestions after 1 character
-              maxItems: 10,
-              classname: "tags-dropdown",
-              highlightFirst: true
-          },
-          editTags: false,
-          placeholder: "Add tags",
-          originalInputValueFormat: (valuesArr) => valuesArr.map(item => item.value).join(',')
-      });
+        // Check if the entered price exceeds the maximum allowed price
+        if (!isNaN(price) && price > maxPrice) {
+            alert(`The maximum allowed price is $${maxPrice.toFixed(2)}. Please enter a lower price.`);
+            return; // Stop the form submission
+        }
 
-      // Customize how items are displayed in the dropdown
-      tagify.settings.templates.dropdownItem = function(tagData) {
-          const count = tagData.label.match(/\((\d+)\)/)?.[1] || 0;
-          return `
-                <div class='tagify__dropdown__item' data-value="${tagData.value}">
-                    <span>${tagData.value}</span>
-                    <span class="tag-count">(${count})</span>
-                </div>
-            `;
-      };
 
-      // Listen to the 'add' event to handle when a tag is selected
-      tagify.on('add', (e) => {
-          console.log('Tag added:', e.detail.data);
-      });
+        // Log tags before submission
+        const tagsData = tagify.value;
+        console.log('Tags to be submitted:', tagsData);
+        
+        // Add uploaded photos
+        photoFiles.forEach(file => {
+            formData.append('photos', file);
+        });
 
-      // Add click event listener to dropdown items for autofill
-      tagify.on('dropdown:select', (e) => {
-          const selectedTag = e.detail.data.value;
-          tagify.addTags([selectedTag]); // Add the selected tag to the input
-          tagify.DOM.dropdown.classList.remove('tagify__dropdown--visible'); // close the dropdown
-          tagify.DOM.scope.focus(); // keep focus on the input to keep the dropdown closed.
-      });
+        // Convert Tagify tags to JSON and append to form
+        formData.set('tags', JSON.stringify(tagsData));
 
-      document.getElementById('selling-form').addEventListener('submit', function (e) {
-          // e.preventDefault(); // Prevent the default form submission behavior
-          console.log('Form submitted!');
-          // tagify.update()
-          
-          // Perform validation or submit data via AJAX here
-          // Example: Fetch API to send form data
-          const formData = new FormData(this);
-          fetch('/selling', {
-              method: 'POST',
-              body: formData,
-          })
-              .then(response => response.json())
-              .then(data => {
-                  console.log('Success:', data);
-                  alert('Listing published successfully!');
-              })
-              .catch(error => {
-                  console.error('Error:', error);
-                  alert('Something went wrong. Please try again.', error);
-              });
-      });
-  });
+        console.log('Final FormData before sending:');
+        // Log FormData entries
+        for (let [key, value] of formData.entries()) {
+            if (key === 'photos') {
+                console.log(`${key}:`, value.name || 'File object');
+            } else {
+                console.log(`${key}:`, value);
+            }
+        }
+
+        fetch('/selling', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(res => {
+            console.log('Response received:', res);
+            if (res.redirected) {
+                console.log('Redirecting to:', res.url);
+                window.location.href = res.url;
+                return;
+            }
+            const contentType = res.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return res.json().then(data => {
+                    console.log('JSON response data:', data);
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert('Listing published successfully!');
+                    }
+                });
+            } else {
+                return res.text().then(text => {
+                    console.log('Text response:', text);
+                    alert(text || 'Listing published successfully!');
+                });
+            }
+        })
+        .catch(err => {
+            console.error('Submission error:', err);
+            alert('Error submitting listing: ' + (err.message || 'Please try again later'));
+        });
+    });
+    
+    // Log when tags are changed
+    tagInput.addEventListener('change', () => {
+        console.log('Tags changed:', tagify.value);
+    });
+});
 </script>
+</body>
 </html>

@@ -129,10 +129,3 @@ def add_post():
 @app.route("/remove_item/<int:item_id>", methods=['POST'])
 def remove_item(item_id):
     return handle_remove_item(item_id)
-
-##==============================================================
-## Testing routes
-##==============================================================
-@app.route('/tags')
-def tags():
-    return render_template('tags.html')

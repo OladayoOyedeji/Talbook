@@ -330,6 +330,7 @@ body {
     margin-left: 10px;
     cursor: pointer;
     text-decoration: none;
+    border: 2px solid black;
 }
 
 .message-header .chat-header__profile-icon {
@@ -339,12 +340,13 @@ body {
     object-fit: cover;
     flex-shrink: 0;
     text-decoration: none;
+    border: 2px solid black;
 }
 
 /* search results */
 .search-results {
   position: absolute;
-  top: 64px;
+  top: calc(64px + 50px);
   left: 0;
   right: 0;
   background: white;
@@ -390,3 +392,11 @@ body {
   color: #888;
 }
 
+.search-result-card .chat-preview {
+  font-size: 14px;
+  color: #5f6368;
+  max-width: 100%;
+  white-space: nowrap;    
+  overflow: hidden;           
+  text-overflow: ellipsis; 
+}
