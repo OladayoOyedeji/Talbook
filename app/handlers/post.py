@@ -105,7 +105,7 @@ VALUES (%s, %s)'''
         execute_sql(video_sql, video_params, commit=True)
         return redirect(url_for('post', post_id=post_id))
          
-    return render_template('add_post.html')
+    return render_template('add_post.html', user={'username': session['username']})
                 
     # get_media
     # store_the_pictures_and_videos

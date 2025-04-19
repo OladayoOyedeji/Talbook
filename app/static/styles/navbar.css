@@ -1,48 +1,66 @@
 /* tab bar */
 .navbar {
-    background-color: #333;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
+    background-color: #333 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 20px !important;
+    font-family: Arial, sans-serif !important;
 }
 
 .nav-title {
-    color: white;
-    font-size: 1.5em;
-    font-weight: bold;
+    color: white !important;
+    font-size: 1.5em !important;
+    font-weight: bold !important;
 }
 
 .nav-links {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
+    list-style: none !important;
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .nav-links li {
-    margin: 0 10px;
+    margin: 0 10px !important;
 }
 
 .nav-links a {
-    color: white;
-    text-decoration: none;
-    padding: 16px;
-    display: block;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 16px !important;
+    display: block !important;
 }
 
 .nav-links a:hover {
-    background-color: #111;
-    border-radius: 4px;
+    background-color: #111 !important;
+    border-radius: 4px !important;
 }
 
 .flash-messages {
-    background-color: #e6f2ff;
-    color: #003366;
-    padding: 10px;
-    border: 1px solid #99c2ff;
-    margin: 10px;
-    border-radius: 6px;
-    text-align: center;
+    background-color: #e6f2ff !important;
+    color: #003366 !important;
+    padding: 10px !important;
+    border: 1px solid #99c2ff !important;
+    margin: 10px !important;
+    border-radius: 6px !important;
+    text-align: center !important;
 }
+
+.navbar,
+.nav-title,
+.nav-links a {
+  font-family: Arial, sans-serif !important;
+}
+
+.navbar {
+  height: 60px !important;
+}
+
+.nav-links a,
+.nav-title {
+  line-height: 60px !important;
+}
+
+
