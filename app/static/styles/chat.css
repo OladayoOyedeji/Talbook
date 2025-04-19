@@ -346,7 +346,7 @@ body {
 /* search results */
 .search-results {
   position: absolute;
-  top: 64px;
+  top: calc(64px + 50px);
   left: 0;
   right: 0;
   background: white;
