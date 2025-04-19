@@ -55,7 +55,7 @@
               <div class="media-upload" id="media-upload-area">
                 <i class="fas fa-camera"></i>
                 <p>Click to add media or drag and drop (up to 14)</p>
-                <input type="file" id="media" name="media" multiple accept="image/*,video/*" style="display: none;">
+                <input type="file" id="media" name="media" multiple accept="image/*,video/*" style="display: none;" required>
               </div>
               <div class="media-previews" id="media-previews"></div>
             </div>
@@ -81,7 +81,7 @@
 <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 
 <script>
- document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function () {
     const descriptionInput = document.getElementById('description');
     const descriptionCount = document.getElementById('description-count');
 
@@ -90,59 +90,57 @@
     const mediaPreviews = document.getElementById('media-previews');
     const maxMedia = 14;
 
-    // Live description character count
-    descriptionInput.addEventListener('input', function() {
+    // Live character count
+    descriptionInput.addEventListener('input', function () {
         descriptionCount.textContent = `${descriptionInput.value.length} / 20000`;
     });
 
     // Click to upload
-    mediaUploadArea.addEventListener('click', function() {
+    mediaUploadArea.addEventListener('click', function () {
         fileInput.click();
     });
 
     // Drag over
-    mediaUploadArea.addEventListener('dragover', function(e) {
+    mediaUploadArea.addEventListener('dragover', function (e) {
         e.preventDefault();
         mediaUploadArea.style.borderColor = '#1877f2';
         mediaUploadArea.style.backgroundColor = '#f0f8ff';
     });
 
     // Drag leave
-    mediaUploadArea.addEventListener('dragleave', function() {
+    mediaUploadArea.addEventListener('dragleave', function () {
         mediaUploadArea.style.borderColor = '#dddfe2';
         mediaUploadArea.style.backgroundColor = 'transparent';
     });
 
-    // Drop media files
-    mediaUploadArea.addEventListener('drop', function(e) {
+    // Drop media
+    mediaUploadArea.addEventListener('drop', function (e) {
         e.preventDefault();
         mediaUploadArea.style.borderColor = '#dddfe2';
         mediaUploadArea.style.backgroundColor = 'transparent';
 
         if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            handleFileUpload(fileInput.files);
+            handleFileUpload(e.dataTransfer.files);
         }
     });
 
+    // File input change
     fileInput.addEventListener('change', () => handleFileUpload(fileInput.files));
 
-    // Handle uploading and preview
+    // Handle file upload and preview
     function handleFileUpload(files) {
-        const existingMedia = mediaPreviews.querySelectorAll('.media-preview').length;
+        // Clear previous previews
+        mediaPreviews.innerHTML = '';
 
-        if (existingMedia >= maxMedia) {
-            alert('You can upload a maximum of 14 media files.');
-            return;
-        }
+        const availableFiles = Array.from(files).slice(0, maxMedia);
+        const dt = new DataTransfer();
+        availableFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
 
-        const availableSlots = maxMedia - existingMedia;
-        const filesToProcess = Array.from(files).slice(0, availableSlots);
-
-        filesToProcess.forEach(file => {
+        availableFiles.forEach(file => {
             const reader = new FileReader();
 
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const preview = document.createElement('div');
                 preview.className = 'media-preview';
 
@@ -163,7 +161,7 @@
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'remove-media';
                 removeBtn.innerHTML = '×';
-                removeBtn.addEventListener('click', function() {
+                removeBtn.addEventListener('click', function () {
                     preview.remove();
                     updateFileInput();
                 });
@@ -179,25 +177,30 @@
 
     function updateFileInput() {
         const dt = new DataTransfer();
-        const mediaPreviews = document.getElementById('media-previews');
         const previews = mediaPreviews.querySelectorAll('img, video');
-        const originalFiles = Array.from(fileInput.files);
+        const currentFiles = Array.from(fileInput.files);
 
         previews.forEach(preview => {
-            const matchedFile = originalFiles.find(file => {
+            const match = currentFiles.find(file => {
                 const url = URL.createObjectURL(file);
-                const matches = url === preview.src;
+                const isMatch = preview.src === url;
                 URL.revokeObjectURL(url);
-                return matches;
+                return isMatch;
             });
-            if (matchedFile) dt.items.add(matchedFile);
+            if (match) dt.items.add(match);
         });
 
         fileInput.files = dt.files;
     }
 
+    // Submission with required media validation
     document.getElementById('selling-form').addEventListener('submit', function (e) {
-        console.log('Form submitted!');
+        if (fileInput.files.length === 0) {
+            e.preventDefault();
+            alert('Please add at least one media file.');
+            return;
+        }
+
         const formData = new FormData(this);
         fetch('/selling', {
             method: 'POST',
