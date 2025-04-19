@@ -1,4 +1,4 @@
-USE Talbook;
+USE Talbook$Talbook;
 INSERT INTO User (email, username, password_hash) VALUES ('bigbrovc@gmail.com', 'bigbrovc', '$2b$11$D7ZZKr8.tbOqwxPxvV2cP.0b9RW1z9C.wE5IADbGMgeQOv1OvN0am');
 INSERT INTO User (email, username, password_hash) VALUES ('oroyedeji1@cougars.ccis.edu', 'Robiefresh', '$2b$11$DnSV/JlxctpGvSY1UWjVYehUmd6E2J51yXEtRcEvvoSoxJWsV0l5G');
 INSERT INTO User (email, username, password_hash) VALUES ('nalahaideb@cougars.ccis.edu', 'nashydog', '$2b$11$9VkuIBMnVkBS/sAvQljhJ.b3kbb5L7CAfY4kY6CPTykqNKSTo5b1K');
