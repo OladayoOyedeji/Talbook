@@ -1,11 +1,11 @@
 -- File: init.sql
 -- Description: Creates tables for the Talbook database
 
-drop database if exists Talbook;
-create database Talbook
+drop database if exists Talbook$Talbook;
+create database Talbook$Talbook
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
-use Talbook;
+use Talbook$Talbook;
 
 --==============================================================
 -- NO 1. Photo: photos for items or user profiles

@@ -1,4 +1,4 @@
-use Talbook;
+use Talbook$Talbook;
 
 -- main categories as tags
 INSERT INTO Tag (name) VALUES 

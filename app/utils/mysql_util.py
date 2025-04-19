@@ -1,7 +1,7 @@
 # File: mysql_user.py
 import pymysql
 
-DB_NAME = "Talbook"
+DB_NAME = "Talbook$Talbook"
 USE_DB = "USE %s;" % DB_NAME
 INIT_SQL_FILE = "app/db/init.sql"  # path to MySQL initialization script
 
