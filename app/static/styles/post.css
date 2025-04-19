@@ -208,7 +208,28 @@ body {
   cursor: not-allowed;
 }
 
-.media-description,
+.media-description{
+    max-height: 3.6em; /* roughly 2-3 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-description.expanded {
+  max-height: none;
+}
+
+.read-more-btn {
+  display: block;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #1877f2;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+}
+
 .media-timestamp {
   text-align: center;
   font-size: 1rem;
@@ -246,8 +267,13 @@ body {
 }
 
 .comment p {
-  margin: 0.2rem 0;
-  color: #444;
+   max-height: 4.5em; /* roughly 3 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
 }
 
 .comment small {

@@ -39,7 +39,10 @@
         <button id="nextBtn">Next</button>
       </div>
 
-      <div class="media-description">{{ post.descrip }}</div>
+      <div class="media-description" id="description-container">
+        <span id="description-text">{{ post.descrip }}</span>
+        <button id="toggle-description" class="read-more-btn">Read more</button>
+      </div>
       <div class="media-timestamp">Uploaded: {{ post.created_at }}</div>
     </div>
 
@@ -64,7 +67,7 @@
 
       <!-- Add New Comment -->
       <form class="comment-form" method="POST" action="">
-        <textarea name="content" rows="3" placeholder="Write a comment..." required></textarea>
+        <textarea name="content" rows="3" maxlength="500" placeholder="Write a comment..." required></textarea>
         <button type="submit">Post Comment</button>
       </form>
     </div>
@@ -105,6 +108,7 @@
           }
       });
 
+      
       // Show first media on load
       showMedia(currentIndex);
     </script>
