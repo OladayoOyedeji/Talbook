@@ -7,19 +7,28 @@ import uuid
 from app.utils import mysql_util
 from app.utils import photo
 
-def create_listing(tags: list, values: tuple, photos: list, city: str, state: str):
+def create_listing(tags: list, values: tuple, photos: list, location_id: int):
+    # insert item
     sql = '''
     INSERT INTO Item (seller_id, item_name, price, `condition`, descrip) VALUES
     (%s, %s, %s, %s, %s)
     '''
-
-    # insert item
     item_id = mysql_util.execute_sql(sql, values, commit=True,
                                      get_lastrowid=True)
 
+    # link location
+    lsql = '''
+    INSERT INTO Item_Location (item_id, location_id) VALUES
+    (%s, %s);
+    '''
+    results = mysql_util.execute_sql(lsql,
+                                     params=(item_id, location_id),
+                                     commit=True)
+    print(results)
+
     # insert tags and link them
     for tag in tags:
-        tsql = "INSERT IGNORE INTO TAG (name) VALUES (%s)"
+        tsql = "INSERT IGNORE INTO Tag (name) VALUES (%s)"
         mysql_util.execute_sql(tsql, (tag,), commit=True)
         tsql = "INSERT INTO Item_Tag (item_id, tag_id) SELECT %s, id FROM Tag WHERE name=%s"
         mysql_util.execute_sql(tsql, (item_id, tag), commit=True)
@@ -32,75 +41,56 @@ def create_listing(tags: list, values: tuple, photos: list, city: str, state: st
         print("photo id is %s" % photo_id)
         photo.link_item_photo(item_id, photo_id, display_order)
 
-    # link location
-    lsql = '''
-    SELECT id FROM Location WHERE city=%s AND state=%s;
-    '''
-    location_id = mysql_util.execute_sql(lsql, params=(city, state))
-    if not location_id:
-        raise Exception("Location not found.")
-
-    location_id = location_id[0]
-
-    lsql = '''
-    INSERT INTO Item_Location (item_id, location_id) VALUES
-    (%s, %s);
-    '''
-    results = mysql_util.execute_sql(lsql, params=(item_id, location_id),
-                                     commit=True)
-    print(results)
-
     return item_id
 
 def handle_selling():
     if request.method == 'POST':
-        print("FORM DATA:", request.form)
-        # values
         seller_id = session['user_id']
         title = request.form.get('title')
         price = float(request.form.get('price'))
         condition = request.form.get('condition')
         description = request.form.get('description')
-
-        values = (seller_id, title, price, condition, description)
-        print("values:", values)
-
-        # location
         city = request.form.get('city')
-        print("city", city)
         state = request.form.get('state')
-        print("state", state)
-            
-        # Get tags (from hidden input)
-        tags_json = request.form.get('tags', '[]')
-        print("tags_json:", tags_json)
-        tags = tags_json.split(',')
-        print("tags:", tags)
-            
-        # Handle file uploads
+        values = (seller_id, title, price, condition, description)
+
+        # test if location is valid
+        lsql = '''
+        SELECT id FROM Location WHERE city=%s AND state=%s;
+        '''
+        location_id = mysql_util.execute_sql(lsql, params=(city, state))
+        if not location_id:
+            return "Location not found in USA"
+        location_id = location_id[0]
+    
+        # Parse tags JSON (Tagify sends JSON array)
+        tags_raw = request.form.get('tags', '[]')
+        try:
+            tag_objs = json.loads(tags_raw)
+            tags = [tag['value'] for tag in tag_objs if 'value' in tag]
+        except (json.JSONDecodeError, TypeError):
+            return "Invalid tag format", 400
+
+        # Enforce tag limit
+        if len(tags) > 30:
+            return "Too many tags: limit is 30", 400
+
+        # Handle photo uploads
         photos = request.files.getlist('photos')
-        print(photos)
         photo_names = []
-            
-        # Save each photo
         dir_path = "app/static/images/uploads/"
         for p in photos:
             if p.filename:
                 filename = str(uuid.uuid4())
                 filepath = dir_path + filename
                 p.save(filepath)
-                print("saving %s to %s" % (p.filename, filename))
                 photo_names.append(filename)
 
-        item_id = create_listing(tags, values, photo_names,
-                                     city, state)
-
-        return redirect('item/%s' % item_id)
+        item_id = create_listing(tags, values, photo_names, city, state)
+        return redirect(f'item/{item_id}')
     
     else:
-        # GET request handling
         tag_count = mysql_util.get_all_tag_counts()
-        print("tag_count:", tag_count)
         tags = [f"{tag} ({count})" for tag, count in tag_count.items()]
         cities = mysql_util.get_all_distinct_cities()
         return render_template('selling.html', tag_count=tag_count, tags=tags, cities=cities)
