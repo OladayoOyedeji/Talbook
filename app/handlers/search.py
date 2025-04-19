@@ -5,6 +5,7 @@ from app.utils.photo import *
 
 def handle_search():
     print(request.args)
+    username = session["username"]
     items = None
     query = None
     if request.method == 'POST':
@@ -15,10 +16,12 @@ def handle_search():
         print(items)
         if not items:
             flash('no item found')
-    return render_template('search.html', items=items, query=query, search_Item=True)
+    return render_template('search.html', items=items, query=query, search_Item=True,
+                           user={'username': username})
 
 def handle_search_profile():
     print(request.args)
+    username = session["username"]
     user_profile = None
     query = None
     if request.method == 'POST':
@@ -29,4 +32,5 @@ def handle_search_profile():
         print(user_profile)
         if not user_profile:
             flash('no item found')
-    return render_template('search.html', user_profile=user_profile, query=query, search_Item=False)
+    return render_template('search.html', user_profile=user_profile, query=query, search_Item=False,
+                           user={'username': username})

@@ -52,4 +52,4 @@ def handle_user_profile(username, tab_id=0):
                 profile['is_following'] = True
 
     return render_template('user_profile.html', tab_id=tab_id, profile=profile,
-                           editable=(session['username'] == username))
+                           editable=(session['username'] == username), user={'username': session['username']})

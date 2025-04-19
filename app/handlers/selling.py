@@ -93,4 +93,4 @@ def handle_selling():
         tag_count = mysql_util.get_all_tag_counts()
         tags = [f"{tag} ({count})" for tag, count in tag_count.items()]
         cities = mysql_util.get_all_distinct_cities()
-        return render_template('selling.html', tag_count=tag_count, tags=tags, cities=cities)
+        return render_template('selling.html', tag_count=tag_count, tags=tags, cities=cities, user={'username': session["username"]})
