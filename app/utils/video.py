@@ -94,6 +94,18 @@ def compress_video(input_path, output_path, target_size_kb=1000):
     except Exception as e:
         print(f"An error occurred during compression: ")
 
+def create_thumbnail(video_path, output_path, time='00:00:00'):
+    """
+        Creates a thumbnail from a video using ffmpeg.
+    
+        Args:
+            video_path (str): Path to the video file.
+            output_path (str): Path to save the thumbnail image.
+            time (str, optional): Timestamp for the thumbnail (HH:MM:SS). Defaults to '00:00:00'.
+    """
+    command = f'ffmpeg -i "{video_path}" -ss {time} -vframes 1 "{output_path}"'
+    os.system(command)
+    
 def upload_video(file: str):
     """
     Converts an image file to a compressed png with a name
@@ -114,9 +126,11 @@ def upload_video(file: str):
     # save file as {photo_id}.png
     filepath = ('app/static/videos/store/%s.mp4' % video_id)
 
+    thumbnail_path = 'app/static/videos/store/thumbnail/%s.webp' % video_id
+
     print("did ts work?")
     compress_video(original_path, filepath)
-
+    create_thumbnail(filepath, thumbnail_path)
     # delete original
     if original_path != filepath:
         os.remove(original_path)

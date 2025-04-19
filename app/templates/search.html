@@ -17,8 +17,14 @@
     
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Top Search UI</title>
+    <title>Search</title>
   </head>
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="/search">Listings</a></li>
+      <li><a href="/search/profile">Profile</a></li>
+    </ul>
+  </nav>
   <body>
     <div class="search-bar">
       <form class="search-bar" action="" method="POST">
@@ -30,13 +36,14 @@
     <h3> showing results for "{{ query }}"</h3>
     {% endif %}
     <div class="content">
+      {% if search_Item %}
       {% if items %}
       
       <div class="grid-container">
         {% for item in items %}
         <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
           <img src="/static/images/store/{{ item[5] }}.webp"
-               onerror="this.onerror=null; this.src='/static/images/defaults/default_item.png';"
+               onerror="this.onerror=null; this.src='/static/images/defaults/default_item.webp';"
                class="item-image">
           <div class="item-title">{{ item[1] }}</div>
           <div class="item-price">${{ item[2] }}</div>
@@ -47,6 +54,25 @@
       </div>
       {% else %}
       <p>Search Listings.</p>
+      {% endif %}
+      {% else %}
+      {% if user_profile %}
+      <div class="profile-list">
+        {% for user in user_profile %}
+        <a href="/user_profile/{{ user.username}}">
+        <div class="profile-item">
+          <img src="/static/images/store/{{ user.photo_id  }}.webp"
+               onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+               alt="Profile picture of {{ user.username }}" class="profile-pic">
+          <span class="username">{{ user.username }}</span>
+        </div>
+        </a>
+        {% endfor %}
+      </div>
+      
+      {% else %}
+      <p>Search Profile.</p>
+      {% endif %}
       {% endif %}
     </div>
     

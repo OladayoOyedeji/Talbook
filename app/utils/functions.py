@@ -175,7 +175,14 @@ ORDER BY count(Item.id) DESC'''
 
     print(sql,  params)
     return execute_sql(sql % params)
-    
+
+def get_search_query_user(query):
+    sql = '''SELECT * FROM User
+    WHERE username like "%%%s%%"'''
+
+    print(sql % query)
+    return execute_sql(sql % query, fetchdict=True)
+
 def get_photo_id(post_id):
     sql = '''SELECT display_order, photo_id
 FROM Post_Photo
@@ -191,8 +198,13 @@ WHERE post_id = %s'''
     return execute_sql(sql, (post_id,))
 
 def get_post_data(post_id):
-    sql = '''SELECT * FROM Post
-    WHERE id = %s'''
+    sql = '''SELECT User.username as username,
+    User.photo_id as photo_id,
+    Post.descrip as descrip,
+    Post.created_at as created_at
+    FROM Post
+    JOIN User ON Post.user_id = User.id
+    WHERE Post.id = %s'''
 
     return execute_sql(sql, (post_id, ), fetchdict=True)
 

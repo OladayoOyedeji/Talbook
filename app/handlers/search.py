@@ -15,4 +15,18 @@ def handle_search():
         print(items)
         if not items:
             flash('no item found')
-    return render_template('search.html', items=items, query=query)
+    return render_template('search.html', items=items, query=query, search_Item=True)
+
+def handle_search_profile():
+    print(request.args)
+    user_profile = None
+    query = None
+    if request.method == 'POST':
+        query = request.form.get('query', '')
+        print(query)
+        user_profile = get_search_query_user(query)
+        
+        print(user_profile)
+        if not user_profile:
+            flash('no item found')
+    return render_template('search.html', user_profile=user_profile, query=query, search_Item=False)

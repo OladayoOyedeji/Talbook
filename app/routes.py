@@ -15,6 +15,7 @@ from app.handlers.item_details import handle_item_details, handle_bookmark_item
 from app.handlers.edit_profile import handle_edit_profile
 from app.handlers.selling import handle_selling
 from app.handlers.search import handle_search
+from app.handlers.search import handle_search_profile
 from app.handlers.media import handle_media
 from app.handlers.bookmark import handle_bookmarks
 from app.handlers.inbox import handle_inbox
@@ -73,6 +74,10 @@ def edit_profile():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     return handle_search()
+
+@app.route('/search/profile', methods=['GET', 'POST'])
+def search_profile():
+    return handle_search_profile()
 
 @app.route('/inbox')
 def inbox():

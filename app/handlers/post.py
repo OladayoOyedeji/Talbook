@@ -44,7 +44,7 @@ def handle_add_post():
         descrip = request.form.get('description')
         
         sql = '''INSERT INTO Post (user_id, descrip)
-VALUES (%s, "%s")'''
+VALUES (%s, %s)'''
         print(sql % (session['user_id'],descrip))
         post_id = execute_sql(sql, (session['user_id'],descrip), commit=True, get_lastrowid=True)
         dir_path_photo = "app/static/images/uploads/"
