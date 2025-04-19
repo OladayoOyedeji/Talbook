@@ -44,6 +44,86 @@
         <div class="item-seller">@{{ item[4] }}</div><!-- add hyperlink to user profile -->
       </a>
       {% endfor %}
+
+      <!-- Posts -->
+      <div>
+        {% if Posts %}
+        {% for post in Posts %}
+        <div class="media-container">
+          <a href="/user_profile/{{ post.username}}">
+            <div class="profile-item">
+              <img src="/static/images/store/{{ post.photo_id  }}.webp"
+                   onerror="this.onerror=null; this.src='/static/images/defaults/default_pfp.webp';"
+                   alt="Profile picture of {{ post.username }}" class="profile-pic">
+              <span class="username">{{ post.username }}</span>
+            </div>
+          </a>
+          <!-- Media Carousel -->
+          {% for media in post.media %}
+          <div class="media-item" id="media-{{ loop.index0 }}">
+            <div class="media-id"></div>
+            {% if media[2] == 'photo' %}
+            <img class="media-preview" src="/static/images/store/{{ media[1] }}.webp" alt="Image preview">
+            {% elif media[2] == 'video' %}
+            <video class="media-preview" controls muted>
+              <source src="/static/videos/store/{{ media[1] }}.mp4" type="video/mp4" />
+            </video>
+            {% endif %}
+          </div>
+          {% endfor %}
+
+          <div class="media-controls">
+            <button id="prevBtn">Previous</button>
+            <button id="nextBtn">Next</button>
+          </div>
+
+          <div class="media-description">{{ post.descrip }}</div>
+          <div class="media-timestamp">Uploaded: {{ post.created_at }}</div>
+        </div>
+        
+        {% endfor %}
+        {% endif %}
+      </div>
 </div>
+    <script>
+      const mediaItems = document.querySelectorAll('.media-item');
+      let currentIndex = 0;
+
+      function showMedia(index) {
+          mediaItems.forEach((item, i) => {
+              item.style.display = i === index ? 'block' : 'none';
+              // Pause all videos when switching
+              const video = item.querySelector('video');
+              if (video) video.pause();
+          });
+
+          document.getElementById('prevBtn').disabled = index === 0;
+          document.getElementById('nextBtn').disabled = index === mediaItems.length - 1;
+
+          // Auto play if it's a video
+          const currentMedia = mediaItems[index];
+          const currentVideo = currentMedia.querySelector('video');
+          if (currentVideo) {
+              currentVideo.play().catch(() => {});
+          }
+      }
+
+      document.getElementById('prevBtn').addEventListener('click', () => {
+          if (currentIndex > 0) {
+              currentIndex--;
+              showMedia(currentIndex);
+          }
+      });
+
+      document.getElementById('nextBtn').addEventListener('click', () => {
+          if (currentIndex < mediaItems.length - 1) {
+              currentIndex++;
+              showMedia(currentIndex);
+          }
+      });
+
+      // Show first media on load
+      showMedia(currentIndex);
+    </script>
 </body>
 </html>

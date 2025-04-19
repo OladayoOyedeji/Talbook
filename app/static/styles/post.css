@@ -306,3 +306,19 @@ body {
     margin-bottom: 0.5rem;
   }
 }
+
+.back-button {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #e5e7eb;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #d1d5db;
+}

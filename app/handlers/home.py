@@ -49,7 +49,7 @@ def handle_home():
     
         print(Posts)
     
-        return render_template("homepage.html", items=items, user={'username': username})
+        return render_template("homepage.html", items=items, Posts=Posts, user={'username': username})
     else:
         flash("You must log in to view this page.")
         return redirect(url_for('login'))
