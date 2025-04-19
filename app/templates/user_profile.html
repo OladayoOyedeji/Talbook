@@ -69,7 +69,9 @@
     <ul class="nav-links">
       <li><a href="/user_profile/{{profile.username}}#Listings">Listings</a></li>
       <li><a href="/user_profile/{{profile.username}}/media#Media">Media</a></li>
+      {% if editable %}
       <li><a href="/user_profile/{{profile.username}}/bookmarks#Bookmarks">Bookmarks</a></li>
+      {% endif %}
     </ul>
   </nav>
   {% if tab_id == 0 %}
@@ -106,7 +108,7 @@
       </div>
       {% endif %}
       {% endfor %}
-      {% elif tab_id == 2 %}
+      {% elif tab_id == 2 and editable %}
       <div class="grid-container" id="Bookmarks">
         {% for item in profile.bookmarks %}
         <a href="{{ url_for('item_details', item_id=item[0]) }}" class="item-card">
