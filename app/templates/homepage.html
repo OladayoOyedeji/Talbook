@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bazaar</title>
     <link rel="stylesheet" href="/static/styles/home.css">
+    <link rel="stylesheet" href="/static/styles/navbar.css">
 </head>
 <body>
     {% with messages = get_flashed_messages() %}
@@ -16,8 +17,7 @@
     </div>
     {% endif %}
     {% endwith %}
-
-    {% if user %}
+    
     <nav class="navbar">
         <div class="nav-title">Talbook</div>
         <ul class="nav-links">
@@ -29,9 +29,6 @@
             <li><a href="/user_profile/{{ user.username }}">Profile</a></li>
         </ul>
     </nav>
-    {% else %}
-    <p>You are not logged in.</p>
-    {% endif %}
 
     <!-- bazaar title card -->
     
