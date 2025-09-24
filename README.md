@@ -1,6 +1,4 @@
 # Talbook
-```markdown
-# Talbook 🎶
 
 A **full-stack social platform** for musicians and music enthusiasts. Built with **Flask, MySQL, HTML/CSS, and JavaScript**.
 
