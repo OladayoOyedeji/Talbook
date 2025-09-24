@@ -18,7 +18,9 @@ git clone https://github.com/OladayoOyedeji/Talbook.git
 cd Talbook
 pip install -r requirements.txt
 flask run
-tables used
+```
+
+## Tables used
 
 user -|
        user_id
