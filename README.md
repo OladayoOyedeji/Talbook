@@ -1,5 +1,25 @@
 # Talbook
+```markdown
+# Talbook 🎶
 
+A **full-stack social platform** for musicians and music enthusiasts. Built with **Flask, MySQL, HTML/CSS, and JavaScript**.
+
+## Features
+- **User profiles**: Upload music, videos, and share skills.
+- **Marketplace**: Buy and sell second-hand instruments and gear.
+- **Community features**: Post content, comment, and collaborate.
+- **Database-backed**: Uses MySQL for managing users, listings, and media.
+
+## Why This Project
+I created Talbook to combine my interest in **web development** and **community building**.  
+It also served as practice for full-stack design and REST API development.
+
+## How to Run
+```bash
+git clone https://github.com/OladayoOyedeji/Talbook.git
+cd Talbook
+pip install -r requirements.txt
+flask run
 tables used
 
 user -|
