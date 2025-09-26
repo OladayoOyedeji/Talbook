@@ -16,8 +16,7 @@ It also served as practice for full-stack design and REST API development.
 ```bash
 git clone https://github.com/OladayoOyedeji/Talbook.git
 cd Talbook
-pip install -r requirements.txt
-flask run
+make r
 ```
 
 ## Tables used
